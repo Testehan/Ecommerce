@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- tells mobile browser to display the  page corectly on mobile screen -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+
+    <title>[[${pageTitle}]]</title>
+</head>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#buttonCancel").on("click", function(){
+            window.location="[[@{/users}]]"
+        });
+
+        $("#fileImage").change(function(){
+            fileSize = this.files[0].size;
+
+            if (fileSize>1048576){
+                this.setCustomValidity("You must choose a file with a size LESS than 1 MB");
+                this.reportValidity();
+            } else {
+                this.setCustomValidity("");
+                showImageThumbnail(this);       // this i assume refers to the file input
+            }
+        });
+    });
+
+    function showImageThumbnail(fileInput){
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e){
+            $("#thumbnail").attr("src", e.target.result)
+        }
+
+        reader.readAsDataURL(file);
+    }
+
+    // below is an ajax call to the REST controller from the server made in order to check if the email is already
+    // used or not
+    function checkEmailIsUnique(form){
+        url = "[[@{/users/check_email}]]";
+        userEmail = $("#email").val();              // this is because this is the id of the email field, and we get the value of the field
+        csrf = $("input[name='_csrf']").val();      // needed because otherwise we get a 403 Forbidden error. If you check with DevTools you will see a forbidden field with this id in the form.
+        userId = $("#id").val();
+
+        params = {id:userId ,email: userEmail, _csrf: csrf}
+
+        $.post(url, params, function(response){
+            console.log("callback means call to the server was made");
+            if (response=="OK"){
+                form.submit();
+            } else if (response =="Duplicated"){
+                showModalDialog("Warning", "There is another user with the same email " + userEmail);
+            } else {
+                showModalDialog("Error", "Unknown response from server");
+            }
+        });
+        return false;
+    }
+
+    function showModalDialog(title, message){
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+
+        $("#modalDialog").modal();
+    }
+
+</script>
+
+<body>
+<!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
+<div class="container-fluid">
+    <div>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <a class="navbar-brand" th:href="@{/}">
+                <img th:src="@{/images/logo.png}">
+            </a>
+
+            <!-- if you view the app on a mobile browser, the screen is too small to display all the
+             navigation links from below...so what will happen is that a new button will appear (of the left side)
+             that looks like 3 horizontal lines , that once clicked it will display the navigation -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/users}">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/categories}">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/brands}">Brands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/products}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/customers}">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/shipping}">Shipping</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/orders}">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/report}">Sales report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/articles}">Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/menus}">Menus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/settings}">Settings</a>
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+
+    <div>
+        <h2>Manage Users | [[${pageTitle}]]</h2>
+    </div>
+
+    <div>
+       <form th:action="@{/users/save}" method="post" th:object="${user}"
+             enctype="multipart/form-data"
+             style="max-width: 700px; margin: 0 auto"
+             onsubmit="return checkEmailIsUnique(this);">
+           <input type="hidden" th:field="*{id}" />
+
+           <div class="border border-secondary rounded p-3">
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">Email</label>
+                   <div class="col-sm-8">
+                       <input type="email" th:field="*{email}" class="form-control"
+                              required minlength="6" maxlength="200" />
+                   </div>
+               </div>
+
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">First name</label>
+                   <div class="col-sm-8">
+                       <input type="text" th:field="*{firstName}" class="form-control"
+                              required minlength="1" maxlength="200" />
+                   </div>
+               </div>
+
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">Last name</label>
+                   <div class="col-sm-8">
+                       <input type="text" th:field="*{lastName}" class="form-control"
+                              required minlength="1" maxlength="200" />
+                   </div>
+               </div>
+
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">Password</label>
+                   <div class="col-sm-8">
+                       <!-- this means that the we are creating a new user, and so we need to have the password field required -->
+                       <input th:if="${user.id == null}" type="password" th:field="*{password}" class="form-control"
+                              required minlength="10" maxlength="200" />
+                        <!-- this means that we are editing a user...and when we do that, we don't want the user to be required to renter the password -->
+                       <input th:if="${user.id != null}" type="password" th:field="*{password}" class="form-control"
+                              minlength="10" maxlength="200" />
+                   </div>
+               </div>
+
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">Roles</label>
+                   <div class="col-sm-8">
+                       <th:block th:each="role : ${listRoles}">
+                           <!-- because the name of the User field for roles is "roles" -->
+                           <input type="checkbox" th:field="*{roles}" th:text="${role.name}" th:value="${role.id}" class="m-2">
+                           - <small th:text="${role.description}"/> <br />
+                       </th:block>
+                   </div>
+               </div>
+
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">Enabled</label>
+                   <div class="col-sm-8">
+                       <input type="checkbox" th:field="*{enabled}" />
+                   </div>
+               </div>
+
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">Photo</label>
+                   <div class="col-sm-8">
+                       <!-- the hidden field below is needed in case an editing is performed, where other fields besides photo field, are edited, and we want to preserve the previously set photo-->
+                       <input type="hidden" th:field="*{photo}" />
+                       <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg" class="mb-2"/>
+                        <img id="thumbnail" alt="Photos preview" th:src="@{${user.PhotosImagePath}}"
+                            class="img-fluid" />
+
+                   </div>
+               </div>
+
+               <div class="text-center">
+                   <input type="submit" value="Save" class="btn btn-primary m-3" />
+                   <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+               </div>
+           </div>
+       </form>
+    </div>
+
+    <!-- dialog that appears when there are duplicate email in the DB -->
+    <div class="modal fade text-center" id="modalDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle">Warning</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="modalBody"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center m-3">
+        <p>Shop control panel - Copyright &copy; Shopp</p>
+    </div>
+</div>
+</body>
+</html>
