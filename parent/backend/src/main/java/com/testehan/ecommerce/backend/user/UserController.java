@@ -94,7 +94,8 @@ public class UserController {
        }
 
         redirectAttributes.addFlashAttribute("message","The user was saved!");
-        return "redirect:/users";
+       // cause after editing or creating a new user we want to see him in the list of users..
+        return "redirect:/users/page/1?sortField=id&sortOrder=asc&keyword=" + user.getEmail();
     }
 
     @GetMapping("/users/edit/{id}")
