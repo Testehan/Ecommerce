@@ -1,8 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
+<head th:fragment="page_head(pageTitle)">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- tells mobile browser to display the  page corectly on mobile screen -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/common.js}" ></script>
+
+    <title>[[${pageTitle}]]</title>
 </head>
 
 <body>
@@ -21,6 +33,10 @@
         th:href="@{'/users/page/'+${pageNumber} + '?sortField='+ ${sortField} + '&sortOrder=' + ${sortOrder} + ${keyword != null ? '&keyword=' + keyword : '' } }">
         [[${label}]]
     </a>
+
+    <div th:fragment="footer" class="text-center m-3">
+        <p>Shop control panel - Copyright &copy; Shopp</p>
+    </div>
 
 </body>
 
