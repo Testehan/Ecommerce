@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- tells mobile browser to display the  page corectly on mobile screen -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+	<title>Login - Shop Admin</title>
+</head>
+<body>
+	<div class="container-fluid text-center">
+		<div>
+			<img th:src="@{/images/logo.png}" />
+		</div>
+		<div th:if="${param.error}" class="text-danger">
+			<p>[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+		</div>
+		<div th:if="${param.logout}" class="text-warning">
+			You have been logged out.</div>
+		<form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto">
+			<div class="border border-secondary rounded p-3">
+				<p>
+					<input type="email" name="email" placeholder="Email" class="form-control" required/>
+				</p>
+				<p>
+					<input type="password" name="password" placeholder="Password" class="form-control" required/>
+				</p>
+				<p>
+					<input type="submit" value="Log in" class="btn btn-primary"/>
+				</p>
+			</div>
+
+		</form>
+
+		<div class="text-center m-3">
+			<p>Shop control panel - Copyright &copy; Shopp</p>
+		</div>
+	</div>
+</body>
+</html>

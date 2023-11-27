@@ -5,8 +5,12 @@ import com.testehan.ecommerce.common.entity.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,14 +30,49 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(getUserDetailsService());
+        authenticationManagerBuilder.authenticationProvider(getAuthenticationProvider());
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+
         http.authorizeRequests()
-                .requestMatchers("/**","/css/**","/js/**")// to access these patterns a user can be NOT authenticated
-                .permitAll();
+            .requestMatchers("/images/**","/css/**","/webjars/**","/js/**")// to access these patterns a user can be NOT authenticated; ex in login page
+                .permitAll()
+            .anyRequest()
+                .authenticated()
+            .and()
+                .authenticationManager(authenticationManager)
+                .formLogin(form -> form
+                    .loginPage("/login")
+                    .usernameParameter("email")     // because in spring security, the default login input parameter name is "username" and we use email
+                    .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .permitAll());
+
+//        http.authorizeRequests()
+//                .requestMatchers("/**","/css/**","/js/**")// to access these patterns a user can be NOT authenticated
+//                .permitAll();
 
         return http.build();
     }
+
+    @Bean
+    public UserDetailsService getUserDetailsService(){
+        return new ShopUserDetailsService();
+    }
+
+    public DaoAuthenticationProvider getAuthenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(getUserDetailsService());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
+
 
     @Bean
     CommandLineRunner setupInitialRoles(){
