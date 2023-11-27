@@ -25,6 +25,20 @@
 			<version>2.4.0</version>
 		</dependency>
 
+		<!-- obviously for Excel related operations -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
+		<!-- obviously for PDF related operations -->
+		<dependency>
+			<groupId>com.github.librepdf</groupId>
+			<artifactId>openpdf</artifactId>
+			<version>1.3.25</version>
+		</dependency>
+
 		<!-- added the next 2 dependencies because i want the app to connect to a docker postgresql DB -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

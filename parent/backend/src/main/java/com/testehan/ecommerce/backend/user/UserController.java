@@ -2,6 +2,7 @@ package com.testehan.ecommerce.backend.user;
 
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.User;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -146,5 +148,24 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<User> users = userService.findAllUsers();
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(users,response);
+    }
 
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<User> users = userService.findAllUsers();
+        UserExcelExporter exporter = new UserExcelExporter();
+        exporter.export(users,response);
+    }
+
+    @GetMapping("/users/export/pdf")
+    public void exportToPdf(HttpServletResponse response) throws IOException {
+        List<User> users = userService.findAllUsers();
+        UserPdfExporter exporter = new UserPdfExporter();
+        exporter.export(users,response);
+    }
 }

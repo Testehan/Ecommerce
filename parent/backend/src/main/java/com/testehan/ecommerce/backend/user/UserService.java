@@ -30,7 +30,8 @@ public class UserService {
     }
 
     public List<User> findAllUsers(){
-       return (List<User>) userRepository.findAll();
+
+        return (List<User>) userRepository.findAll(Sort.by("firstName").ascending());
     }
 
     public List<Role> findAllRoles(){

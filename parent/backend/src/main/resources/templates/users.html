@@ -95,7 +95,10 @@
 
         <div>
             <h2>Manage Users</h2>
-            <a th:href="@{/users/new}">Create new User</a>
+            <a th:href="@{/users/new}" title="Create new user" class="fa-solid fa-user-plus fa-2x icon-dark mr-2" />
+            <a th:href="@{/users/export/csv}" title="Export to CSV" class="fa-solid fa-file-csv fa-2x icon-dark mr-2" />
+            <a th:href="@{/users/export/excel}" title ="Export to Excel" class="fa-solid fa-file-excel fa-2x icon-dark mr-2"></a>
+            <a th:href="@{/users/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
         </div>
 
         <div th:if="${message != null}" class="alert alert-success text-center">
@@ -110,41 +113,49 @@
                 Filter:&nbsp;
                 <input type="search" name="keyword" th:value="${keyword}" required class="form-control" />
                 &nbsp;&nbsp;
-                <input type="submit" value="Search" class="btn btn-primary" />
+                <button type="submit" value="Search" class="btn btn-primary" >
+                    <i class="fas fa-search"></i>
+                </button>
                 &nbsp;&nbsp;
-                <input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()"/>
+                <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+                    <i class="fas fa-eraser"></i>
+                </button>
             </form>
         </div>
 
-        <div>
+        <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
-                        <th th:replace="fragments :: column_link('id', 'User Id')" />
+                        <th class="hideable-column">
+                            <th th:replace="fragments :: column_link('id', 'User Id', 'tag')"  />
+                        </th>
 
                         <th>Photos</th>
 
-                        <th th:replace="fragments :: column_link('email', 'Email')" />
+                        <th class="hideable-column">
+                            <th th:replace="fragments :: column_link('email', 'Email', 'tag')" />
+                        </th>
 
-                        <th th:replace="fragments :: column_link('firstName', 'First name')" />
+                        <th th:replace="fragments :: column_link('firstName', 'First name', 'none')" />
 
-                        <th th:replace="fragments :: column_link('lastName', 'Last name')" />
+                        <th th:replace="fragments :: column_link('lastName', 'Last name', 'none')" />
 
                         <!-- idk if it makes sense for roles... -->
-                        <th th:replace="fragments :: column_link('roles', 'Roles')" />
+                        <th th:replace="fragments :: column_link('roles', 'Roles', 'none')" />
 
-                        <th th:replace="fragments :: column_link('enabled', 'Enabled')" />
+                        <th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />
 
                         <th></th>
                 </thead>
                 <tbody>
                     <tr th:each="user : ${listUsers}">
-                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.id}" class="hideable-column"></td>
                         <td>
                             <span th:if="${user.photo == null}"  class="fas fa-portrait fa-3x icon-silver"></span>
                             <!-- below we are calling a method that returns the path to the photo ...so we can not only access fields, but also methods -->
                             <img th:if="${user.photo != null}"  th:src="@{${user.PhotosImagePath}}" style="width:75px"/>
                         </td>
-                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.email}" class="hideable-column"></td>
                         <td th:text="${user.firstName}"></td>
                         <td th:text="${user.lastName}"></td>
                         <td th:text="${user.roles}"></td>
@@ -168,6 +179,35 @@
             </table>
         </div>
 
+        <div class="less-details">
+            <h3>Showing user list on small phone screen</h3>
+            <div th:each="user : ${listUsers}" class="row m-1">
+                <div class="col-4">
+                    <span th:if="${user.photo == null}"  class="fas fa-portrait fa-3x icon-silver"></span>
+                    <!-- below we are calling a method that returns the path to the photo ...so we can not only access fields, but also methods -->
+                    <img th:if="${user.photo != null}"  th:src="@{${user.PhotosImagePath}}" style="width:75px"/>
+                </div>
+                <div class="col-8">
+                    <div>[[${user.FullName}]]</div>
+                    <div>[[${user.roles}]]</div>
+                    <div class="mt-1">
+                        <a th:if="${user.enabled == true}" class="fa fa-check-circle fa-2x icon-green" th:href="@{'/users/'+${user.id} +'/enabled/false'}"
+                           title="Disable this user">&nbsp</a>
+                        <a th:if="${user.enabled == false}" class="fa fa-circle fa-2x icon-dark" th:href="@{'/users/'+${user.id} +'/enabled/true'}"
+                           title="Enable this user">&nbsp </a>
+                        &nbsp;
+                        <a class="fa fa-edit fa-2x icon-green" th:href="@{'/users/edit/'+${user.id}}" title="Edit User">&nbsp </a>
+                        <a class="fa fa-trash fa-2x icon-dark link-delete"
+                           th:href="@{'/users/delete/'+${user.id}}"
+                           th:userId="${user.id}"
+                           title="Delete User">&nbsp;
+                        </a>
+                    </div>
+                </div>
+                <div>&nbsp;</div>
+            </div>
+        </div>
+
         <div class="text-center m-1" th:if="${totalItems > 0}">
             <span>Showing users [[${startCount}]] to [[${endCount}]] from total of [[${totalItems}]]</span>
         </div>
@@ -179,7 +219,7 @@
 
         <div th:if="${totalPages > 1}">
             <nav>
-                <ul class="pagination justify-content-center">
+                <ul class="pagination justify-content-center flex-wrap">
                     <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
                         <a th:replace="fragments :: page_link(1, 'First')" />
                     </li>
