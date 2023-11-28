@@ -1,5 +1,6 @@
-package com.testehan.ecommerce.backend.user;
+package com.testehan.ecommerce.backend.user.export;
 
+import com.testehan.ecommerce.backend.user.export.AbstractExporter;
 import com.testehan.ecommerce.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import org.supercsv.io.CsvBeanWriter;
@@ -9,7 +10,7 @@ import org.supercsv.prefs.CsvPreference;
 import java.io.IOException;
 import java.util.List;
 
-public class UserCsvExporter extends AbstractExporter{
+public class UserCsvExporter extends AbstractExporter {
 
     public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
 

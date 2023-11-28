@@ -1,5 +1,10 @@
-package com.testehan.ecommerce.backend.user;
+package com.testehan.ecommerce.backend.user.controller;
 
+import com.testehan.ecommerce.backend.user.UserNotFoundException;
+import com.testehan.ecommerce.backend.user.UserService;
+import com.testehan.ecommerce.backend.user.export.UserCsvExporter;
+import com.testehan.ecommerce.backend.user.export.UserExcelExporter;
+import com.testehan.ecommerce.backend.user.export.UserPdfExporter;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,7 +63,8 @@ public class UserController {
         model.addAttribute("reverseSortOrder", reverseSortOrder);
         model.addAttribute("keyword", keyword);
 
-        return "users";
+        // because first is folder from "templates"
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -71,7 +77,7 @@ public class UserController {
         model.addAttribute("listRoles",roles);
         model.addAttribute("pageTitle","Create new user");
 
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -110,7 +116,7 @@ public class UserController {
             model.addAttribute("pageTitle","Edit user with id " + user.getId());
             model.addAttribute("listRoles",roles);
 
-            return "user_form";
+            return "users/user_form";
         } catch(UserNotFoundException e){
             redirectAttributes.addFlashAttribute("message",e.getMessage());
             return "redirect:/users";

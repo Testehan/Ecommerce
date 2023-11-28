@@ -1,10 +1,11 @@
-package com.testehan.ecommerce.backend.user;
+package com.testehan.ecommerce.backend.user.export;
 
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.testehan.ecommerce.backend.user.export.AbstractExporter;
 import com.testehan.ecommerce.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -12,7 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
-public class UserPdfExporter extends AbstractExporter{
+public class UserPdfExporter extends AbstractExporter {
     public void export(List<User> users, HttpServletResponse response) throws IOException {
         setupResponseHeader(response,"pdf","application/pdf");
 

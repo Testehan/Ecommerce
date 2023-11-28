@@ -3,34 +3,10 @@
 
 <head th:replace="~{fragments :: page_head(${pageTitle})}" />
 
+<script th:src="@{/js/common_form.js}"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#buttonCancel").on("click", function(){
-            window.location="[[@{/users}]]"
-        });
 
-        $("#fileImage").change(function(){
-            fileSize = this.files[0].size;
-
-            if (fileSize>1048576){
-                this.setCustomValidity("You must choose a file with a size LESS than 1 MB");
-                this.reportValidity();
-            } else {
-                this.setCustomValidity("");
-                showImageThumbnail(this);       // this i assume refers to the file input
-            }
-        });
-    });
-
-    function showImageThumbnail(fileInput){
-        var file = fileInput.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e){
-            $("#thumbnail").attr("src", e.target.result)
-        }
-
-        reader.readAsDataURL(file);
-    }
+    moduleUrl = "[[@{/users}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
 
     // below is an ajax call to the REST controller from the server made in order to check if the email is already
     // used or not

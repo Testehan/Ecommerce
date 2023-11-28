@@ -1,6 +1,8 @@
-package com.testehan.ecommerce.backend.user;
+package com.testehan.ecommerce.backend.user.controller;
 
 import com.testehan.ecommerce.backend.security.ShopUserDetails;
+import com.testehan.ecommerce.backend.user.UserNotFoundException;
+import com.testehan.ecommerce.backend.user.UserService;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class AccountController {
         User user = userService.findByEmail(email);
         model.addAttribute("user",user);
 
-        return "account_form";
+        return "users/account_form";
     }
 
     @PostMapping("/account/update")

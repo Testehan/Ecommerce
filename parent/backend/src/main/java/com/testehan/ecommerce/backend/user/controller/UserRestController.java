@@ -1,5 +1,6 @@
-package com.testehan.ecommerce.backend.user;
+package com.testehan.ecommerce.backend.user.controller;
 
+import com.testehan.ecommerce.backend.user.UserService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
