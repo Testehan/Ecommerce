@@ -38,10 +38,12 @@ public class WebSecurityConfig {
         authenticationManagerBuilder.userDetailsService(getUserDetailsService());
         authenticationManagerBuilder.authenticationProvider(getAuthenticationProvider());
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
-
+// TODO list of roles and patterns from below will be updated in the future on a needed basis
         http.authorizeRequests()
             .requestMatchers("/images/**","/css/**","/webjars/**","/js/**")// to access these patterns a user can be NOT authenticated; ex in login page
                 .permitAll()
+            .requestMatchers("/users/**","/settings/**").hasAnyAuthority("admin")
+            .requestMatchers("/categories/**","/brands/**","/menus/**", "/articles/**").hasAnyAuthority("admin","Editor")
             .anyRequest()
                 .authenticated()
             .and()

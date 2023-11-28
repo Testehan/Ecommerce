@@ -24,37 +24,37 @@
 
         <div class="collapse navbar-collapse" id="topNavbar">
             <ul class="navbar-nav">
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAuthority('admin')">
                     <a class="nav-link" th:href="@{/users}">Users</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Editor')">
                     <a class="nav-link" th:href="@{/categories}">Categories</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Editor')">
                     <a class="nav-link" th:href="@{/brands}">Brands</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Salesperson','Editor','Shipper')">
                     <a class="nav-link" th:href="@{/products}">Products</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Salesperson')">
                     <a class="nav-link" th:href="@{/customers}">Customers</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Salesperson')">
                     <a class="nav-link" th:href="@{/shipping}">Shipping</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Salesperson','Shipper')">
                     <a class="nav-link" th:href="@{/orders}">Orders</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Salesperson')">
                     <a class="nav-link" th:href="@{/report}">Sales report</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Editor')">
                     <a class="nav-link" th:href="@{/articles}">Articles</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('admin','Editor')">
                     <a class="nav-link" th:href="@{/menus}">Menus</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAuthority('admin')" >
                     <a class="nav-link" th:href="@{/settings}">Settings</a>
                 </li>
                 <li>

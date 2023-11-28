@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head(${pageTitle})" />
+<head th:replace="~{fragments :: page_head(${pageTitle})}" />
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -68,7 +68,7 @@
 <!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
 <div class="container-fluid">
 
-    <head th:replace="navigation :: menu" />
+    <head th:replace="~{navigation :: menu}" />
 
     <div>
         <h2>Manage Users | [[${pageTitle}]]</h2>
@@ -176,7 +176,7 @@
         </div>
     </div>
 
-    <head th:replace="fragments :: footer" />
+    <div th:replace="~{fragments :: footer}" />
 </div>
 </body>
 </html>

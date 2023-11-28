@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head('Users - Shop Admin')" />
+<head th:replace="~{fragments :: page_head('Users - Shop Admin')}" />
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -28,7 +28,7 @@
     <!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
     <div class="container-fluid">
 
-        <head th:replace="navigation :: menu" />
+        <head th:replace="~{navigation :: menu}" />
 
         <div>
             <h2>Manage Users</h2>
@@ -64,23 +64,23 @@
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
                         <th class="hideable-column">
-                            <th th:replace="fragments :: column_link('id', 'User Id', 'tag')"  />
+                            <th th:replace="~{fragments :: column_link('id', 'User Id', 'tag')}"  />
                         </th>
 
                         <th>Photos</th>
 
                         <th class="hideable-column">
-                            <th th:replace="fragments :: column_link('email', 'Email', 'tag')" />
+                            <th th:replace="~{fragments :: column_link('email', 'Email', 'tag')}" />
                         </th>
 
-                        <th th:replace="fragments :: column_link('firstName', 'First name', 'none')" />
+                        <th th:replace="~{fragments :: column_link('firstName', 'First name', 'none')}" />
 
-                        <th th:replace="fragments :: column_link('lastName', 'Last name', 'none')" />
+                        <th th:replace="~{fragments :: column_link('lastName', 'Last name', 'none')}" />
 
                         <!-- idk if it makes sense for roles... -->
-                        <th th:replace="fragments :: column_link('roles', 'Roles', 'none')" />
+                        <th th:replace="~{fragments :: column_link('roles', 'Roles', 'none')}" />
 
-                        <th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />
+                        <th th:replace="~{fragments :: column_link('enabled', 'Enabled', 'none')}" />
 
                         <th></th>
                 </thead>
@@ -158,22 +158,22 @@
             <nav>
                 <ul class="pagination justify-content-center flex-wrap">
                     <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="fragments :: page_link(1, 'First')" />
+                        <a th:replace="~{fragments :: page_link(1, 'First')}" />
                     </li>
                     <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="fragments :: page_link(${currentPage-1}, 'Previous')" />
+                        <a th:replace="~{fragments :: page_link(${currentPage-1}, 'Previous')}" />
                     </li>
 
                     <!-- if you want to have all pages listed have the sequence from 1 to totalPages below; I would like to have just a few..hence the complicated sequence from below-->
                     <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(currentPage+1>totalPages ? currentPage-1>0 ? currentPage-1 : 1 : currentPage, currentPage+1>totalPages ? totalPages :currentPage+1)}">
-                        <a th:replace="fragments :: page_link(${i}, ${i})" />
+                        <a th:replace="~{fragments :: page_link(${i}, ${i})}" />
                     </li>
 
                     <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="fragments :: page_link(${currentPage+1}, 'Next')" />
+                        <a th:replace="~{fragments :: page_link(${currentPage+1}, 'Next')}" />
                     </li>
                     <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="fragments :: page_link(${totalPages}, 'Last')" />
+                        <a th:replace="~{fragments :: page_link(${totalPages}, 'Last')}" />
                     </li>
                 </ul>
             </nav>
@@ -200,7 +200,7 @@
             </div>
         </div>
 
-        <head th:replace="fragments :: footer" />
+        <div th:replace="~{fragments :: footer}" />
 
     </div>
 </body>

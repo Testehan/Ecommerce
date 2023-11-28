@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head('Account details')" />
+<head th:replace="~{fragments :: page_head('Account details')}" />
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -46,7 +46,7 @@
 <!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
 <div class="container-fluid">
 
-    <head th:replace="navigation :: menu" />
+    <head th:replace="~{navigation :: menu}" />
 
     <div>
         <form th:action="@{/account/update}" method="post" th:object="${user}"
@@ -153,7 +153,7 @@
         </div>
     </div>
 
-    <head th:replace="fragments :: footer" />
+    <div th:replace="~{fragments :: footer}" />
 </div>
 </body>
 </html>

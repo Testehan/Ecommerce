@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
-<head th:replace="fragments :: page_head('Home - Shop Admin')" />
+<head th:replace="~{fragments :: page_head('Home - Shop Admin')}" />
 
 <script type="text/javascript">
 
@@ -12,13 +12,16 @@
 	<!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
 	<div class="container-fluid">
 
-		<head th:replace="navigation :: menu" />
+		<head th:replace="~{navigation :: menu}" />
 
 		<div>
-			<h1>Welcome to Shop Admin Control Panel</h1>
+			<h2> Shop Admin Control Panel</h2>
+			Welcome <a th:href="@{/account}" sec:authentication="principal.FullName"></a> !
+			<br />
+			You have the following roles: <span sec:authentication="principal.authorities"> </span>
 		</div>
 
-		<head th:replace="fragments :: footer" />
+		<div th:replace="~{fragments :: footer}" />
 
 	</div>
 </body>
