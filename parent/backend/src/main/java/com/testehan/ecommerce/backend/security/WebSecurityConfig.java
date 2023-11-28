@@ -52,11 +52,8 @@ public class WebSecurityConfig {
                     .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .permitAll());
-
-//        http.authorizeRequests()
-//                .requestMatchers("/**","/css/**","/js/**")// to access these patterns a user can be NOT authenticated
-//                .permitAll();
+                        .permitAll())
+                .rememberMe(rememberMe -> rememberMe.key("123456789"));
 
         return http.build();
     }
