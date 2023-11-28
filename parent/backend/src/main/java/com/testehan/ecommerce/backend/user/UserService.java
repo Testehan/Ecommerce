@@ -71,6 +71,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateAccount(User userInForm) {
+        User userInDB = userRepository.findById(userInForm.getId()).get();
+
+        if (!userInForm.getPassword().isEmpty()) {
+            userInDB.setPassword(passwordEncoder.encode(userInForm.getPassword()));
+        }
+
+        if (userInForm.getPhoto() != null) {
+            userInDB.setPhoto(userInForm.getPhoto());
+        }
+
+        userInDB.setFirstName(userInForm.getFirstName());
+        userInDB.setLastName(userInForm.getLastName());
+
+        return userRepository.save(userInDB);
+    }
+
     public boolean isEmailUnique(Integer id, String email){
         User userByEmail = userRepository.getUserByEmail(email);
 
@@ -97,6 +114,14 @@ public class UserService {
             return userRepository.findById(id).get();
         } catch(NoSuchElementException e){
             throw  new UserNotFoundException("Could not find any user with id " + id);
+        }
+    }
+
+    public User findByEmail(String email) throws UserNotFoundException {
+        try {
+            return userRepository.getUserByEmail(email);
+        } catch(NoSuchElementException e){
+            throw  new UserNotFoundException("Could not find any user with email " + email);
         }
     }
 
