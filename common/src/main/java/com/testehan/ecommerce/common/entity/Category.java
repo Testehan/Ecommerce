@@ -35,11 +35,14 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent",cascade = {
+    @OneToMany(mappedBy = "parent", cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
     private Set<Category> children = new HashSet<>();
+
+    @Transient
+    public boolean hasChildren;
 
     public Category(String name, String alias, String image) {
         this.name = name;
@@ -72,6 +75,7 @@ public class Category {
         copyCategory.setAlias(category.getAlias());
         copyCategory.setImage(category.getImage());
         copyCategory.setEnabled(category.isEnabled());
+        copyCategory.setHasChildren(category.getChildren().size()>0);
 
         return copyCategory;
     }
@@ -90,5 +94,7 @@ public class Category {
             return "/category-images/" + this.id + "/" + this.image;
         }
     }
+
+
 
 }

@@ -3,26 +3,7 @@
 
 <head th:replace="~{fragments :: page_head('Users - Shop Admin')}" />
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".link-delete").on("click",function(e){
-            e.preventDefault();
-            // "this" is the Delete button element..
-            link = $(this).attr("href");
-            console.log(link);
-            userId = $(this).attr("userId");   // this comes from  th:userId="${user.id}" which is defined on the <a> element of the delete button
-            $("#confirmText").text("Are you sure you want to delete user with id " + userId)
-            $("#yesButton").attr("href",link);
-            $("#confirmModal").modal()
-        });
 
-    });
-
-    function clearFilter(){
-        window.location="[[@{/users}]]"
-    }
-
-</script>
 
 <body>
     <!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
@@ -106,7 +87,7 @@
                             <a class="fa fa-edit fa-2x icon-green" th:href="@{'/users/edit/'+${user.id}}" title="Edit User">&nbsp </a>
                             <a class="fa fa-trash fa-2x icon-dark link-delete"
                                th:href="@{'/users/delete/'+${user.id}}"
-                               th:userId="${user.id}"
+                               th:entityId="${user.id}"
                                title="Delete User">&nbsp;
                             </a>
 
@@ -180,29 +161,25 @@
         </div>
 
         <!-- dialog that appears when there are duplicate email in the DB -->
-        <div class="modal fade text-center" id="confirmModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" >Delete Confirmation</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-
-                    <div class="modal-body">
-                        <span id="confirmText"></span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a class="btn btn-success" id="yesButton" href="">Yes</a>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div th:replace="~{fragments_modal :: confirm_modal}" />
 
         <div th:replace="~{fragments :: footer}" />
 
     </div>
 </body>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/users}]]";
+
+    $(document).ready(function(){
+        $(".link-delete").on("click",function(e){
+           e.preventDefault();
+           showDeleteConfirmModal($(this),'user');
+        });
+
+    });
+</script>
 
 </html>

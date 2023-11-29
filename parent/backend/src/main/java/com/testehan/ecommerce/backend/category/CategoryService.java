@@ -148,4 +148,14 @@ public class CategoryService {
     public void updateEnabledStatus(Integer id, boolean enabled) {
         categoryRepository.updateEnabledStatus(id,enabled);
     }
+
+    public void delete(Integer id) throws CategoryNotFoundException {
+        try {
+            categoryRepository.findById(id).get();
+        } catch (NoSuchElementException e){
+            throw new CategoryNotFoundException("Could not find any category with ID " + id);
+        }
+
+        categoryRepository.deleteById(id);
+    }
 }

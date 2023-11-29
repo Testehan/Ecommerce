@@ -3,25 +3,16 @@
 
 <head th:replace="~{fragments :: page_head('Categories - Shop Admin')}" />
 
+<script th:src="@{/js/common_list.js}"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $(".link-delete").on("click",function(e){
-            e.preventDefault();
-            // "this" is the Delete button element..
-            link = $(this).attr("href");
-            console.log(link);
-            categoryId = $(this).attr("categoryId");   // this comes from  th:categoryId="${category.id}" which is defined on the <a> element of the delete button
-            $("#confirmText").text("Are you sure you want to delete category with id " + categoryId)
-            $("#yesButton").attr("href",link);
-            $("#confirmModal").modal()
-        });
+    moduleURL="[[@{/categories}]]"
 
-    });
-
-    function clearFilter(){
-        window.location="[[@{/categories}]]"
-    }
-
+   $(document).ready(function(){
+       $(".link-delete").on("click",function(e){
+           e.preventDefault();
+           showDeleteConfirmModal($(this),'category');
+       });
+   });
 </script>
 
 <body>
@@ -94,39 +85,15 @@
                                title="Enable this category">&nbsp </a>
                         </td>
                         <td >
-                            <a class="fa fa-edit fa-2x icon-green" th:href="@{'/categories/edit/'+${category.id}}" title="Edit Category">&nbsp </a>
-                            <a class="fa fa-trash fa-2x icon-dark link-delete"
-                               th:href="@{'/categories/delete/'+${category.id}}"
-                               th:categoryId="${category.id}"
-                               title="Delete Category">&nbsp;
-                            </a>
-
+                            <div th:replace = "~{fragments :: category_actions}" />
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- dialog that appears when there are duplicate email in the DB -->
-        <div class="modal fade text-center" id="confirmModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" >Delete Confirmation</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
 
-                    <div class="modal-body">
-                        <span id="confirmText"></span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a class="btn btn-success" id="yesButton" href="">Yes</a>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div th:replace="~{fragments_modal :: confirm_modal}" />
 
         <div th:replace="~{fragments :: footer}" />
 

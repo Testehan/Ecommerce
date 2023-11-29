@@ -34,6 +34,16 @@
         [[${label}]]
     </a>
 
+    <div th:fragment="category_actions" th:remove="tag">
+        <a class="fa fa-edit fa-2x icon-green" th:href="@{'/categories/edit/'+${category.id}}" title="Edit Category">&nbsp </a>
+        <a th:if="${category.hasChildren == false}" class="fa fa-trash fa-2x icon-dark link-delete"
+           th:href="@{'/categories/delete/'+${category.id}}"
+           th:entityId="${category.id}"
+           title="Delete Category">&nbsp;
+        </a>
+    </div>
+
+
     <div th:fragment="footer" class="text-center m-3">
         <p>Shop control panel - Copyright &copy; Shopp</p>
     </div>
