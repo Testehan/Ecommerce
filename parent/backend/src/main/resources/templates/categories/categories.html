@@ -33,23 +33,7 @@
             [[${message}]]
         </div>
 
-        <div>
-            <form th:action="@{/categories/page/1}" class="form-inline m-3">
-                <input type="hidden" name="sortField" th:value="${sortField}" />
-                <input type="hidden" name="sortOrder" th:value="${sortOrder}" />
-
-                Filter:&nbsp;
-                <input type="search" name="keyword" th:value="${keyword}" required class="form-control" />
-                &nbsp;&nbsp;
-                <button type="submit" value="Search" class="btn btn-primary" >
-                    <i class="fas fa-search"></i>
-                </button>
-                &nbsp;&nbsp;
-                <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
-                    <i class="fas fa-eraser"></i>
-                </button>
-            </form>
-        </div>
+        <div th:replace="~{fragments :: search_form('/categories/page/1')}" />
 
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
@@ -61,7 +45,7 @@
                         <th>Category Image</th>
 
                         <th>
-                            <a th:href="@{'/categories/page/' + ${currentPage} +'?sortOrder=' +${reverseSortDir}}" class="text-white" >Category Name</a>
+                            <a th:href="@{'/categories/page/' + ${currentPage} +'?sortOrder=' +${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : '' }}" class="text-white" >Category Name</a>
                             <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"> </span>
                         </th>
 
@@ -92,7 +76,15 @@
             </table>
         </div>
 
-        <div th:replace="~{fragments :: pagination('/categories','top level categories')}" />
+        <!-- because when using the search/filter functionality, we show all categories and subcategories, and the message
+         needs to reflect that -->
+        <div th:if="${keyword != null}" class="text-center">
+            <span>Search result does not show results in hierarchical form</span>
+            <div th:replace="~{fragments :: pagination('/categories','categories')}" />
+        </div>
+        <th:block th:unless="${keyword != null}">
+            <div th:replace="~{fragments :: pagination('/categories','top level categories')}" />
+        </th:block>
 
         <div th:replace="~{fragments_modal :: confirm_modal}" />
 

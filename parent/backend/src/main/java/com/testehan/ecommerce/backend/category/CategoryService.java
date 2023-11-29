@@ -3,6 +3,7 @@ package com.testehan.ecommerce.backend.category;
 import com.testehan.ecommerce.common.entity.Category;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<Category> findAllCategories(CategoryPageInfo categoryPageInfo, String sortDir, int pageNumber){
+    public List<Category> findAllCategories(CategoryPageInfo categoryPageInfo, String sortDir, int pageNumber, String keyword){
         Sort sort = Sort.by("name");
          if (sortDir.equalsIgnoreCase("asc")){
             sort = sort.ascending();
@@ -28,12 +29,27 @@ public class CategoryService {
 
         var pageable = PageRequest.of(pageNumber -1 ,ROOT_CATEGORIES_PER_PAGE,sort);
 
-        var pageCategories = categoryRepository.listRootCategories(pageable);
+         Page<Category> pageCategories;
+         if (Objects.nonNull(keyword) && !keyword.isEmpty()){
+             pageCategories = categoryRepository.search(keyword, pageable);
+         } else {
+             pageCategories = categoryRepository.listRootCategories(pageable);
+         }
+
         var rootCategories = pageCategories.getContent();
         categoryPageInfo.setTotalPages(pageCategories.getTotalPages());
         categoryPageInfo.setTotalElements(pageCategories.getTotalElements());
 
-        return listHierarchicalCategories(rootCategories, sortDir);
+        if (Objects.nonNull(keyword) && !keyword.isEmpty()){
+            var searchResult = pageCategories.getContent();
+            for (Category category : searchResult){
+                category.setHasChildren(category.getChildren().size()>0);
+            }
+
+            return searchResult;
+        } else {
+            return listHierarchicalCategories(rootCategories, sortDir);
+        }
     }
 
     private List<Category> listHierarchicalCategories(List<Category> listRootCategories, String sortDir){
