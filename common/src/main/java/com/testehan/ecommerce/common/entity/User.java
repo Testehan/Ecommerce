@@ -34,7 +34,7 @@ public class User {
     @Column(name = "last_name", length = 200, nullable = false)
     private String lastName;
 
-    @Column(length = 1000)  // or 64? isn't this going to hold a URL...64 chars is kind of LITTLE for a URL
+    @Column(length = 1000)
     private String photo;
 
     private boolean enabled;
