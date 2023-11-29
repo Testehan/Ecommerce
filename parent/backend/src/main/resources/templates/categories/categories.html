@@ -61,8 +61,8 @@
                         <th>Category Image</th>
 
                         <th>
-                            <a th:href="@{'/categories?sortDir=' +${reverseSortDir}}" class="text-white" >Category Name</a>
-                            <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"> </span>
+                            <a th:href="@{'/categories/page/' + ${currentPage} +'?sortOrder=' +${reverseSortDir}}" class="text-white" >Category Name</a>
+                            <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"> </span>
                         </th>
 
                         <th>Alias</th>
@@ -92,6 +92,7 @@
             </table>
         </div>
 
+        <div th:replace="~{fragments :: pagination('/categories','top level categories')}" />
 
         <div th:replace="~{fragments_modal :: confirm_modal}" />
 

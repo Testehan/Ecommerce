@@ -3,6 +3,7 @@ package com.testehan.ecommerce.backend.category;
 import com.testehan.ecommerce.common.entity.Category;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +13,27 @@ import java.util.*;
 @Transactional
 public class CategoryService {
 
+    public static final int ROOT_CATEGORIES_PER_PAGE = 4;
+
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<Category> findAllCategories(String sortDir){
+    public List<Category> findAllCategories(CategoryPageInfo categoryPageInfo, String sortDir, int pageNumber){
         Sort sort = Sort.by("name");
          if (sortDir.equalsIgnoreCase("asc")){
             sort = sort.ascending();
         } else  if (sortDir.equalsIgnoreCase("desc")){
             sort = sort.descending();
         }
-        return listHierarchicalCategories(categoryRepository.listRootCategories(sort), sortDir);
+
+        var pageable = PageRequest.of(pageNumber -1 ,ROOT_CATEGORIES_PER_PAGE,sort);
+
+        var pageCategories = categoryRepository.listRootCategories(pageable);
+        var rootCategories = pageCategories.getContent();
+        categoryPageInfo.setTotalPages(pageCategories.getTotalPages());
+        categoryPageInfo.setTotalElements(pageCategories.getTotalElements());
+
+        return listHierarchicalCategories(rootCategories, sortDir);
     }
 
     private List<Category> listHierarchicalCategories(List<Category> listRootCategories, String sortDir){

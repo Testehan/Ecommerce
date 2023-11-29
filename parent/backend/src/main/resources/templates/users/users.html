@@ -126,39 +126,7 @@
             </div>
         </div>
 
-        <div class="text-center m-1" th:if="${totalItems > 0}">
-            <span>Showing users [[${startCount}]] to [[${endCount}]] from total of [[${totalItems}]]</span>
-        </div>
-
-        <!-- if total number of items is not > 0 display this -->
-        <div class="text-center m-1" th:unless="${totalItems > 0}">
-            <span>No users found</span>
-        </div>
-
-        <div th:if="${totalPages > 1}">
-            <nav>
-                <ul class="pagination justify-content-center flex-wrap">
-                    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(1, 'First')}" />
-                    </li>
-                    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${currentPage-1}, 'Previous')}" />
-                    </li>
-
-                    <!-- if you want to have all pages listed have the sequence from 1 to totalPages below; I would like to have just a few..hence the complicated sequence from below-->
-                    <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(currentPage+1>totalPages ? currentPage-1>0 ? currentPage-1 : 1 : currentPage, currentPage+1>totalPages ? totalPages :currentPage+1)}">
-                        <a th:replace="~{fragments :: page_link(${i}, ${i})}" />
-                    </li>
-
-                    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${currentPage+1}, 'Next')}" />
-                    </li>
-                    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${totalPages}, 'Last')}" />
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <div th:replace="~{fragments :: pagination('/users','users')}" />
 
         <!-- dialog that appears when there are duplicate email in the DB -->
         <div th:replace="~{fragments_modal :: confirm_modal}" />

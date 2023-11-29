@@ -25,16 +25,42 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String listFirstPage(@Param("sortDir") String sortDir, Model model){
-        if (sortDir == null || sortDir.isEmpty()){
-            sortDir="asc";
-        }
+        return listCategoriesByPage(1,model,sortDir);
+    }
 
-        List<Category> categoryList = categoryService.findAllCategories(sortDir);
-        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+    @GetMapping("/categories/page/{pageNumber}")
+    public String listCategoriesByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
+                                       @Param("sortOrder")String sortOrder)
+    {
+        if (sortOrder == null || sortOrder.isEmpty()){
+            sortOrder="asc";
+        }
+        var categoryPageInfo = new CategoryPageInfo();
+        List<Category> categoryList = categoryService.findAllCategories(categoryPageInfo, sortOrder, pageNumber);
+        String reverseSortDir = sortOrder.equals("asc") ? "desc" : "asc";
+
         model.addAttribute("listCategories", categoryList);
         model.addAttribute("reverseSortDir", reverseSortDir);
 
+        model.addAttribute("totalPages", categoryPageInfo.getTotalPages());
+        model.addAttribute("totalItems", categoryPageInfo.getTotalElements());
+        model.addAttribute("currentPage", pageNumber);
+
+        model.addAttribute("sortField", "name");
+        model.addAttribute("sortOrder", sortOrder);
+
+        long startCount = (pageNumber-1)* CategoryService.ROOT_CATEGORIES_PER_PAGE + 1;
+        long endCount = startCount + CategoryService.ROOT_CATEGORIES_PER_PAGE - 1;
+        if (endCount > categoryPageInfo.getTotalElements()){
+            endCount = categoryPageInfo.getTotalElements();
+        }
+        model.addAttribute("startCount",startCount);
+        model.addAttribute("endCount",endCount);
+
+
         return "categories/categories";
+
+
     }
 
     @GetMapping("/categories/new")
