@@ -1,5 +1,7 @@
 package com.testehan.ecommerce.backend.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,6 +14,8 @@ import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
+
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 
         Path uploadPath = Paths.get(uploadDir);
@@ -23,6 +27,7 @@ public class FileUploadUtil {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
+            LOGGER.error("Could not save file: " + fileName);
             throw new IOException("Could not save file: " + fileName, ex);
         }
     }
