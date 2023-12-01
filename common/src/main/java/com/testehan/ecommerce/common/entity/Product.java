@@ -23,7 +23,7 @@ public class Product {
     private String name;
 
     @Column(length = 256, nullable = false, unique = true)
-    private String alias;
+    private String alias;           // will be used in the URL coresponding to the product
 
     @Column(name="short_description", length = 512, nullable = false)
     private String shortDescription;
