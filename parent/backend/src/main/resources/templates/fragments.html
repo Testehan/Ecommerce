@@ -18,9 +18,9 @@
 </head>
 
 <body>
-    <th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+    <th th:fragment="column_link(moduleURL,fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
         <a class="text-white"
-           th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortOrder=' + ${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword=' + keyword : '' }}" >
+           th:href="@{${moduleURL}+'/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortOrder=' + ${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword=' + keyword : '' }}" >
             [[${columnLabel}]]
         </a>
 
@@ -34,20 +34,24 @@
         [[${label}]]
     </a>
 
-    <div th:fragment="category_status" th:remove="tag">
-        <a th:if="${category.enabled == true}" class="fa fa-check-circle fa-2x icon-green" th:href="@{'/categories/'+${category.id} +'/enabled/false'}"
-           title="Disable this category">&nbsp</a>
-        <a th:if="${category.enabled == false}" class="fa fa-circle fa-2x icon-dark" th:href="@{'/categories/'+${category.id} +'/enabled/true'}"
-           title="Enable this category">&nbsp </a>
+    <div th:fragment="status(enabled, entityName, moduleURL)" th:remove="tag">
+        <a th:if="${enabled == true}" class="fa fa-check-circle fa-2x icon-green" th:href="@{${moduleURL} +'/enabled/false'}"
+           th:title="'Disable this '+ ${entityName}">&nbsp</a>
+        <a th:if="${enabled== false}" class="fa fa-circle fa-2x icon-dark" th:href="@{${moduleURL} +'/enabled/true'}"
+           th:title="'Enable this '+ ${entityName}">&nbsp </a>
     </div>
 
-    <div th:fragment="category_actions" th:remove="tag">
-        <a class="fa fa-edit fa-2x icon-green" th:href="@{'/categories/edit/'+${category.id}}" title="Edit Category">&nbsp </a>
-        <a th:if="${category.hasChildren == false}" class="fa fa-trash fa-2x icon-dark link-delete"
-           th:href="@{'/categories/delete/'+${category.id}}"
-           th:entityId="${category.id}"
-           title="Delete Category">&nbsp;
-        </a>
+    <div th:fragment="edit(entityName, editURL)" th:remove="tag">
+        <a class="fa fa-edit fa-2x icon-green" th:href="@{${editURL}}" th:title="'Edit ' + ${entityName}">&nbsp </a>
+    </div>
+    <div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+        <th:block th:if="${visible}">
+            <a class="fa fa-trash fa-2x icon-dark link-delete"
+               th:href="@{${deleteURL}}"
+               th:entityId="${entityId}"
+               title="'Delete ' + ${entityName}">&nbsp;
+            </a>
+        </th:block>
     </div>
                 <!-- th:remove="tag" means that this top level div will not be included with the fragment, only the content inside this div -->
     <div th:fragment="pagination(moduleURL, entityName)" th:remove="tag">
@@ -86,7 +90,7 @@
         </div>
     </div>
 
-    <div th:fragment="search_form(moduleURL)">
+    <div th:fragment="search_form_and_message(moduleURL)">
         <form th:action="@{${moduleURL}}" class="form-inline m-3">
             <input type="hidden" name="sortField" th:value="${sortField}" />
             <input type="hidden" name="sortOrder" th:value="${sortOrder}" />
@@ -102,6 +106,10 @@
                 <i class="fas fa-eraser"></i>
             </button>
         </form>
+
+        <div th:if="${message != null}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
     </div>
 
 

@@ -44,10 +44,10 @@ public class CategoryController {
         }
         var categoryPageInfo = new CategoryPageInfo();
         List<Category> categoryList = categoryService.findAllCategories(categoryPageInfo, sortOrder, pageNumber, keyword);
-        String reverseSortDir = sortOrder.equals("asc") ? "desc" : "asc";
+        String reverseSortOrder = sortOrder.equals("asc") ? "desc" : "asc";
 
         model.addAttribute("listCategories", categoryList);
-        model.addAttribute("reverseSortDir", reverseSortDir);
+        model.addAttribute("reverseSortOrder", reverseSortOrder);
 
         model.addAttribute("totalPages", categoryPageInfo.getTotalPages());
         model.addAttribute("totalItems", categoryPageInfo.getTotalElements());
