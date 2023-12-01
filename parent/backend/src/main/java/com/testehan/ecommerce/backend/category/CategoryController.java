@@ -1,7 +1,11 @@
 package com.testehan.ecommerce.backend.category;
 
+import com.testehan.ecommerce.backend.category.export.CategoryCsvExporter;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Category;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,8 @@ import java.util.List;
 
 @Controller
 public class CategoryController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
     @Autowired
     private CategoryService categoryService;
@@ -143,5 +149,24 @@ public class CategoryController {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
         return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        var categories = categoryService.listCategoriesInForm();
+        var exporter = new CategoryCsvExporter();
+        exporter.export(categories,response);
+    }
+
+    @GetMapping("/categories/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        LOGGER.warn("Export to excel is not yet supported. A CSV file is provided instead.");
+        exportToCSV(response);
+    }
+
+    @GetMapping("/categories/export/pdf")
+    public void exportToPdf(HttpServletResponse response) throws IOException {
+        LOGGER.warn("Export to pdf is not yet supported. A CSV file is provided instead.");
+        exportToCSV(response);
     }
 }

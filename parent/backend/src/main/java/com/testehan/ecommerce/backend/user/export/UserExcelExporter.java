@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.backend.user.export;
 
-import com.testehan.ecommerce.backend.user.export.AbstractExporter;
+import com.testehan.ecommerce.backend.util.AbstractExporter;
 import com.testehan.ecommerce.common.entity.User;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ public class UserExcelExporter extends AbstractExporter {
     }
 
     public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-        setupResponseHeader(response,"xlsx","application/octet-stream");
+        setupResponseHeader(response,"users" , "xlsx", "application/octet-stream");
 
         writeHeader();
         writeDataLines(listUsers);

@@ -38,7 +38,7 @@
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
-                        <th class="hideable-column">
+                        <th>
                             <th th:replace="~{fragments :: column_link('id', 'Id', 'tag')}"  />
                         </th>
 
@@ -49,24 +49,21 @@
                             <span th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"> </span>
                         </th>
 
-                        <th>Alias</th>
+                        <th class="hideable-column">Alias</th>
                         <th>Enabled</th>
 
                         <th></th>
                 </thead>
                 <tbody>
                     <tr th:each="category : ${listCategories}">
-                        <td th:text="${category.id}" class="hideable-column"></td>
+                        <td th:text="${category.id}" ></td>
                         <td>
                             <img th:src="@{${category.ImagePath}}" style="width:100px" class="img-fluid" />
                         </td>
                         <td th:text="${category.name}" ></td>
-                        <td th:text="${category.alias}"></td>
+                        <td th:text="${category.alias}" class="hideable-column"></td>
                         <td>
-                            <a th:if="${category.enabled == true}" class="fa fa-check-circle fa-2x icon-green" th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
-                               title="Disable this category">&nbsp</a>
-                            <a th:if="${category.enabled == false}" class="fa fa-circle fa-2x icon-dark" th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
-                               title="Enable this category">&nbsp </a>
+                            <div th:replace = "~{fragments :: category_status}" />
                         </td>
                         <td >
                             <div th:replace = "~{fragments :: category_actions}" />
@@ -74,6 +71,24 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="less-details">
+            <h4>Showing category list on small phone screen</h4>
+            <div th:each="category : ${listCategories}" class="row m-1">
+                <div class="col-4">
+                    <!-- below we are calling a method that returns the path to the photo ...so we can not only access fields, but also methods -->
+                    <img th:src="@{${category.ImagePath}}" style="width:100px" class="image-fluid"/>
+                </div>
+                <div class="col-8">
+                    <div>[[${category.name}]]</div>
+                    <div class="mt-2">
+                        <div th:replace = "~{fragments :: category_status}" />
+
+                        <div th:replace = "~{fragments :: category_actions}" />
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- because when using the search/filter functionality, we show all categories and subcategories, and the message

@@ -5,7 +5,7 @@ import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.testehan.ecommerce.backend.user.export.AbstractExporter;
+import com.testehan.ecommerce.backend.util.AbstractExporter;
 import com.testehan.ecommerce.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class UserPdfExporter extends AbstractExporter {
     public void export(List<User> users, HttpServletResponse response) throws IOException {
-        setupResponseHeader(response,"pdf","application/pdf");
+        setupResponseHeader(response,"users" , "pdf", "application/pdf");
 
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
