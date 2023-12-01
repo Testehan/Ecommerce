@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: page_head('Products - Shop Admin')}" />
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+    moduleURL="[[@{/products}]]"
+
+   $(document).ready(function(){
+       $(".link-delete").on("click",function(e){
+           e.preventDefault();
+           showDeleteConfirmModal($(this),'product');
+       });
+   });
+</script>
+
+<body>
+    <!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
+    <div class="container-fluid">
+
+        <head th:replace="~{navigation :: menu}" />
+
+        <div>
+            <h2>Manage Products</h2>
+            <a th:href="@{/products/new}" title="Create new Product" class="fa-solid fa-folder-plus fa-2x icon-dark mr-2" />
+            <a th:href="@{/products/export/csv}" title="Export to CSV" class="fa-solid fa-file-csv fa-2x icon-dark mr-2" />
+            <a th:href="@{/products/export/excel}" title ="Export to Excel" class="fa-solid fa-file-excel fa-2x icon-dark mr-2"></a>
+            <a th:href="@{/products/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
+        </div>
+
+        <div th:replace="~{fragments :: search_form_and_message('/products/page/1')}" />
+
+        <div class="full-details">
+            <table class="table table-bordered table-striped table-hover table-responsive-xl">
+                <thead class="thead-dark">
+                        <th class="hideable-column">ID</th>
+                        <th>Main Image</th>
+                        <th th:replace="~{fragments :: column_link('/products','name', 'Product Name', 'none')}"  />
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Enabled</th>
+                        <th></th>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${listProducts}">
+                        <td th:text="${product.id}" class="hideable-column" ></td>
+                        <td>
+<!--                            <img th:src="@{${brand.LogoPath}}" style="width:100px" class="img-fluid" />-->
+                        </td>
+                        <td th:text="${product.name}" ></td>
+                        <td th:text="${product.brand.name}" ></td>
+                        <td th:text="${product.category.name}"></td>
+                        <td>
+                            <div th:replace="~{fragments :: status(${product.enabled},'product','/products/'+${product.id})}" />
+                        </td>
+                        <td >
+                            <a class="fas fa-file-alt fa-2x icon-green" th:href="@{'/products/detail'+${product.id} }"
+                               title="View details of product">&nbsp;</a>
+                            &nbsp;&nbsp;
+                            <div th:replace="~{fragments :: edit('product','/products/edit/'+${product.id})}" />
+                            &nbsp;&nbsp;
+                            <div th:replace="~{fragments :: delete('product',${product.id},'/products/delete/'+${product.id}, true)}" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:replace="~{fragments_modal :: confirm_modal}" />
+
+        <div th:replace="~{fragments :: footer}" />
+
+    </div>
+</body>
+
+</html>

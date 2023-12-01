@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: page_head(${pageTitle})}" />
+
+<script th:src="@{/js/common_form.js}"></script>
+<script type="text/javascript">
+    moduleUrl = "[[@{/products}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
+    brandModuleUrl = "[[@{/brands}]]";
+
+    $(document).ready(function(){
+        dropdownBrands = $("#brand");
+        dropdownCategories = $("#category");
+
+        dropdownBrands.change(function(){          // when a brand is selected
+            dropdownCategories.empty();
+            getCategories();
+        });
+
+        getCategories();        // we need to call this at the initial load of the page, so that categories for first brand from dropdown are also retrieved
+    });
+
+    function getCategories(){
+        brandId = dropdownBrands.val();
+        url = brandModuleUrl + "/" + brandId + "/categories";
+
+        $.get(url, function(responseJson){
+           $.each(responseJson, function(index,category){
+                $("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
+           });
+        });
+    }
+
+</script>
+
+<body>
+<!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
+<div class="container-fluid">
+
+    <head th:replace="~{navigation :: menu}" />
+
+    <div>
+        <h2>Manage Products | [[${pageTitle}]]</h2>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+    <div>
+        <form th:action="@{/products/save}" method="post" th:object="${product}">
+            <input type="hidden" th:field="*{id}" />
+
+            <div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#overview" role="tab" >Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#description" role="tab" >Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#images" role="tab" >Images</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#details" role="tab">Details</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active p-3" id="overview" role="tabpanel">
+                        <div th:replace="~{products/product_overview :: content}" />
+                    </div>
+                    <div class="tab-pane" id="description" role="tabpanel" >Description</div>
+                    <div class="tab-pane" id="images" role="tabpanel" >Images</div>
+                    <div class="tab-pane" id="details" role="tabpanel" >Details</div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Save" class="btn btn-primary m-3" />
+                <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+            </div>
+
+        </form>
+    </div>
+
+    <!-- dialog that appears when there are duplicate brand names or aliases in the DB -->
+    <div th:replace="~{fragments_modal :: modal_dialog}" />
+
+    <div th:replace="~{fragments :: footer}" />
+</div>
+</body>
+</html>

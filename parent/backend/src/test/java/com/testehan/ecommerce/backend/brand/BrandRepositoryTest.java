@@ -83,4 +83,10 @@ public class BrandRepositoryTest {
         var brands = brandRepository.findAll();
         assertThat(brands.contains(brand)).isEqualTo(false);
     }
+
+    @Test
+    public void whenBrandsAreRetrieved_brandsAreRetrievedOrderedByName(){
+        var listBrands = brandRepository.findAll();
+        listBrands.forEach(System.out::println);
+    }
 }

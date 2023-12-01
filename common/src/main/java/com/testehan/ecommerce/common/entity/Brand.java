@@ -38,6 +38,11 @@ public class Brand {
         this.categories = categories;
     }
 
+    public Brand(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Transient
     public String getLogoPath() {
         if (this.id == null  ){
@@ -57,5 +62,14 @@ public class Brand {
     @Override
     public int hashCode() {
         return Objects.hash(getName());
+    }
+
+    @Override
+    public String toString() {
+        return "Brand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", logo='" + logo + '\'' +
+                '}';
     }
 }
