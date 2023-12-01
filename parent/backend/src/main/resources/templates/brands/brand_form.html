@@ -5,24 +5,21 @@
 
 <script th:src="@{/js/common_form.js}"></script>
 <script type="text/javascript">
-    moduleUrl = "[[@{/categories}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
+    moduleUrl = "[[@{/brands}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
 
     function checkUnique(form){
-        categoryId = $("#id").val();
-        categoryName = $("#name").val();
-        categoryAlias = $("#alias").val();
+        brandId = $("#id").val();
+        brandName = $("#name").val();
         csrf = $("input[name='_csrf']").val();      // needed because otherwise we get a 403 Forbidden error. If you check with DevTools you will see a forbidden field with this id in the form.
 
-        url = "[[@{/categories/check_unique}]]"
-        params = {id: categoryId, name: categoryName, alias: categoryAlias, _csrf: csrf}
+        url = "[[@{/brands/check_unique}]]"
+        params = {id: brandId, name: brandName, _csrf: csrf}
 
         $.post(url, params, function(response){
             if (response == "OK"){
                 form.submit();
             } else if (response =="DuplicateName"){
-                showWarningModal("There is another category with the same Name " + categoryName);
-            } else if (response =="DuplicateAlias"){
-                showWarningModal("There is another category with the same Alias " + categoryAlias);
+                showWarningModal("There is another brand with the same Name " + brandName);
             } else {
                 showErrorModal("Unknown response from server");
             }
@@ -34,6 +31,27 @@
         return false;
     }
 
+    $(document).ready(function(){
+        dropdownCategories = $("#categories");
+        divChosenCategories = $("#chosenCategories");
+        showChosenCategories(); // initially show what was selected...this is useful during the edit
+
+        dropdownCategories.change(function(){
+            divChosenCategories.empty();    // to clean up the previous content so that only what is not selected is displayed in this div
+            showChosenCategories();
+        });
+    });
+
+    function showChosenCategories(){
+        dropdownCategories.children("option:selected").each(function(){
+            selectedCategory = $(this);
+            categoryId = selectedCategory.val();
+            categoryName = selectedCategory.text();
+
+            divChosenCategories.append("<span class='badge badge-secondary mr-2'>" + categoryName + "</span>");
+        });
+    }
+
 </script>
 
 <body>
@@ -43,7 +61,7 @@
     <head th:replace="~{navigation :: menu}" />
 
     <div>
-        <h2>Manage Categories | [[${pageTitle}]]</h2>
+        <h2>Manage Brands | [[${pageTitle}]]</h2>
     </div>
 
     <div th:if="${message != null}" class="alert alert-success text-center">
@@ -51,7 +69,7 @@
     </div>
 
     <div>
-        <form th:action="@{/categories/save}" method="post" th:object="${category}"
+        <form th:action="@{/brands/save}" method="post" th:object="${brand}"
               enctype="multipart/form-data"
               onsubmit="return checkUnique(this)"
               style="max-width: 500px; margin: 0 auto">
@@ -59,7 +77,7 @@
 
             <div class="border border-secondary rounded p-3">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Category Name</label>
+                    <label class="col-sm-4 col-form-label">Brand Name</label>
                     <div class="col-sm-8">
                         <input type="text" th:field="*{name}" class="form-control"
                                required minlength="3" maxlength="128" />
@@ -67,17 +85,23 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Alias</label>
+                    <label class="col-sm-4 col-form-label">Brand Logo</label>
                     <div class="col-sm-8">
-                        <input type="text" th:field="*{alias}" class="form-control"
-                               required minlength="3" maxlength="64" />
+                        <!-- the hidden field below is needed in case an editing is performed, where other fields besides photo field, are edited, and we want to preserve the previously set photo-->
+                        <input type="hidden" th:field="*{logo}" />
+                        <input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg" class="mb-2"
+                               th:required="${brand.logo == null}" />
+                        <div class="mt-2">
+                            <img id="thumbnail" alt="Image preview" th:src="@{${brand.LogoPath}}" class="img-fluid" />
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Parent Category</label>
+                    <label class="col-sm-4 col-form-label">Select one or more categories</label>
                     <div class="col-sm-8">
-                        <select class="form-control" th:field="*{parent}">
+                        <select id="categories" multiple required class="form-control" style="resize:vertical; height:200px"
+                                th:field="*{categories}" >
                             <option value="0">No Parent</option>
 
                             <th:block th:each="category : ${listCategories}">
@@ -88,21 +112,10 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Enabled</label>
+                    <label class="col-sm-4 col-form-label">Chosen categories</label>
                     <div class="col-sm-8">
-                        <input type="checkbox" th:field="*{enabled}" />
-                    </div>
-                </div>
+                        <div id="chosenCategories">
 
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Image</label>
-                    <div class="col-sm-8">
-                        <!-- the hidden field below is needed in case an editing is performed, where other fields besides photo field, are edited, and we want to preserve the previously set photo-->
-                        <input type="hidden" th:field="*{image}" />
-                        <input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg" class="mb-2"
-                               th:required="${category.image == null}" />
-                        <div class="mt-2">
-                            <img id="thumbnail" alt="Image preview" th:src="@{${category.ImagePath}}" class="img-fluid" />
                         </div>
                     </div>
                 </div>
@@ -115,7 +128,7 @@
         </form>
     </div>
 
-    <!-- dialog that appears when there are duplicate category names or aliases in the DB -->
+    <!-- dialog that appears when there are duplicate brand names or aliases in the DB -->
     <div th:replace="~{fragments_modal :: modal_dialog}" />
 
     <div th:replace="~{fragments :: footer}" />

@@ -19,20 +19,19 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        Path userPhotos = Paths.get("user-photos");
-        String userPhotosPath = userPhotos.toFile().getAbsolutePath();
+        exposeDirectory("user-photos", registry, "/user-photos/**");
 
-        // after getting the user-photos local folder, we make a configuration in the registry so that each time
-        // a resource from that folder, is requested from the browser, it will know to take it from the right location
-        // userPhotosPath (configured in addResourceLocations)
-        registry.addResourceHandler("/user-photos/**")
-                .addResourceLocations("file:"+ userPhotosPath +"/");
+        exposeDirectory("category-images", registry, "/category-images/**");
 
-        Path categoryImages = Paths.get("category-images");
+        exposeDirectory("brand-logos", registry, "/brand-logos/**");
+    }
+
+    private static void exposeDirectory(String directoryName, ResourceHandlerRegistry registry, String logicalPath) {
+        Path categoryImages = Paths.get(directoryName);
         String categoryImagesPath = categoryImages.toFile().getAbsolutePath();
 
-        registry.addResourceHandler("/category-images/**")
-                .addResourceLocations("file:"+ categoryImagesPath +"/");
+        registry.addResourceHandler(logicalPath)
+                .addResourceLocations("file:" + categoryImagesPath + "/");
     }
 
     @Bean
