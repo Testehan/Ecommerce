@@ -119,9 +119,9 @@ public class ProductRepositoryTest {
         product.setUpdatedTime(new Date());
 
         product.setMainImage("main iPhone 17 image");
-        product.addProductDetail("CPU Speed","1.20 Ghz");
-        product.addProductDetail("RAM","32 Gb");
-        product.addProductDetail("HDD","SSD 2TB");
+        product.addNewProductDetail("CPU Speed","1.20 Ghz");
+        product.addNewProductDetail("RAM","32 Gb");
+        product.addNewProductDetail("HDD","SSD 2TB");
 
 
         var savedProduct = productRepository.save(product);

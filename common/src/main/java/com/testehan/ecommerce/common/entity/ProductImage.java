@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,5 +36,17 @@ public class ProductImage {
     public String getImagePath() {
         return "/product-images/" + this.product.getId() + "/extras/" + this.name;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProductImage that)) return false;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getProduct(), that.getProduct());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getProduct());
     }
 }

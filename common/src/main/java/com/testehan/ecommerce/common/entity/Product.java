@@ -64,18 +64,26 @@ public class Product {
     @JoinColumn(name="brand_id")
     private Brand brand;
 
-    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL, orphanRemoval=true)
     private Set<ProductImage> images = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<ProductDetail> details = new ArrayList<>();
 
     public void addExtraImage(String imageName){
         this.images.add(new ProductImage(imageName,this));
     }
 
-    public void addProductDetail(String name, String value){
+    public void addNewProductDetail(String name, String value){
         this.details.add(new ProductDetail(name,value,this));
+    }
+
+    public void updateExistingProductDetail(Integer id, String name, String value) {
+        this.details.add(new ProductDetail(id,name,value, this));
+    }
+
+    public boolean containsImageName(String imageName) {
+        return this.images.contains(new ProductImage(imageName,this));
     }
 
     @Transient
@@ -86,4 +94,20 @@ public class Product {
             return "/product-images/" + this.id + "/" + this.mainImage;
         }
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product product)) return false;
+        return Objects.equals(getName(), product.getName()) && Objects.equals(getAlias(), product.getAlias());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getAlias());
+    }
+
+
+
 }

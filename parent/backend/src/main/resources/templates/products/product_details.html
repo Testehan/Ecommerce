@@ -12,6 +12,9 @@
                 <a class="btn fas fa-times-circle fa-2x icon-dark float-right"
                     name="linkRemoveDetail"
                    title="Remove this Product Detail"></a>
+
+                <input type="hidden" name="detailIds" th:value="${detail.id}" />
+
             </div>
         </th:block>
 
@@ -20,6 +23,9 @@
             <input type="text" class="form-control w-25" name="detailNames" maxlength="256" />
             <label class="m-3">Value:</label>
             <input type="text" class="form-control w-25" name="detailValues" maxlength="256" />
+
+            <input type="hidden" name="detailIds" value="0" />
+            <!-- above <input type="hidden" name="detailIds" value="0" /> has value 0 because a new detailsSection means that it is not yet in the DB, hence the 0 id. -->
         </div>
 
     </div>

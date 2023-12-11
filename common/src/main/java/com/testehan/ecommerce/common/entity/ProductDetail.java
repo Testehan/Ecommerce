@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,5 +33,17 @@ public class ProductDetail {
         this.name = name;
         this.value = value;
         this.product = product;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProductDetail that)) return false;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getValue(), that.getValue()) && Objects.equals(getProduct(), that.getProduct());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getValue(), getProduct());
     }
 }

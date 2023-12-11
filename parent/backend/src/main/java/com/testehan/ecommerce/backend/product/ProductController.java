@@ -3,7 +3,10 @@ package com.testehan.ecommerce.backend.product;
 import com.testehan.ecommerce.backend.brand.BrandService;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.entity.ProductImage;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -15,10 +18,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class ProductController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
     private ProductService productService;
     private BrandService brandService;
@@ -53,29 +63,74 @@ public class ProductController {
     public String saveProduct(Product product, RedirectAttributes redirectAttributes,
                               @RequestParam("fileImage") MultipartFile mainImage,
                               @RequestParam("extraImage") MultipartFile[] extraImages,
+                              @RequestParam(name = "detailIds", required = false) String[] detailIds,
                               @RequestParam(name = "detailNames", required = false) String[] detailNames,
-                              @RequestParam(name = "detailValues", required = false) String[] detailValues) throws IOException
+                              @RequestParam(name = "detailValues", required = false) String[] detailValues,
+                              @RequestParam(name = "imageIds", required = false) String[] imageIds,
+                              @RequestParam(name = "imageNames", required = false) String[] imageNames) throws IOException
     {
         setMainImageName(mainImage,product);
-        setExtraImageNames(extraImages,product);
-        setProductDetails(product,detailNames,detailValues);
+        setExistingExtraImageNames(product,imageIds,imageNames);
+        setNewExtraImageNames(extraImages,product);
+        setProductDetails(product,detailNames,detailValues, detailIds);
         
         Product savedProduct =  productService.save(product);
         
         saveUploadedImages(savedProduct, mainImage, extraImages);
 
+        deleteExtraImagesThatWereRemovedInForm(product);
 
         redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
         return "redirect:/products";
     }
 
-    private void setProductDetails(Product product, String[] detailNames, String[] detailValues) {
+    private void deleteExtraImagesThatWereRemovedInForm(Product product) {
+        String uploadDirExtras = "product-images/" + product.getId() + "/extras";
+        Path path = Paths.get(uploadDirExtras);
+
+        try{
+            Files.list(path).forEach(image -> {
+                String imageName = image.toFile().getName();
+                if (!product.containsImageName(imageName)){
+                    try {
+                        Files.delete(image);
+                        LOGGER.info("Deleted extra image " + imageName + " from " + uploadDirExtras);
+                    } catch (IOException e) {
+                        LOGGER.error("Could not delete file " + imageName + " from " + uploadDirExtras);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.error("Problem listing the files from " + uploadDirExtras);
+        }
+    }
+
+    private void setExistingExtraImageNames(Product product, String[] imageIds, String[] imageNames) {
+        if (imageIds != null && imageIds.length>0){
+            Set<ProductImage> extraProductImages = new HashSet<>();
+            for (int i = 0; i < imageIds.length; i++){
+                Integer imageId = Integer.parseInt(imageIds[i]);
+                String imageName = imageNames[i];
+                extraProductImages.add(new ProductImage(imageId,imageName,product));
+            }
+
+            product.setImages(extraProductImages);
+        }
+    }
+
+    private void setProductDetails(Product product, String[] detailNames, String[] detailValues, String[] detailIds) {
         if (Objects.nonNull(detailNames) && detailNames.length>0){
             for (int count =0; count < detailNames.length; count++){
                 String name = detailNames[count];
                 String value = detailValues[count];
-                if (!Strings.isBlank(name) && !Strings.isBlank(value)){
-                    product.addProductDetail(name,value);
+                Integer id = Integer.parseInt(detailIds[count]);
+
+                if (id != 0){   // means existing product detail, perhaps changed or unchanged
+                    product.updateExistingProductDetail(id,name,value);
+                } else {      // means new product detail added in form
+                    if (!Strings.isBlank(name) && !Strings.isBlank(value)) {
+                        product.addNewProductDetail(name, value);
+                    }
                 }
             }
         }
@@ -101,12 +156,15 @@ public class ProductController {
         }
     }
 
-    private void setExtraImageNames(MultipartFile[] extraImages, Product product) {
+    private void setNewExtraImageNames(MultipartFile[] extraImages, Product product) {
         if (extraImages.length>0) {
             for (MultipartFile extraImage : extraImages) {
                 if (!extraImage.isEmpty()) {
                     String filename = StringUtils.cleanPath(extraImage.getOriginalFilename());
-                    product.addExtraImage(filename);
+
+                    if (!product.containsImageName(filename)) {
+                        product.addExtraImage(filename);
+                    }
                 }
             }
         }

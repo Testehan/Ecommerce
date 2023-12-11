@@ -20,8 +20,11 @@ function addNextDetailSection(){
             <input type="text" class="form-control w-25" name="detailNames" maxlength="256" />
             <label class="m-3">Value:</label>
             <input type="text" class="form-control w-25" name="detailValues" maxlength="256" />
+
+            <input type="hidden" name="detailIds" value="0" />
         </div>
     `;
+    // above <input type="hidden" name="detailIds" value="0" /> has value 0 because a new detailsSection means that it is not yet in the DB, hence the 0 id.
 
     $("#divProductDetails").append(htmlDetailSection);
 
