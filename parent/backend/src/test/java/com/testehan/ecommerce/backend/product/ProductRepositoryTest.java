@@ -2,10 +2,7 @@ package com.testehan.ecommerce.backend.product;
 
 import com.testehan.ecommerce.backend.brand.BrandRepository;
 import com.testehan.ecommerce.backend.category.CategoryRepository;
-import com.testehan.ecommerce.common.entity.Brand;
-import com.testehan.ecommerce.common.entity.Category;
-import com.testehan.ecommerce.common.entity.Product;
-import com.testehan.ecommerce.common.entity.ProductImage;
+import com.testehan.ecommerce.common.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -98,5 +95,41 @@ public class ProductRepositoryTest {
         assertThat(savedProduct.getBrand()).isEqualTo(savedBrand);
         assertThat(savedProduct.getCategory()).isEqualTo( savedCategory);
         assertThat(savedProduct.getImages().size()).isEqualTo( 3);
+    }
+
+    @Test
+    public void whenPersistingProductProductDetails_productDetailsArePersistedInDB(){
+        var category = new Category("Test_Products5","Test_Product5","a pic of various products.jpg");
+        var savedCategory = categoryRepository.save(category);
+        var brand = new Brand("Test_Brand5","puma_logo.png",new HashSet<>());
+        brand.getCategories().add(savedCategory);
+        var savedBrand = brandRepository.save(brand);
+
+        Product product = new Product();
+        product.setName("Iphone 18");
+        product.setAlias("Iphone 18");
+        product.setShortDescription("Latest Iphone from Apple with improved specs.");
+        product.setFullDescription("Tim Cook talking about this phone");
+
+        product.setBrand(savedBrand);
+        product.setCategory(savedCategory);
+
+        product.setPrice(200000);
+        product.setCreatedTime(new Date());
+        product.setUpdatedTime(new Date());
+
+        product.setMainImage("main iPhone 17 image");
+        product.addProductDetail("CPU Speed","1.20 Ghz");
+        product.addProductDetail("RAM","32 Gb");
+        product.addProductDetail("HDD","SSD 2TB");
+
+
+        var savedProduct = productRepository.save(product);
+
+        assertThat(savedProduct.getName()).isEqualTo("Iphone 18");
+        assertThat(savedProduct.getAlias()).isEqualTo("Iphone 18");
+        assertThat(savedProduct.getBrand()).isEqualTo(savedBrand);
+        assertThat(savedProduct.getCategory()).isEqualTo( savedCategory);
+        assertThat(savedProduct.getDetails().size()).isEqualTo( 3);
     }
 }

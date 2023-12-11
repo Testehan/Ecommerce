@@ -3,6 +3,7 @@ package com.testehan.ecommerce.backend.product;
 import com.testehan.ecommerce.backend.brand.BrandService;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Product;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Controller
 public class ProductController {
@@ -50,10 +52,13 @@ public class ProductController {
     @PostMapping("/products/save")
     public String saveProduct(Product product, RedirectAttributes redirectAttributes,
                               @RequestParam("fileImage") MultipartFile mainImage,
-                              @RequestParam("extraImage") MultipartFile[] extraImages) throws IOException 
+                              @RequestParam("extraImage") MultipartFile[] extraImages,
+                              @RequestParam(name = "detailNames", required = false) String[] detailNames,
+                              @RequestParam(name = "detailValues", required = false) String[] detailValues) throws IOException
     {
         setMainImageName(mainImage,product);
-        setExtraImageNames(extraImages,product);    
+        setExtraImageNames(extraImages,product);
+        setProductDetails(product,detailNames,detailValues);
         
         Product savedProduct =  productService.save(product);
         
@@ -62,6 +67,18 @@ public class ProductController {
 
         redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
         return "redirect:/products";
+    }
+
+    private void setProductDetails(Product product, String[] detailNames, String[] detailValues) {
+        if (Objects.nonNull(detailNames) && detailNames.length>0){
+            for (int count =0; count < detailNames.length; count++){
+                String name = detailNames[count];
+                String value = detailValues[count];
+                if (!Strings.isBlank(name) && !Strings.isBlank(value)){
+                    product.addProductDetail(name,value);
+                }
+            }
+        }
     }
 
     private void saveUploadedImages(Product product, MultipartFile mainImage, MultipartFile[] extraImages) throws IOException {
