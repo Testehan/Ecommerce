@@ -39,10 +39,9 @@ function checkUnique(form){
     productName = $("#name").val();
     csrf = $("input[name='_csrf']").val();      // needed because otherwise we get a 403 Forbidden error. If you check with DevTools you will see a forbidden field with this id in the form.
 
-    url = "[[@{/products/check_unique}]]"
     params = {id: productId, name: productName, _csrf: csrf}
 
-    $.post(url, params, function(response){
+    $.post(checkUniqueUrl, params, function(response){
         if (response == "OK"){
             form.submit();
         } else if (response =="DuplicateName"){

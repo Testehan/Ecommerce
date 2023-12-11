@@ -14,7 +14,8 @@
     MAX_FILE_SIZE=5000000       //5 MB
 
     moduleUrl = "[[@{/products}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
-    brandModuleUrl = "[[@{/brands}]]";
+    checkUniqueUrl = "[[@{/products/check_unique}]]"; // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
+    brandModuleUrl = "[[@{/brands}]]";     // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
 
     // because we can't use thymeleaf in js code, we declare this variable here, and use it in product_form.js
     defaultThumbnailImageSrc = "[[@{/images/image-thumbnail.png}]]"
