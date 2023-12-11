@@ -9,59 +9,15 @@
     <script type="text/javascript" th:src="@{/richtext/jquery.richtext.min.js}" ></script>
 </head>
 <script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/product_form.js}"></script>
 <script type="text/javascript">
+    MAX_FILE_SIZE=5000000       //5 MB
+
     moduleUrl = "[[@{/products}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
     brandModuleUrl = "[[@{/brands}]]";
 
-    $(document).ready(function(){
-        $("#shortDescription").richText();
-         $("#fullDescription").richText();
-
-        dropdownBrands = $("#brand");
-        dropdownCategories = $("#category");
-
-        dropdownBrands.change(function(){          // when a brand is selected
-            dropdownCategories.empty();
-            getCategories();
-        });
-
-        getCategories();        // we need to call this at the initial load of the page, so that categories for first brand from dropdown are also retrieved
-    });
-
-    function getCategories(){
-        brandId = dropdownBrands.val();
-        url = brandModuleUrl + "/" + brandId + "/categories";
-
-        $.get(url, function(responseJson){
-           $.each(responseJson, function(index,category){
-                $("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
-           });
-        });
-    }
-
-    function checkUnique(form){
-        productId = $("#id").val();
-        productName = $("#name").val();
-        csrf = $("input[name='_csrf']").val();      // needed because otherwise we get a 403 Forbidden error. If you check with DevTools you will see a forbidden field with this id in the form.
-
-        url = "[[@{/products/check_unique}]]"
-        params = {id: productId, name: productName, _csrf: csrf}
-
-        $.post(url, params, function(response){
-            if (response == "OK"){
-                form.submit();
-            } else if (response =="DuplicateName"){
-                showWarningModal("There is another product with the same Name " + productName);
-            } else {
-                showErrorModal("Unknown response from server");
-            }
-
-        }).fail(function(){
-             showErrorModal("Unknown response from server");
-        });
-
-        return false;
-    }
+    // because we can't use thymeleaf in js code, we declare this variable here, and use it in product_form.js
+    defaultThumbnailImageSrc = "[[@{/images/image-thumbnail.png}]]"
 
 </script>
 
@@ -81,6 +37,7 @@
 
     <div>
         <form th:action="@{/products/save}" method="post" th:object="${product}"
+              enctype="multipart/form-data"
               onsubmit="return checkUnique(this)">
             <input type="hidden" th:field="*{id}" />
 
@@ -112,7 +69,9 @@
                     <div class="tab-pane" id="description" role="tabpanel" >
                         <div th:replace="~{products/product_description :: content}" />
                     </div>
-                    <div class="tab-pane" id="images" role="tabpanel" >Images</div>
+                    <div class="tab-pane" id="images" role="tabpanel" >
+                        <div th:replace="~{products/product_images :: content}" />
+                    </div>
                     <div class="tab-pane" id="details" role="tabpanel" >Details</div>
                     <div class="tab-pane p-3" id="shipping" role="tabpanel" >
                         <div th:replace="~{products/product_shipping :: content}" />

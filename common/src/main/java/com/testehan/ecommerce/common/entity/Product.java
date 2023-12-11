@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -48,6 +50,9 @@ public class Product {
     @Column(name="discount_percent")
     private byte discountPercent;      // maybe float could be used here, but discounts are usually integer values
 
+    @Column(name="main_image", nullable = false)
+    private String mainImage;
+
     private int length;             // again, float complictes things, this is in mm
     private int width;
     private int height;
@@ -61,4 +66,19 @@ public class Product {
     @JoinColumn(name="brand_id")
     private Brand brand;
 
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
+    private Set<ProductImage> images = new HashSet<>();
+
+    public void addExtraImage(String imageName){
+        this.images.add(new ProductImage(imageName,this));
+    }
+
+    @Transient
+    public String getMainImagePath() {
+        if (this.id == null || this.mainImage == null){
+            return "/images/image-thumbnail.png";
+        } else {
+            return "/product-images/" + this.id + "/" + this.mainImage;
+        }
+    }
 }

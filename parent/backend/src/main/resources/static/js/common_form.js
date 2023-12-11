@@ -4,15 +4,10 @@
         });
 
         $("#fileImage").change(function(){
-            fileSize = this.files[0].size;
-
-            if (fileSize>1048576){
-                this.setCustomValidity("You must choose a file with a size LESS than 1 MB");
-                this.reportValidity();
-            } else {
-                this.setCustomValidity("");
-                showImageThumbnail(this);       // this i assume refers to the file input
+            if (!checkFileSize(this)){
+                return ;
             }
+            showImageThumbnail(this);       // this i assume refers to the file input
         });
     });
 
@@ -24,6 +19,20 @@
         }
 
         reader.readAsDataURL(file);
+    }
+
+    function checkFileSize(fileInput){
+        fileSize = fileInput.files[0].size;
+
+        if (fileSize > MAX_FILE_SIZE){      // configured in various places depending on the needs
+            fileInput.setCustomValidity("You must choose a file with a size LESS than " + (MAX_FILE_SIZE/1000000) + " MB");
+            fileInput.reportValidity();
+            return false;
+        } else {
+            fileInput.setCustomValidity("");
+            return true;
+        }
+
     }
 
     function showModalDialog(title, message){

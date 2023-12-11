@@ -5,6 +5,7 @@ import com.testehan.ecommerce.backend.category.CategoryRepository;
 import com.testehan.ecommerce.common.entity.Brand;
 import com.testehan.ecommerce.common.entity.Category;
 import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.entity.ProductImage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -62,8 +63,40 @@ public class ProductRepositoryTest {
         assertThat(savedProduct.getAlias()).isEqualTo("Iphone 17");
         assertThat(savedProduct.getBrand()).isEqualTo(savedBrand);
         assertThat(savedProduct.getCategory()).isEqualTo( savedCategory);
+    }
 
+    @Test
+    public void whenPersistingProductWithImages_productImagesArePersistedInDB(){
+        var category = new Category("Test_Products2","Test_Products2","a pic of various products.jpg");
+        var savedCategory = categoryRepository.save(category);
+        var brand = new Brand("Test_Brand2","puma_logo.png",new HashSet<>());
+        brand.getCategories().add(savedCategory);
+        var savedBrand = brandRepository.save(brand);
 
+        Product product = new Product();
+        product.setName("Iphone 17");
+        product.setAlias("Iphone 17");
+        product.setShortDescription("Latest Iphone from Apple with improved specs.");
+        product.setFullDescription("Tim Cook talking about this phone");
 
+        product.setBrand(savedBrand);
+        product.setCategory(savedCategory);
+
+        product.setPrice(200000);
+        product.setCreatedTime(new Date());
+        product.setUpdatedTime(new Date());
+
+        product.setMainImage("main iPhone 17 image");
+        product.getImages().add(new ProductImage("rear picture",product));
+        product.getImages().add(new ProductImage("back picture",product));
+        product.getImages().add(new ProductImage("photos picture",product));
+
+        var savedProduct = productRepository.save(product);
+
+        assertThat(savedProduct.getName()).isEqualTo("Iphone 17");
+        assertThat(savedProduct.getAlias()).isEqualTo("Iphone 17");
+        assertThat(savedProduct.getBrand()).isEqualTo(savedBrand);
+        assertThat(savedProduct.getCategory()).isEqualTo( savedCategory);
+        assertThat(savedProduct.getImages().size()).isEqualTo( 3);
     }
 }
