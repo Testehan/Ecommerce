@@ -74,4 +74,12 @@ public class ProductService {
 
         productRepository.deleteById(id);
     }
+
+    public Product getById(Integer id) throws ProductNotFoundException {
+        try {
+            return productRepository.findById(id).get();
+        } catch (NoSuchElementException e){
+            throw new ProductNotFoundException("Could not find any product with id " + id);
+        }
+    }
 }

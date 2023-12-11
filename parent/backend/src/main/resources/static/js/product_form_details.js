@@ -1,3 +1,13 @@
+$(document).ready(function(){
+
+    $("a[name='linkRemoveDetail'").each(function(index){
+        $(this).click(function(){
+            removeExtraDivDetailsBy(index);
+        });
+
+    });
+
+});
 
 function addNextDetailSection(){
     allDivDetails=$("[id^='divDetail']");   // get all divDetails whos id starts with "divDetail"
@@ -30,4 +40,8 @@ function addNextDetailSection(){
 
 function removeExtraDivDetails(divDetailId){
     $("#"+divDetailId).remove();
+}
+
+function removeExtraDivDetailsBy(index){
+    $("#divDetail"+index).remove();
 }

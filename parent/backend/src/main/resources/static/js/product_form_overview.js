@@ -10,9 +10,22 @@ $(document).ready(function(){
         getCategories();
     });
 
-    getCategories();        // we need to call this at the initial load of the page, so that categories for first brand from dropdown are also retrieved
+    getCategoriesForNewForm();        // we need to call this at the initial load of the page, so that categories for first brand from dropdown are also retrieved
 
 });
+
+function getCategoriesForNewForm(){
+    catIdField = $("#categoryId");
+    editMode= false;
+
+    if (catIdField.length){     // if that field is present, it means that we are in edit mode
+        editMode=true;
+    }
+
+    if (!editMode){
+        getCategories();
+    }
+}
 
 function getCategories(){
     brandId = dropdownBrands.val();
