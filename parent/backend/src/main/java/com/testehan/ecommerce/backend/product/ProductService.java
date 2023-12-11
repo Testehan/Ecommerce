@@ -2,6 +2,11 @@ package com.testehan.ecommerce.backend.product;
 
 import com.testehan.ecommerce.common.entity.Product;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -12,6 +17,8 @@ import java.util.Objects;
 @Service
 @Transactional
 public class ProductService {
+
+    public static final int PRODUCTS_PER_PAGE = 5;
 
     private ProductRepository productRepository;
 
@@ -81,5 +88,29 @@ public class ProductService {
         } catch (NoSuchElementException e){
             throw new ProductNotFoundException("Could not find any product with id " + id);
         }
+    }
+
+    public Page<Product> listProductsByPage(int pageNumber, String sortField, String sortOrder, String keyword,Integer categoryId){
+        Sort sort = Sort.by(sortField);
+        sort = sortOrder.equalsIgnoreCase("ASC") ? sort.ascending() : sort.descending();
+
+        // the first pageNumber displayed in the UI is 1...but the paging starts from 0, hence why we need to substract 1
+        Pageable pageable = PageRequest.of(pageNumber -1, PRODUCTS_PER_PAGE, sort);
+
+        if (Strings.isNotBlank(keyword)){
+            if (Objects.nonNull(categoryId) && categoryId>0){
+                var categoryIdMatch = "-"+ categoryId +"-";
+                return productRepository.findAllInCategoryWithKeyword(categoryId,categoryIdMatch,keyword,pageable);
+            }
+            return productRepository.findAllByKeyword(keyword,pageable);
+        }
+
+        if (Objects.nonNull(categoryId) && categoryId>0){
+            var categoryIdMatch = "-"+ categoryId +"-";
+            return productRepository.findAllInCategory(categoryId,categoryIdMatch,pageable);
+        }
+
+        return productRepository.findAll(pageable);
+
     }
 }

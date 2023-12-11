@@ -95,6 +95,16 @@ public class Product {
         }
     }
 
+    @Transient
+    public String getProductShortName(){
+        if (this.name.length()>70) {
+            return this.name.substring(0,70).concat("...");
+        }
+        else {
+            return this.name;
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {

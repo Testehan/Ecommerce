@@ -1,12 +1,14 @@
 package com.testehan.ecommerce.backend.product;
 
 import com.testehan.ecommerce.backend.brand.BrandService;
+import com.testehan.ecommerce.backend.category.CategoryService;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Product;
 import com.testehan.ecommerce.common.entity.ProductImage;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -29,19 +31,58 @@ import java.util.Set;
 public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+    private static final String NO_KEYWORD="";
+    public static final int ALL_CATEGORIES = 0;
 
     private ProductService productService;
     private BrandService brandService;
+    private CategoryService categoryService;
 
-    public ProductController(ProductService productService, BrandService brandService){
+    public ProductController(ProductService productService, BrandService brandService,CategoryService categoryService){
         this.productService = productService;
         this.brandService = brandService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/products")
-    public String listAll(Model model){
-        var listProducts = productService.listAllProducts();
-        model.addAttribute("listProducts",listProducts);
+    public String listFirstPage(Model model){
+        return listBrandsByPage(1,model, "name", "asc", NO_KEYWORD, ALL_CATEGORIES);
+    }
+
+    @GetMapping("/products/page/{pageNumber}")
+    public String listBrandsByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
+                                   @Param("sortField")String sortField, @Param("sortOrder")String sortOrder,
+                                   @Param("keyword")String keyword,
+                                   @Param("categoryId")Integer categoryId ){
+
+        var pageOfProducts = productService.listProductsByPage(pageNumber, sortField, sortOrder, keyword,categoryId);
+        model.addAttribute("listProducts",pageOfProducts.getContent());
+
+        var listCategories = categoryService.listCategoriesInForm();
+
+        long startCount = (pageNumber-1)* ProductService.PRODUCTS_PER_PAGE + 1;
+        long endCount = startCount + ProductService.PRODUCTS_PER_PAGE - 1;
+        if (endCount > pageOfProducts.getTotalElements()){
+            endCount = pageOfProducts.getTotalElements();
+        }
+        model.addAttribute("startCount",startCount);
+        model.addAttribute("endCount",endCount);
+        model.addAttribute("currentPage",pageNumber);
+
+        model.addAttribute("totalItems",pageOfProducts.getTotalElements());
+        model.addAttribute("totalPages", pageOfProducts.getTotalPages());
+
+        String reverseSortOrder = sortOrder.equalsIgnoreCase("asc") ? "desc" : "asc";
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortOrder", sortOrder);
+        model.addAttribute("reverseSortOrder", reverseSortOrder);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("listCategories", listCategories);
+        if (Objects.nonNull(categoryId)) {
+            model.addAttribute("categoryId", categoryId);
+        }
+
+        // because first is folder from "templates"
         return "products/products";
     }
 
@@ -55,6 +96,8 @@ public class ProductController {
         model.addAttribute("product",product);
         model.addAttribute("listBrands",listBrands);
         model.addAttribute("pageTitle","Create new Product");
+        Integer numberOfExistingExtraImages = product.getImages().size();
+        model.addAttribute("numberOfExistingExtraImages",numberOfExistingExtraImages);
 
         return "products/product_form";
     }
@@ -222,6 +265,22 @@ public class ProductController {
             model.addAttribute("numberOfExistingExtraImages",numberOfExistingExtraImages);
 
             return "products/product_form";
+
+        } catch (ProductNotFoundException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/products";
+        }
+    }
+
+    @GetMapping("/products/detail/{id}")
+    public String viewProductDetails(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            var product = productService.getById(id);
+
+            model.addAttribute("product", product);
+
+            return "products/product_detail_modal";
 
         } catch (ProductNotFoundException e) {
             e.printStackTrace();
