@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: page_head(${pageTitle},'none')}" />
+
+<body>
+<!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
+<div class="container-fluid">
+
+	<head th:replace="~{navigation :: header_menu}" />
+	<head th:replace="~{navigation :: search_nav}" />
+
+	<div th:if="${totalItems > 0}">
+		<div>
+			<h2>Search results for '[[${keyword}]]'</h2>
+		</div>
+	</div>
+	<div th:unless="${totalItems > 0}">
+		<div>
+			<h2>No results found for '[[${keyword}]]'</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<th:block th:each="product : ${listResult}">
+			<div th:replace="~{product/product_fragment :: content}" />
+		</th:block>
+	</div>
+
+	<div th:replace="~{fragments :: pagination('/search','product')}" />
+
+	<div th:replace="~{navigation :: footer_menu}" />
+
+</div>
+</body>
+</html>

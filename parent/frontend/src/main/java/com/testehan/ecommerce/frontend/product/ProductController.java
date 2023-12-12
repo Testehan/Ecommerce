@@ -6,6 +6,7 @@ import com.testehan.ecommerce.common.exception.ProductNotFoundException;
 import com.testehan.ecommerce.frontend.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,5 +77,32 @@ public class ProductController {
             return "error/404";
         }
 
+    }
+
+    @GetMapping("/search")
+    public String searchFirstPage(@Param("keyword")String keyword, Model model){
+        return searchByPage(1,keyword,model);
+    }
+    @GetMapping("/search/page/{pageNum}")
+    public String searchByPage(@PathVariable("pageNum") int pageNum, @Param("keyword")String keyword, Model model){
+
+        var pageProducts = productService.search(keyword,pageNum);
+        model.addAttribute("pageTitle",keyword+" - Search Result");
+        model.addAttribute("keyword",keyword);
+
+        long startCount = (pageNum-1) * ProductService.PRODUCT_SEARCH_RESULTS_PER_PAGE + 1;
+        long endCount = startCount + ProductService.PRODUCT_SEARCH_RESULTS_PER_PAGE - 1;
+        if (endCount > pageProducts.getTotalElements()){
+            endCount = pageProducts.getTotalElements();
+        }
+        model.addAttribute("startCount",startCount);
+        model.addAttribute("endCount",endCount);
+        model.addAttribute("currentPage",pageNum);
+
+        model.addAttribute("totalItems", pageProducts.getTotalElements());
+        model.addAttribute("totalPages", pageProducts.getTotalPages());
+        model.addAttribute("listResult", pageProducts.getContent());
+
+        return "product/search_result";
     }
 }

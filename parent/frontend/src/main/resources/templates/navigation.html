@@ -14,7 +14,7 @@
         <!-- if you view the app on a mobile browser, the screen is too small to display all the
          navigation links from below...so what will happen is that a new button will appear (of the left side)
          that looks like 3 horizontal lines , that once clicked it will display the navigation -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar, #searchNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -41,6 +41,20 @@
             </ul>
         </div>
     </nav>
+</div>
+
+<div th:fragment="search_nav" class="row">
+    <div class="col-md">
+        <nav class="navbar navbar-expand-sm bg-light">
+            <div class="collapse navbar-collapse" id="searchNavbar">
+                <form class="form-inline" th:action="@{/search}" method="get" >
+                    <input type="search" name="keyword" class="form-control mr-sm-2" placeholder="keyword" required
+                        th:value="${keyword}"/>
+                    <input type="submit" value="Search" class="btn btn-outline-success" />
+                </form>
+            </div>
+        </nav>
+    </div>
 </div>
 
 <div th:fragment="footer_menu">

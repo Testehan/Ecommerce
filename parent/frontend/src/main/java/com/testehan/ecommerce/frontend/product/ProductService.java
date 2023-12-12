@@ -14,6 +14,7 @@ import java.util.Objects;
 public class ProductService {
 
     public static final Integer PRODUCTS_PER_PAGE = 10;
+    public static final Integer PRODUCT_SEARCH_RESULTS_PER_PAGE = 10;
     @Autowired
     private ProductRepository productRepository;
 
@@ -31,5 +32,10 @@ public class ProductService {
         }
 
         return product;
+    }
+
+    public Page<Product> search(String keyword, int pageNumber){
+        Pageable pageable = PageRequest.of(pageNumber-1, PRODUCT_SEARCH_RESULTS_PER_PAGE);
+        return productRepository.search(keyword,pageable);
     }
 }

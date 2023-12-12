@@ -17,4 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     // this will generate automatically a query behind the scenes, as "findBy.." is a spring data convention that
     // searches for the entity based on the mentioned field
     Product findByAlias(String alias);
+
+    @Query("SELECT p FROM Product p WHERE p.enabled=true " +
+            "AND (p.name LIKE %?1% OR p.fullDescription LIKE %?1% OR p.shortDescription LIKE %?1% )")
+    Page<Product> search(String keyword, Pageable pageable);
 }
