@@ -25,4 +25,16 @@ public class CategoryRepositoryTest {
         assertThat(categoryRepository.findAllEnabled().contains(savedCategory)).isTrue();
 
     }
+
+    @Test
+    public void whenFindEnabledByAlias_enabledCategoryWithAliasIsRetrieved(){
+        var category = new Category("FrontendCategory","FrontendCategory","a pic of various products.jpg");
+        category.setEnabled(true);
+        var savedCategory = categoryRepository.save(category);
+
+        var foundCategory = categoryRepository.findByAliasEnabled("FrontendCategory");
+        assertThat(foundCategory).isNotNull();
+        assertThat(foundCategory.getAlias()).isEqualTo("FrontendCategory");
+        assertThat(foundCategory.getName()).isEqualTo("FrontendCategory");
+    }
 }

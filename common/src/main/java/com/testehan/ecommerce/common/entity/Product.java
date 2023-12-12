@@ -105,6 +105,15 @@ public class Product {
         }
     }
 
+    @Transient
+    public float getDiscountedPrice(){
+        if (discountPercent > 0){
+            return price * ((float) (100 - discountPercent) /100);
+        } else {
+            return price;
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {
