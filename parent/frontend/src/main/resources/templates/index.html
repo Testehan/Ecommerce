@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Welcome to Shop</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: page_head('Shop','none')}" />
+
 <body>
-	<h1>Welcome to Shop eCommerce</h1>
+<!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
+<div class="container-fluid">
+
+	<head th:replace="~{navigation :: header_menu}" />
+
+	<div>
+		<h1>Shopping by categories</h1>
+	</div>
+
+	<div class="row">
+		<div class="col" th:each="cat : ${listCategories}">
+			<div>
+				<img th:src="@{${cat.ImagePath}}" width="80px" />
+			</div>
+			<div>
+				<a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="~{navigation :: footer_menu}" />
+
+</div>
 </body>
 </html>

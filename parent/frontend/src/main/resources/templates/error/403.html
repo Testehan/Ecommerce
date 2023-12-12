@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments :: page_head('Error - Shop','none')}" />
+
+<body>
+<!-- this is a bootstrap CSS class for corect display on mobile browsers -->
+<div class="container-fluid">
+
+    <head th:replace="~{navigation :: header_menu}" />
+
+    <div class="m-3">
+        <h2>You are not authorized to access this page.</h2>
+    </div>
+
+    <div th:replace="~{navigation :: footer_menu}" />
+
+</div>
+</body>
+</html>

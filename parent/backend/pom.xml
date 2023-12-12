@@ -39,16 +39,7 @@
 			<version>1.3.25</version>
 		</dependency>
 
-		<!-- added the next 2 dependencies because i want the app to connect to a docker postgresql DB -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-docker-compose</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+
 	</dependencies>
 
 	<build>
