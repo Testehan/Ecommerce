@@ -43,8 +43,13 @@ public class WebSecurityConfig {
             .requestMatchers("/images/**","/css/**","/webjars/**","/js/**")// to access these patterns a user can be NOT authenticated; ex in login page
                 .permitAll()
             .requestMatchers("/users/**","/settings/**").hasAnyAuthority("admin")
+
             .requestMatchers("/categories/**","/brands/**","/menus/**", "/articles/**").hasAnyAuthority("admin","Editor")
-            .requestMatchers("/products/**").hasAnyAuthority("admin","Editor","Salesperson","Shipper")
+
+            .requestMatchers("/products/new","/products/delete/**").hasAnyAuthority("admin","Editor")
+            .requestMatchers("/products/edit/**","/products/save","/products/check_unique").hasAnyAuthority("admin","Editor","Salesperson")
+            .requestMatchers("/products","/products/","/products/detail/**","/products/page/**").hasAnyAuthority("admin","Editor","Salesperson","Shipper")
+            .requestMatchers("/products/**").hasAnyAuthority("admin","Editor")
             .anyRequest()
                 .authenticated()
             .and()

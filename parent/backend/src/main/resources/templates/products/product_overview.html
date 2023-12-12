@@ -6,7 +6,9 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Product Name</label>
             <div class="col-sm-10">
-                <input type="text" th:field="*{name}" class="form-control" required minlength="3" maxlength="256" />
+                <input type="text" th:field="*{name}"
+                       th:readonly="${#authorization.expression('hasAuthority(''Salesperson'')')}"
+                       class="form-control" required minlength="3" maxlength="256" />
             </div>
         </div>
 
@@ -14,6 +16,7 @@
             <label class="col-sm-2 col-form-label">Alias</label>
             <div class="col-sm-10">
                 <input type="text" th:field="*{alias}" class="form-control"
+                    th:readonly="${#authorization.expression('hasAuthority(''Salesperson'')')}"
                     placeholder="Default is product name (spaces are replaced by dashes)"/>
             </div>
         </div>
@@ -21,44 +24,61 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Brand</label>
             <div class="col-sm-10">
-                <select th:field="*{brand}" class="form-control" required>
-                    <th:block th:each="brand: ${listBrands}">
-                        <option th:value="${brand.id}">[[${brand.name}]]</option>
-                    </th:block>
-                </select>
+
+                <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">
+                    <select th:field="*{brand}" class="form-control" required>
+                        <th:block th:each="brand: ${listBrands}">
+                            <option th:value="${brand.id}">[[${brand.name}]]</option>
+                        </th:block>
+                    </select>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Salesperson')">
+                    <input type="text" th:value="${product.brand.name}" class="form-control" readonly/>
+                </th:block>
+
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Categories</label>
             <div class="col-sm-10">
-                <th:block th:if="${product.category != null}">
-                    <select th:field="*{category}" class="form-control" required>
-                        <!-- TODO no idea why iterating here over the brand categories always shows as the first element in the dropdown the correct category.... -->
-                        <th:block th:each="cat : ${product.brand.categories}">
-                            <option th:value="${cat.id}">[[${cat.name}]]</option>
-                        </th:block>
-                    </select>
+                <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">
+                    <th:block th:if="${product.category != null}">
+                        <select th:field="*{category}" class="form-control" required>
+                            <!-- TODO no idea why iterating here over the brand categories always shows as the first element in the dropdown the correct category.... -->
+                            <th:block th:each="cat : ${product.brand.categories}">
+                                <option th:value="${cat.id}">[[${cat.name}]]</option>
+                            </th:block>
+                        </select>
+                    </th:block>
+
+                    <th:block th:if="${product.category == null}">
+                        <select th:field="*{category}" class="form-control" required>
+                        </select>
+                    </th:block>
                 </th:block>
 
-                <th:block th:if="${product.category == null}">
-                    <select th:field="*{category}" class="form-control" required>
-                    </select>
+                <th:block sec:authorize="hasAnyAuthority('Salesperson')">
+                    <input type="text" th:value="${product.category.name}" class="form-control" readonly/>
                 </th:block>
+
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Enabled</label>
             <div class="col-sm-10">
-                <input type="checkbox" th:field="*{enabled}" />
+                <input type="checkbox" th:field="*{enabled}"
+                       th:disabled="${#authorization.expression('hasAuthority(''Salesperson'')')}" />
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">In Stock</label>
             <div class="col-sm-10">
-                <input type="checkbox" th:field="*{inStock}" />
+                <input type="checkbox" th:field="*{inStock}"
+                       th:disabled="${#authorization.expression('hasAuthority(''Salesperson'')')}"/>
             </div>
         </div>
 

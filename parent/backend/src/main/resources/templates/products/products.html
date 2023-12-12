@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head th:replace="~{fragments :: page_head('Products - Shop Admin','none')}" />
 
@@ -34,10 +35,12 @@
 
         <div>
             <h2>Manage Products</h2>
-            <a th:href="@{/products/new}" title="Create new Product" class="fa-solid fa-folder-plus fa-2x icon-dark mr-2" />
-            <a th:href="@{/products/export/csv}" title="Export to CSV" class="fa-solid fa-file-csv fa-2x icon-dark mr-2" />
-            <a th:href="@{/products/export/excel}" title ="Export to Excel" class="fa-solid fa-file-excel fa-2x icon-dark mr-2"></a>
-            <a th:href="@{/products/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
+            <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">
+                <a th:href="@{/products/new}" title="Create new Product" class="fa-solid fa-folder-plus fa-2x icon-dark mr-2" />
+                <a th:href="@{/products/export/csv}" title="Export to CSV" class="fa-solid fa-file-csv fa-2x icon-dark mr-2" />
+                <a th:href="@{/products/export/excel}" title ="Export to Excel" class="fa-solid fa-file-excel fa-2x icon-dark mr-2"></a>
+                <a th:href="@{/products/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
+            </th:block>
         </div>
 
         <div>
@@ -73,17 +76,26 @@
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
-                        <th class="hideable-column" th:replace="~{fragments :: column_link('/products','id', 'ID', 'none')}" />
+                        <th class="hideable-column">
+                            <th th:replace="~{fragments :: column_link('/products','id', 'ID', 'tag')}" />
+                        </th>
+
                         <th>Main Image</th>
                         <th th:replace="~{fragments :: column_link('/products','name', 'Product Name', 'none')}"  />
-                        <th th:replace="~{fragments :: column_link('/products','brand', 'Brand', 'none')}"  />
-                        <th th:replace="~{fragments :: column_link('/products','category', 'Category', 'none')}"  />
-                        <th>Enabled</th>
+                        <th class="hideable-column">
+                            <th th:replace="~{fragments :: column_link('/products','brand', 'Brand', 'tag')}"  />
+                        </th>
+                        <th class="hideable-column">
+                            <th th:replace="~{fragments :: column_link('/products','category', 'Category', 'tag')}"  />
+                        </th>
+                        <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">
+                            <th>Enabled</th>
+                        </th:block>
                         <th></th>
                 </thead>
                 <tbody>
                     <tr th:each="product : ${listProducts}">
-                        <td th:text="${product.id}" class="hideable-column" ></td>
+                        <td class="hideable-column">[[${product.id}]]</td>
                         <td>
                             <img th:src="@{${product.MainImagePath}}" style="width:120px" class="img-fluid"/>
                         </td>
@@ -92,22 +104,52 @@
                             [[${product.ProductShortName}]]
                             </a>
                         </td>
-                        <td th:text="${product.brand.name}" ></td>
-                        <td th:text="${product.category.name}"></td>
-                        <td>
-                            <div th:replace="~{fragments :: status(${product.enabled},'product','/products/'+${product.id})}" />
-                        </td>
+                        <td class="hideable-column" >[[${product.brand.name}]]</td>
+                        <td class="hideable-column" >[[${product.category.name}]]</td>
+                        <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">
+                            <td>
+                                <div th:replace="~{fragments :: status(${product.enabled},'product','/products/'+${product.id})}" />
+                            </td>
+                        </th:block>
                         <td >
                             <a class="fas fa-file-alt fa-2x icon-green link-detail" th:href="@{'/products/detail/'+${product.id} }"
                                title="View details of product">&nbsp;</a>
-                            &nbsp;&nbsp;
-                            <div th:replace="~{fragments :: edit('product','/products/edit/'+${product.id})}" />
-                            &nbsp;&nbsp;
-                            <div th:replace="~{fragments :: delete('product',${product.id},'/products/delete/'+${product.id}, true)}" />
+                            <th:block sec:authorize="hasAnyAuthority('admin', 'Editor','Salesperson')">&nbsp;&nbsp;
+                                <div th:replace="~{fragments :: edit('product','/products/edit/'+${product.id})}" />
+                            </th:block>
+                            <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">&nbsp;&nbsp;
+                                <div th:replace="~{fragments :: delete('product',${product.id},'/products/delete/'+${product.id}, true)}" />
+                            </th:block>
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="less-details">
+            <h4>Showing product list on small phone screen</h4>
+            <div th:each="product : ${listProducts}" class="row m-1">
+                <div class="col-4">
+                    <!-- below we are calling a method that returns the path to the photo ...so we can not only access fields, but also methods -->
+                    <img th:src="@{${product.MainImagePath}}" style="width:80px" class="image-fluid"/>
+                </div>
+                <div class="col-8">
+                    <div>
+                        <a class="link-detail" th:href="@{'/products/detail/'+${product.id} }"
+                           title="View details of product">[[${product.ProductShortName}]]</a>
+                    </div>
+                    <div class="mt-2">
+                        <a class="fas fa-file-alt fa-2x icon-green link-detail" th:href="@{'/products/detail/'+${product.id} }"
+                           title="View details of product"></a>
+                        <th:block sec:authorize="hasAnyAuthority('admin', 'Editor','Salesperson')">&nbsp;&nbsp;
+                            <div th:replace="~{fragments :: edit('product','/products/edit/'+${product.id})}" />
+                        </th:block>
+                        <th:block sec:authorize="hasAnyAuthority('admin', 'Editor')">&nbsp;&nbsp;
+                            <div th:replace="~{fragments :: delete('product',${product.id},'/products/delete/'+${product.id}, true)}" />
+                        </th:block>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div th:replace="~{fragments :: pagination('/products','products')}" />

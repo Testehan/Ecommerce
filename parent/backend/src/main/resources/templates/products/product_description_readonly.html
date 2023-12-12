@@ -5,16 +5,15 @@
     <div th:fragment="content" remove="tag">
         <div class="m-2">
             <label>Short Description</label>
-            <textarea class="form-control" th:field="*{shortDescription}" rows="5" required>
+            <div th:utext="${product.shortDescription}" class="border p-2 m-2"></div>
             </textarea>
         </div>
 
         <div class="m-2">
             <label>Full Description</label>
-            <textarea class="form-control" th:field="*{fullDescription}" rows="10" required>
+            <div th:utext="${product.fullDescription}" class="border p-2 m-2"></div>
             </textarea>
         </div>
-
     </div>
 
 </body>

@@ -61,19 +61,9 @@ public class User {
         this.roles.add(role);
     }
 
+    @Transient
     public boolean hasRole(String roleName) {
         return roles.stream().filter(role -> role.getName().equalsIgnoreCase(roleName)).count()>0;
-
-//        Iterator<Role> iterator = roles.iterator();
-//
-//        while (iterator.hasNext()) {
-//            Role role = iterator.next();
-//            if (role.getName().equals(roleName)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
     }
 
     @Transient

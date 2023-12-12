@@ -47,6 +47,15 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public void saveProductPrice(Product productInForm){
+        var product = productRepository.findById(productInForm.getId()).get();
+        product.setCost(productInForm.getCost());
+        product.setPrice(productInForm.getPrice());
+        product.setDiscountPercent(productInForm.getDiscountPercent());
+
+        productRepository.save(product);
+    }
+
     public boolean isNameUnique(Integer id, String name) {
         Product productByName = productRepository.getProductByName(name);
 
