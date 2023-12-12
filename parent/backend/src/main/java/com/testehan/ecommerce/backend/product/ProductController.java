@@ -5,6 +5,7 @@ import com.testehan.ecommerce.backend.category.CategoryService;
 import com.testehan.ecommerce.backend.security.ShopUserDetails;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.exception.ProductNotFoundException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

@@ -1,11 +1,13 @@
 package com.testehan.ecommerce.frontend.category;
 
 import com.testehan.ecommerce.common.entity.Category;
+import com.testehan.ecommerce.common.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CategoryService {
@@ -23,8 +25,13 @@ public class CategoryService {
         return noChildrenCategories;
     }
 
-    public Category getCategoryByAlias(String alias){
-        return categoryRepository.findByAliasEnabled(alias);
+    public Category getCategoryByAlias(String alias) throws CategoryNotFoundException {
+        var category = categoryRepository.findByAliasEnabled(alias);
+        if (Objects.isNull(category)){
+            throw new CategoryNotFoundException("Category with alias " + alias + " was not found!");
+        }
+
+        return category;
     }
 
     public List<Category> getCategoryParents(Category child){

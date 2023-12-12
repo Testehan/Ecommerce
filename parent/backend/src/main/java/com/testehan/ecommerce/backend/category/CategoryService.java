@@ -1,6 +1,7 @@
 package com.testehan.ecommerce.backend.category;
 
 import com.testehan.ecommerce.common.entity.Category;
+import com.testehan.ecommerce.common.exception.CategoryNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -132,7 +133,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Category findById(Integer id) throws  CategoryNotFoundException{
+    public Category findById(Integer id) throws CategoryNotFoundException {
         try {
             return categoryRepository.findById(id).get();
         } catch(NoSuchElementException e){

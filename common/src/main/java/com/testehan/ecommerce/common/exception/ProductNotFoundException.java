@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.backend.product;
+package com.testehan.ecommerce.common.exception;
 
 public class ProductNotFoundException extends Exception {
 

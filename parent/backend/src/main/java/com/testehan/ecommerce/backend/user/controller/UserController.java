@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.backend.user.controller;
 
-import com.testehan.ecommerce.backend.user.UserNotFoundException;
+import com.testehan.ecommerce.common.exception.UserNotFoundException;
 import com.testehan.ecommerce.backend.user.UserService;
 import com.testehan.ecommerce.backend.user.export.UserCsvExporter;
 import com.testehan.ecommerce.backend.user.export.UserExcelExporter;

@@ -1,6 +1,7 @@
 package com.testehan.ecommerce.backend.brand;
 
 import com.testehan.ecommerce.common.entity.Brand;
+import com.testehan.ecommerce.common.exception.BrandNotFoundException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.backend.brand;
+package com.testehan.ecommerce.common.exception;
 
 public class BrandNotFoundException extends Throwable {
     public BrandNotFoundException(String message) {

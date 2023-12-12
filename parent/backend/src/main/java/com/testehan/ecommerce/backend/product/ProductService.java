@@ -1,6 +1,7 @@
 package com.testehan.ecommerce.backend.product;
 
 import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.exception.ProductNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;

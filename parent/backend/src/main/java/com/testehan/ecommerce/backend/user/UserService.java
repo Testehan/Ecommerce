@@ -2,6 +2,7 @@ package com.testehan.ecommerce.backend.user;
 
 import com.testehan.ecommerce.common.entity.Role;
 import com.testehan.ecommerce.common.entity.User;
+import com.testehan.ecommerce.common.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;

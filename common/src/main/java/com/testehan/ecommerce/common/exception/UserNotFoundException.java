@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.backend.user;
+package com.testehan.ecommerce.common.exception;
 
 public class UserNotFoundException extends Exception {
     public UserNotFoundException(String message) {

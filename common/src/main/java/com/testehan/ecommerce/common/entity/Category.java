@@ -42,6 +42,7 @@ public class Category {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
+    @OrderBy("name ASC")
     private Set<Category> children = new HashSet<>();
 
     @Transient

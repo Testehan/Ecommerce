@@ -3,6 +3,7 @@ package com.testehan.ecommerce.backend.category;
 import com.testehan.ecommerce.backend.category.export.CategoryCsvExporter;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Category;
+import com.testehan.ecommerce.common.exception.CategoryNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

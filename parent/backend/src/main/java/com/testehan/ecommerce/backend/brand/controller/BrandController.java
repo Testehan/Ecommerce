@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.backend.brand.controller;
 
-import com.testehan.ecommerce.backend.brand.BrandNotFoundException;
+import com.testehan.ecommerce.common.exception.BrandNotFoundException;
 import com.testehan.ecommerce.backend.brand.BrandService;
 import com.testehan.ecommerce.backend.category.CategoryService;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
