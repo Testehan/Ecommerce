@@ -19,7 +19,7 @@ public class Setting {
     @Column(length = 256, nullable = false, unique = true)
     private String key;
 
-    @Column(length = 1024, nullable = false, unique = true)
+    @Column(length = 1024, nullable = false)
     private String value;
 
     @Enumerated(EnumType.STRING)
@@ -30,11 +30,20 @@ public class Setting {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Setting setting)) return false;
-        return Objects.equals(getKey(), setting.getKey()) && Objects.equals(getValue(), setting.getValue()) && getCategory() == setting.getCategory();
+        return Objects.equals(getKey(), setting.getKey());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getKey(), getValue(), getCategory());
+        return Objects.hash(getKey());
+    }
+
+    @Override
+    public String toString() {
+        return "Setting{" +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                ", category=" + category +
+                '}';
     }
 }

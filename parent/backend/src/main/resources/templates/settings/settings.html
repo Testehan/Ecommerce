@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>  <!-- we remove head tag from inserted tag, because we want to make the page_head fragment extensible, since we need to include js libs here for rich text, that are not needed in other files -->
+    <head th:replace="~{fragments :: page_head('Settings - Shop Admin', 'tag')}" />
+
+    <link rel="stylesheet" type="text/css" th:href="@{/richtext/richtext.min.css}" />
+
+    <script type="text/javascript" th:src="@{/richtext/jquery.richtext.min.js}" ></script>
+
+</head>
+<script th:src="@{/js/common_form.js}"></script>
+<script type="text/javascript">
+    MAX_FILE_SIZE=1000000       //1 MB
+
+    moduleUrl = "[[@{/settings}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
+
+</script>
+<body>
+<!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
+<div class="container-fluid">
+
+    <head th:replace="~{navigation :: menu}" />
+
+    <div>
+        <h2>Site settings</h2>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+    <div>
+        <div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" id="settingTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#general" role="tab" >General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#countries" role="tab" >Countries</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#states" role="tab" >States</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#mailServer" role="tab" >Mail Server</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#mailTemplates" role="tab">Mail templates</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active p-3" id="general" role="tabpanel">
+                    <h1>General</h1>
+                    <head th:replace="~{settings/settings_general :: content}" />
+                </div>
+                <div class="tab-pane" id="countries" role="tabpanel" >
+                    <h1>Countries</h1>
+                </div>
+                <div class="tab-pane" id="states" role="tabpanel" >
+                    <h1>States</h1>
+                </div>
+                <div class="tab-pane p-3" id="mailServer" role="tabpanel" >
+                    <h1>Mail Server</h1>
+                </div>
+                <div class="tab-pane p-3" id="mailTemplates" role="tabpanel" >
+                    <h1>Mail templates</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: footer}" />
+</div>
+</body>
+</html>
