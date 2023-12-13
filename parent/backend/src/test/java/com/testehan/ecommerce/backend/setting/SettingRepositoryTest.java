@@ -20,7 +20,8 @@ public class SettingRepositoryTest {
 
     @Autowired
     private SettingRepository settingRepository;
-
+// TODO When deploying the app, the settings from the 2 tests from below should be added as defaults in some
+    // kind of initializer ...for example see DatabaseUpdates and how it is used
     @Test
     public void whenPersistingNewSetting_settingIsPersistedInDB(){
         var setting = new Setting("SITE_NAME","Shop", SettingCategory.GENERAL);
