@@ -95,4 +95,13 @@ public class WebSecurityConfig {
         };
     }
 
+    // if you ever need to create the first user of the app, you can just insert in the DB, and use the
+    // generated password from below in the insert. When logging in the form use "password"
+    @Bean
+    CommandLineRunner createAdminPassword(PasswordEncoder passwordEncoder ){
+        return args -> {
+           System.out.println("Encoded password is : ");
+           System.out.println(passwordEncoder.encode("password"));
+        };
+    }
 }
