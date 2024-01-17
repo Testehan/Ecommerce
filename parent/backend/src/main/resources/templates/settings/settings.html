@@ -10,10 +10,16 @@
 
 </head>
 <script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/setting_countries.js}"></script>
+<script th:src="@{/js/setting_states.js}"></script>
 <script type="text/javascript">
     MAX_FILE_SIZE=1000000       //1 MB
 
     moduleUrl = "[[@{/settings}]]";    // need to do this, because in common_form.js where moduleUrl is used, we can't specify the url with thymeleaf
+    contextPath = "[[@{/}]]";           // this is used in setting_countries.js
+
+    var csrfHeaderName = "[[${_csrf.headerName}]]";     // these 2 are used in setting_countries.js to make a POST request
+    var csrfValue = "[[${_csrf.token}]]";
 
 </script>
 <body>
@@ -55,13 +61,15 @@
             <div class="tab-content">
                 <div class="tab-pane active p-3" id="general" role="tabpanel">
                     <h1>General</h1>
-                    <head th:replace="~{settings/settings_general :: content}" />
+                    <div th:replace="~{settings/settings_general :: content}" ></div>
                 </div>
-                <div class="tab-pane" id="countries" role="tabpanel" >
+                <div class="tab-pane p-3" id="countries" role="tabpanel" >
                     <h1>Countries</h1>
+                    <div th:replace="~{settings/settings_countries :: content}" ></div>
                 </div>
                 <div class="tab-pane" id="states" role="tabpanel" >
                     <h1>States</h1>
+                    <div th:replace="~{settings/settings_states :: content}" ></div>
                 </div>
                 <div class="tab-pane p-3" id="mailServer" role="tabpanel" >
                     <h1>Mail Server</h1>
@@ -69,6 +77,14 @@
                 <div class="tab-pane p-3" id="mailTemplates" role="tabpanel" >
                     <h1>Mail templates</h1>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast justify-content-center d-flex" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000">
+        <div role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <span id="toastMessage"> </span>
             </div>
         </div>
     </div>
