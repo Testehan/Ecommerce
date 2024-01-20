@@ -42,7 +42,7 @@ public class WebSecurityConfig {
         http.authorizeRequests()
             .requestMatchers("/images/**","/css/**","/webjars/**","/js/**")// to access these patterns a user can be NOT authenticated; ex in login page
                 .permitAll()
-            .requestMatchers("/users/**","/settings/**").hasAnyAuthority("admin")
+            .requestMatchers("/users/**","/settings/**", "/states/**","/countries/**").hasAnyAuthority("admin")
 
             .requestMatchers("/categories/**","/brands/**","/menus/**", "/articles/**").hasAnyAuthority("admin","Editor")
 

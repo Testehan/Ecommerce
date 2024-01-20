@@ -33,7 +33,7 @@ $(document).ready(function(){
         if (buttonAddCountry.val() == "Add"){
             addCountry();
         } else{
-            changeFormStateToNew();
+            changeFormStateToNewCountry();
         }
     });
 
@@ -110,7 +110,7 @@ function selectNewlyAddedCountry(countryId, countryCode, countryName){
     fieldCountryCode.val("").focus();
 }
 
-function changeFormStateToNew(){
+function changeFormStateToNewCountry(){
     buttonAddCountry.val("Add");
     labelCountryName.text("Country name:");
 
@@ -142,7 +142,7 @@ function updateCountry(){
         $("#dropdownCountries option:selected").text(countryName);
 
         showToastMessage("The new country has been updated!");
-        changeFormStateToNew();
+        changeFormStateToNewCountry();
 
     }).fail(function(){
         showToastMessage("ERROR -> Could not connect to server or server encountered an error");
@@ -154,11 +154,16 @@ function deleteCountry(){
     countryId = optionValue.split("-")[0];
     url = contextPath + "countries/delete/" + countryId;
 
-    $.get(url, function(){
-        $("#dropdownCountries option[value='" + optionValue + "']").remove();
-        changeFormStateToNew();
+    $.ajax({
+        type: 'DELETE',
+        url: url,
+        beforeSend: function(xhr){
+            xhr.setRequestHeader(csrfHeaderName, csrfValue);    // csrfHeaderName and csrfValue are initialized in settings.html js code
+        }
     }).done(function(){
-        showToastMessage("Country have been loaded");
+        $("#dropdownCountries option[value='" + optionValue + "']").remove();
+        changeFormStateToNewCountry();
+        showToastMessage("Country have been deleted");
     }).fail(function(){
         showToastMessage("ERROR -> Could not connect to server or server encountered an error");
     });

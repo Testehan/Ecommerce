@@ -37,7 +37,7 @@ $(document).ready(function() {
 				addState();         // seems like the return from the "done" method in checkUnique is not working like that
 //			}                       // as it only seems to return from "done", and not from "checkUnique"...and so the
 		} else {                    // "addState" method is never reached
-			changeFormStateToNew();
+			changeFormStateToNewState();
 		}
 	});
 
@@ -63,7 +63,7 @@ function deleteState() {
 		}
 	}).done(function() {
 		$("#dropDownStates option[value='" + stateId + "']").remove();
-		changeFormStateToNew();
+		changeFormStateToNewState();
 		showToastMessage("The state has been deleted");
 	}).fail(function() {
 		showToastMessage("ERROR: Could not connect to server or server encountered an error");
@@ -95,7 +95,7 @@ function updateState() {
 	}).done(function(stateId) {
 		$("#dropDownStates option:selected").text(stateName);
 		showToastMessage("The state has been updated");
-		changeFormStateToNew();
+		changeFormStateToNewState();
 	}).fail(function() {
 		showToastMessage("ERROR: Could not connect to server or server encountered an error");
 	});
@@ -140,7 +140,7 @@ function selectNewlyAddedState(stateId, stateName) {
 	fieldStateName.val("").focus();
 }
 
-function changeFormStateToNew() {
+function changeFormStateToNewState() {
 	buttonAddState.val("Add");
 	labelStateName.text("State/Province Name:");
 
@@ -179,7 +179,7 @@ function loadStates4Country() {
 		});
 
 	}).done(function() {
-		changeFormStateToNew();
+		changeFormStateToNewState();
 		showToastMessage("All states have been loaded for country " + selectedCountry.text());
 	}).fail(function() {
 		showToastMessage("ERROR: Could not connect to server or server encountered an error");
