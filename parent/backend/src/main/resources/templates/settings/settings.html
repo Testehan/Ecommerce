@@ -21,6 +21,11 @@
     var csrfHeaderName = "[[${_csrf.headerName}]]";     // these 2 are used in setting_countries.js to make a POST request
     var csrfValue = "[[${_csrf.token}]]";
 
+    $(document).ready(function(){
+        $("#customerVerificationContent").richText();       // so that we have a rich text editor for this
+        $("#orderConfirmationContent").richText();       // so that we have a rich text editor for this
+    });
+
 </script>
 <body>
 <!-- thisi is a bootstrap CSS class for corect display on mobile browsers -->
