@@ -43,6 +43,22 @@ public class SettingsDefaultConfiguration {
 
                 settingRepository.saveAll(List.of(currencyId, symbol, symbolPosition, decimalPointType,
                         decimalDigits, thousandsPointType));
+
+                LOGGER.info("Mail settings will be persisted in the database !");
+                Setting mailHost = new Setting("MAIL_HOST", "smtp.gmail.com", SettingCategory.MAIL_SERVER);
+                Setting mailPort = new Setting("MAIL_PORT", "123", SettingCategory.MAIL_SERVER);
+                Setting mailUsername = new Setting("MAIL_USERNAME", "username", SettingCategory.MAIL_SERVER);
+                Setting mailPassword = new Setting("MAIL_PASSWORD", "password", SettingCategory.MAIL_SERVER);
+                Setting mailFrom = new Setting("MAIL_FROM", "shop@gmail.com", SettingCategory.MAIL_SERVER);
+                Setting mailSmtpAuth = new Setting("SMTP_AUTH", "true", SettingCategory.MAIL_SERVER);
+                Setting mailSmtpSecured = new Setting("SMTP_SECURED", "true", SettingCategory.MAIL_SERVER);
+                Setting mailSenderName = new Setting("MAIL_SENDER_NAME", "Shop Team", SettingCategory.MAIL_SERVER);
+                Setting mailCustomerVerifySubject = new Setting("CUSTOMER_VERIFY_SUBJECT", "Shop Verify your email", SettingCategory.MAIL_TEMPLATES);
+                Setting mailCustomerVerifyContent = new Setting("CUSTOMER_VERIFY_CONTENT", "Click on the link below to verify your Shop account", SettingCategory.MAIL_TEMPLATES);
+
+                settingRepository.saveAll(List.of(mailHost, mailPort, mailUsername, mailPassword, mailFrom, mailSmtpAuth,
+                        mailSmtpSecured, mailSenderName, mailCustomerVerifySubject, mailCustomerVerifyContent));
+
             } else {
                 LOGGER.info("Default settings are already present in the database !");
             }
