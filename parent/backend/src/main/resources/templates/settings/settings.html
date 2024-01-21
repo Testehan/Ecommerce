@@ -80,6 +80,7 @@
                 </div>
                 <div class="tab-pane p-3" id="mailTemplates" role="tabpanel" >
                     <h1>Mail templates</h1>
+                    <div th:replace="~{settings/mail/settings_mail_templates :: content}" ></div>
                 </div>
                 <div class="tab-pane p-3" id="payment" role="tabpanel" >
                     <h1>Payment</h1>
