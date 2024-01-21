@@ -30,6 +30,12 @@ public class SettingService {
         return new GeneralSettingBag(allSettings);
     }
 
+    public List<Setting> getMailServerSettings() {
+        var mailServerSettings = settingRepository.findByCategory(SettingCategory.MAIL_SERVER);
+
+        return mailServerSettings;
+    }
+
 
     public void saveAll(Iterable<Setting> settings) {
         settingRepository.saveAll(settings);

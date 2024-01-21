@@ -54,4 +54,15 @@ public class SettingController {
 
         return "redirect:/settings";
     }
+
+    @PostMapping("/settings/save_mail_server")
+    public String saveMailSettings(HttpServletRequest request, RedirectAttributes ra) throws IOException {
+
+        var mailServerSettings = settingService.getMailServerSettings();
+        SettingHelper.updateSettingValuesFromForm(request, mailServerSettings, settingService);
+
+        ra.addFlashAttribute("message", "Mail Server settings have been saved.");
+
+        return "redirect:/settings";
+    }
 }
