@@ -65,4 +65,16 @@ public class SettingController {
 
         return "redirect:/settings";
     }
+
+    @PostMapping("/settings/save_mail_templates")
+    public String saveTemplateSettings(HttpServletRequest request, RedirectAttributes ra) throws IOException {
+
+        var mailTemplateSettings = settingService.getMailTemplateSettings();
+        SettingHelper.updateSettingValuesFromForm(request, mailTemplateSettings, settingService);
+
+        ra.addFlashAttribute("message", "Mail Template settings have been saved.");
+
+        return "redirect:/settings";
+    }
+
 }

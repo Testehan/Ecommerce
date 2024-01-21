@@ -55,9 +55,12 @@ public class SettingsDefaultConfiguration {
                 Setting mailSenderName = new Setting("MAIL_SENDER_NAME", "Shop Team", SettingCategory.MAIL_SERVER);
                 Setting mailCustomerVerifySubject = new Setting("CUSTOMER_VERIFY_SUBJECT", "Shop Verify your email", SettingCategory.MAIL_TEMPLATES);
                 Setting mailCustomerVerifyContent = new Setting("CUSTOMER_VERIFY_CONTENT", "Click on the link below to verify your Shop account", SettingCategory.MAIL_TEMPLATES);
+                Setting mailOrderConfirmationSubject = new Setting("ORDER_CONFIRMATION_SUBJECT", "Your Shop order is confirmed", SettingCategory.MAIL_TEMPLATES);
+                Setting mailOrderConfirmationContent = new Setting("ORDER_CONFIRMATION_CONTENT", "Dear user, we herby inform you that we recieved your order and will deliver it ASAP.", SettingCategory.MAIL_TEMPLATES);
 
                 settingRepository.saveAll(List.of(mailHost, mailPort, mailUsername, mailPassword, mailFrom, mailSmtpAuth,
-                        mailSmtpSecured, mailSenderName, mailCustomerVerifySubject, mailCustomerVerifyContent));
+                        mailSmtpSecured, mailSenderName, mailCustomerVerifySubject, mailCustomerVerifyContent,
+                        mailOrderConfirmationSubject, mailOrderConfirmationContent));
 
             } else {
                 LOGGER.info("Default settings are already present in the database !");
