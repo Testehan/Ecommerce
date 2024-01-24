@@ -19,4 +19,9 @@ public class SettingService {
         return generalSettings;
     }
 
+    public EmailSettingsBag getEmailSettingsBag(){
+        var emailSettings = settingRepository.findByTwoCategories(SettingCategory.MAIL_SERVER, SettingCategory.MAIL_TEMPLATES);
+        return new EmailSettingsBag(emailSettings);
+    }
+
 }

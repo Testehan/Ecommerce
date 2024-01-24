@@ -46,15 +46,18 @@ public class SettingsDefaultConfiguration {
 
                 LOGGER.info("Mail settings will be persisted in the database !");
                 Setting mailHost = new Setting("MAIL_HOST", "smtp.gmail.com", SettingCategory.MAIL_SERVER);
-                Setting mailPort = new Setting("MAIL_PORT", "123", SettingCategory.MAIL_SERVER);
+                Setting mailPort = new Setting("MAIL_PORT", "587", SettingCategory.MAIL_SERVER);
+                // this needs to be your gmail address
                 Setting mailUsername = new Setting("MAIL_USERNAME", "username", SettingCategory.MAIL_SERVER);
+                // this needs to be your gmail password generated as described here: https://www.jotform.com/help/392-how-to-use-your-gmail-account-as-your-email-sender-via-smtp/
                 Setting mailPassword = new Setting("MAIL_PASSWORD", "password", SettingCategory.MAIL_SERVER);
                 Setting mailFrom = new Setting("MAIL_FROM", "shop@gmail.com", SettingCategory.MAIL_SERVER);
                 Setting mailSmtpAuth = new Setting("SMTP_AUTH", "true", SettingCategory.MAIL_SERVER);
                 Setting mailSmtpSecured = new Setting("SMTP_SECURED", "true", SettingCategory.MAIL_SERVER);
                 Setting mailSenderName = new Setting("MAIL_SENDER_NAME", "Shop Team", SettingCategory.MAIL_SERVER);
                 Setting mailCustomerVerifySubject = new Setting("CUSTOMER_VERIFY_SUBJECT", "Shop Verify your email", SettingCategory.MAIL_TEMPLATES);
-                Setting mailCustomerVerifyContent = new Setting("CUSTOMER_VERIFY_CONTENT", "Click on the link below to verify your Shop account", SettingCategory.MAIL_TEMPLATES);
+                // this needs to contain variables [[user]] and [[URL]]
+                Setting mailCustomerVerifyContent = new Setting("CUSTOMER_VERIFY_CONTENT", "Dear [[user]],<div><br></div><div>Click on the link below to verify your Shop account:</div><a href=\"[[URL]]\" target=\"_self\">Verify</a><div><a href=\"[[url]]\" target=\"_self\"></a></div><div><br></div><div><br></div><div>Have a nice day!</div><div><br></div>", SettingCategory.MAIL_TEMPLATES);
                 Setting mailOrderConfirmationSubject = new Setting("ORDER_CONFIRMATION_SUBJECT", "Your Shop order is confirmed", SettingCategory.MAIL_TEMPLATES);
                 Setting mailOrderConfirmationContent = new Setting("ORDER_CONFIRMATION_CONTENT", "Dear user, we herby inform you that we recieved your order and will deliver it ASAP.", SettingCategory.MAIL_TEMPLATES);
 

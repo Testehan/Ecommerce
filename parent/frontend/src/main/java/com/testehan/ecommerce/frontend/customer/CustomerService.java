@@ -15,20 +15,20 @@ import java.util.List;
 public class CustomerService {
 
     @Autowired
-    private CountryRepository countryRepo;
+    private CountryRepository countryRepository;
 
     @Autowired
-    private CustomerRepository customerRepo;
+    private CustomerRepository customerRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public List<Country> listAllCountries() {
-        return countryRepo.findAllByOrderByNameAsc();
+        return countryRepository.findAllByOrderByNameAsc();
     }
 
     public boolean isEmailUnique(String email) {
-        var customer = customerRepo.findByEmail(email);
+        var customer = customerRepository.findByEmail(email);
         return customer == null;
     }
 
@@ -40,7 +40,7 @@ public class CustomerService {
         var randomCode = randomString(64);
         customer.setVerificationCode(randomCode);
 
-        System.out.println("Verification code " + randomCode);
+        customerRepository.save(customer);
     }
 
     private void encodePassword(Customer customer) {

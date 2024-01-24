@@ -2,6 +2,9 @@ package com.testehan.ecommerce.frontend.customer;
 
 import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.Customer;
+import com.testehan.ecommerce.frontend.setting.SettingService;
+import com.testehan.ecommerce.frontend.util.CustomerRegisterUtil;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,9 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private SettingService settingService;
+
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
 
@@ -32,11 +38,11 @@ public class CustomerController {
 
     @PostMapping("/create_customer")
     public String createCustomer(Customer customer, Model model,
-                                 HttpServletRequest request) throws UnsupportedEncodingException {
+                                 HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
 
 
         customerService.registerCustomer(customer);
-//        CustomerRegisterUtil.sendVerificationEmail(request, customer, settingService);
+        CustomerRegisterUtil.sendVerificationEmail(request, customer, settingService);
 
         model.addAttribute("pageTitle", "Registration Succeeded!");
 
