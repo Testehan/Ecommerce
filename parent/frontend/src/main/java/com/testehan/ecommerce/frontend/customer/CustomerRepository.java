@@ -13,9 +13,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
             + "' ', c.postalCode, ' ', c.country.name) LIKE %?1%")
     Page<Customer> findAll(String keyword, Pageable pageable);
 
-    @Query("UPDATE Customer c SET c.enabled = ?2 WHERE c.id = ?1")
+    @Query("UPDATE Customer c SET c.enabled = true, c.verificationCode = null WHERE c.id = ?1")
     @Modifying
-    void updateEnabledStatus(Integer id, boolean enabled);
+    void enable(Integer id);
 
     @Query("SELECT c FROM Customer c WHERE c.email = ?1")
     Customer findByEmail(String email);

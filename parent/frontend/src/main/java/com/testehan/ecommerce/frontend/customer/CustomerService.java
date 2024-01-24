@@ -3,6 +3,7 @@ package com.testehan.ecommerce.frontend.customer;
 import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.frontend.setting.country.CountryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class CustomerService {
 
     @Autowired
@@ -41,6 +43,17 @@ public class CustomerService {
         customer.setVerificationCode(randomCode);
 
         customerRepository.save(customer);
+    }
+
+    public boolean verify(String verificationCode) {
+        Customer customer = customerRepository.findByVerificationCode(verificationCode);
+
+        if (customer == null || customer.isEnabled()) {
+            return false;
+        } else {
+            customerRepository.enable(customer.getId());
+            return true;
+        }
     }
 
     private void encodePassword(Customer customer) {
