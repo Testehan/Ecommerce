@@ -1,5 +1,7 @@
 package com.testehan.ecommerce.backend.customer;
 
+import com.testehan.ecommerce.common.entity.Country;
+import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -7,7 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class CustomerController {
@@ -79,4 +84,48 @@ public class CustomerController {
 
         return DEFAULT_REDIRECT_URL;
     }
+
+    @GetMapping("/customers/detail/{id}")
+    public String viewCustomer(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+
+        try {
+            Customer customer = customerService.get(id);
+            model.addAttribute("customer", customer);
+
+            return "customers/customer_detail_modal";
+        } catch (CustomerNotFoundException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+
+            return DEFAULT_REDIRECT_URL;
+        }
+    }
+
+    @GetMapping("/customers/edit/{id}")
+    public String editCustomer(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+
+        try {
+            Customer customer = customerService.get(id);
+            List<Country> countries = customerService.listAllCountries();
+
+            model.addAttribute("listCountries", countries);
+            model.addAttribute("customer", customer);
+            model.addAttribute("pageTitle", String.format("Edit Customer (ID: %d)", id));
+
+            return "customers/customer_form";
+
+        } catch (CustomerNotFoundException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+            return DEFAULT_REDIRECT_URL;
+        }
+    }
+
+    @PostMapping("/customers/save")
+    public String saveCustomer(Customer customer, Model model, RedirectAttributes ra) {
+
+        customerService.save(customer);
+        ra.addFlashAttribute("message", "The customer ID " + customer.getId() + " has been updated successfully.");
+
+        return DEFAULT_REDIRECT_URL;
+    }
+
 }
