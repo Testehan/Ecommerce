@@ -2,6 +2,7 @@ package com.testehan.ecommerce.backend.customer;
 
 import com.testehan.ecommerce.backend.setting.country.CountryRepository;
 import com.testehan.ecommerce.common.entity.Customer;
+import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,11 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 @Service
+@Transactional
 public class CustomerService {
 
-    public static final int CUSTOMERS_PER_PAGE = 10;
+    public static final int CUSTOMERS_PER_PAGE = 3;     // i put a smaller value so that i can test pagination with less data
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -37,5 +42,19 @@ public class CustomerService {
         }
 
         return customerRepository.findAll(pageable);
+    }
+
+    public void updateCustomerEnabledStatus(Integer id, boolean enabled) {
+        customerRepository.updateCustomerEnabledStatus(id, enabled);
+    }
+
+    public void delete(Integer id) throws CustomerNotFoundException {
+        try {
+            customerRepository.findById(id).get();
+        } catch (NoSuchElementException e){
+            throw new CustomerNotFoundException("Could not find any customer with ID " + id);
+        }
+        customerRepository.deleteById(id);
+
     }
 }

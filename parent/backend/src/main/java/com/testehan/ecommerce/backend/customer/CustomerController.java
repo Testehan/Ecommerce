@@ -1,16 +1,20 @@
 package com.testehan.ecommerce.backend.customer;
 
+import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CustomerController {
 
     private static final String NO_KEYWORD="";
+
+    private static final String DEFAULT_REDIRECT_URL = "redirect:/customers/page/1?sortField=firstName&sortOrder=asc";
 
     @Autowired
     private CustomerService customerService;
@@ -49,5 +53,30 @@ public class CustomerController {
 
         // because first is folder from "templates"
         return "customers/customers";
+    }
+
+    @GetMapping("/customers/{id}/enabled/{status}")
+    public String updateCustomerEnabledStatus(@PathVariable("id") Integer id,
+                                              @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
+
+        customerService.updateCustomerEnabledStatus(id, enabled);
+        String status = enabled ? "enabled" : "disabled";
+        String message = "The Customer ID " + id + " has been " + status;
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return DEFAULT_REDIRECT_URL;
+    }
+
+    @GetMapping("/customers/delete/{id}")
+    public String deleteCustomer(@PathVariable Integer id, RedirectAttributes ra) {
+
+        try {
+            customerService.delete(id);
+            ra.addFlashAttribute("message", "The customer ID " + id + " has been deleted successfully.");
+        } catch (CustomerNotFoundException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+        }
+
+        return DEFAULT_REDIRECT_URL;
     }
 }
