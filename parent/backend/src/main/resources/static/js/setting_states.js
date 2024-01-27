@@ -205,15 +205,12 @@ function loadCountries4States() {
 
 function validateFormState() {
 
-    console.log("Inside validateFormState");
 	formState = document.getElementById("formState");
 	if (!formState.checkValidity()) {
 		formState.reportValidity();
-		console.log("Inside validateFormState -> false");
 		return false;
 	}
 
-    console.log("Inside validateFormState -> true");
 	return true;
 }
 

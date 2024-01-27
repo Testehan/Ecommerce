@@ -77,7 +77,24 @@ function changeFormStateToSelectedCountry(){
 
 }
 
+
+// TODO This would also need to verify if the input fields of country name and state contain only
+// whitespaces... right now it just verifies the length of the inputs
+function validateFormCountry(){
+    formCountry = document.getElementById("formCountry");
+    if (!formCountry.checkValidity()){
+        formCountry.reportValidity();
+        return false;
+    }
+
+    return true;
+}
+
 function addCountry(){
+    if (!validateFormCountry()){
+        return;
+    }
+
     url = contextPath + "countries/save";
     countryName = fieldCountryName.val();
     countryCode = fieldCountryCode.val();
@@ -122,6 +139,10 @@ function changeFormStateToNewCountry(){
 }
 
 function updateCountry(){
+    if (!validateFormCountry()){
+        return;
+    }
+
     url = contextPath + "countries/save";
     countryName = fieldCountryName.val();
     countryCode = fieldCountryCode.val();
