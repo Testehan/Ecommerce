@@ -39,14 +39,14 @@ public class ProductController {
 
     @GetMapping("/products")
     public String listFirstPage(Model model){
-        return listBrandsByPage(1,model, "name", "asc", NO_KEYWORD, ALL_CATEGORIES);
+        return listProductsByPage(1,model, "name", "asc", NO_KEYWORD, ALL_CATEGORIES);
     }
 
     @GetMapping("/products/page/{pageNumber}")
-    public String listBrandsByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
-                                   @Param("sortField")String sortField, @Param("sortOrder")String sortOrder,
-                                   @Param("keyword")String keyword,
-                                   @Param("categoryId")Integer categoryId ){
+    public String listProductsByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
+                                     @Param("sortField")String sortField, @Param("sortOrder")String sortOrder,
+                                     @Param("keyword")String keyword,
+                                     @Param("categoryId")Integer categoryId ){
 
         var pageOfProducts = productService.listProductsByPage(pageNumber, sortField, sortOrder, keyword,categoryId);
         model.addAttribute("listProducts",pageOfProducts.getContent());
