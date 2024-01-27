@@ -54,7 +54,7 @@ public class CustomerController {
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortOrder", reverseSortOrder);
         model.addAttribute("keyword", keyword);
-
+        model.addAttribute("moduleURL", "/customers");
 
         // because first is folder from "templates"
         return "customers/customers";

@@ -65,7 +65,7 @@ public class CategoryController {
         }
         model.addAttribute("startCount",startCount);
         model.addAttribute("endCount",endCount);
-
+        model.addAttribute("moduleURL", "/categories");
 
         return "categories/categories";
 

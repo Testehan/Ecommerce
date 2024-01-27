@@ -59,6 +59,7 @@ public class BrandController {
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("reverseSortOrder", reverseSortOrder);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("moduleURL", "/brands");
 
         // because first is folder from "templates"
         return "brands/brands";

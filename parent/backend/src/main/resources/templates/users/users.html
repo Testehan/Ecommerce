@@ -19,29 +19,29 @@
             <a th:href="@{/users/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
         </div>
 
-        <div th:replace="~{fragments :: search_form_and_message('/users/page/1')}" />
+        <div th:replace="~{fragments :: search_form_and_message}" />
 
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
                         <th class="hideable-column">
-                            <th th:replace="~{fragments :: column_link('/users','id', 'User Id', 'tag')}"  />
+                            <th th:replace="~{fragments :: column_link('id', 'User Id', 'tag')}"  />
                         </th>
 
                         <th>Photos</th>
 
                         <th class="hideable-column">
-                            <th th:replace="~{fragments :: column_link('/users','email', 'Email', 'tag')}" />
+                            <th th:replace="~{fragments :: column_link('email', 'Email', 'tag')}" />
                         </th>
 
-                        <th th:replace="~{fragments :: column_link('/users','firstName', 'First name', 'none')}" />
+                        <th th:replace="~{fragments :: column_link('firstName', 'First name', 'none')}" />
 
-                        <th th:replace="~{fragments :: column_link('/users','lastName', 'Last name', 'none')}" />
+                        <th th:replace="~{fragments :: column_link('lastName', 'Last name', 'none')}" />
 
                         <!-- idk if it makes sense for roles... -->
-                        <th th:replace="~{fragments :: column_link('/users','roles', 'Roles', 'none')}" />
+                        <th th:replace="~{fragments :: column_link('roles', 'Roles', 'none')}" />
 
-                        <th th:replace="~{fragments :: column_link('/users','enabled', 'Enabled', 'none')}" />
+                        <th th:replace="~{fragments :: column_link('enabled', 'Enabled', 'none')}" />
 
                         <th></th>
                 </thead>
@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <div th:replace="~{fragments :: pagination('/users','users')}" />
+        <div th:replace="~{fragments :: pagination('users')}" />
 
         <!-- dialog that appears when there are duplicate email in the DB -->
         <div th:replace="~{fragments_modal :: confirm_modal}" />

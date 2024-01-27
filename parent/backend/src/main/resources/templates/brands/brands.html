@@ -29,14 +29,14 @@
             <a th:href="@{/brands/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
         </div>
 
-        <div th:replace="~{fragments :: search_form_and_message('/brands/page/1')}" />
+        <div th:replace="~{fragments :: search_form_and_message}" />
 
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
                         <th class="hideable-column">ID</th>
                         <th>Logo</th>
-                        <th th:replace="~{fragments :: column_link('/brands','name', 'Brand Name', 'none')}"  />
+                        <th th:replace="~{fragments :: column_link('name', 'Brand Name', 'none')}"  />
                         <th>Categories</th>
                         <th></th>
                 </thead>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <div th:replace="~{fragments :: pagination('/brands','brands')}" />
+        <div th:replace="~{fragments :: pagination('brands')}" />
 
         <div th:replace="~{fragments_modal :: confirm_modal}" />
 

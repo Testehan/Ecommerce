@@ -67,20 +67,20 @@
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
-                        <th th:replace="~{fragments :: column_link('/customers','id', 'ID', 'none')}" />
-                        <th th:replace="~{fragments :: column_link('/customers','firstName', 'First Name', 'none')}"  />
-                        <th th:replace="~{fragments :: column_link('/customers','lastName', 'Last Name', 'none')}"  />
+                        <th th:replace="~{fragments :: column_link('id', 'ID', 'none')}" />
+                        <th th:replace="~{fragments :: column_link('firstName', 'First Name', 'none')}"  />
+                        <th th:replace="~{fragments :: column_link('lastName', 'Last Name', 'none')}"  />
                         <th class="hideable-column">
-                            <th th:replace="~{fragments :: column_link('/customers','email', 'Email', 'tag')}"  />
+                            <th th:replace="~{fragments :: column_link('email', 'Email', 'tag')}"  />
                         </th>
                         <th class="hideable-column">
-                        <th th:replace="~{fragments :: column_link('/customers','city', 'City', 'tag')}"  />
+                        <th th:replace="~{fragments :: column_link('city', 'City', 'tag')}"  />
                         </th>
                         <th class="hideable-column">
-                            <th th:replace="~{fragments :: column_link('/customers','state', 'State', 'tag')}"  />
+                            <th th:replace="~{fragments :: column_link('state', 'State', 'tag')}"  />
                         </th>
 
-                        <th th:replace="~{fragments :: column_link('/customers','country', 'Country', 'none')}"  />
+                        <th th:replace="~{fragments :: column_link('country', 'Country', 'none')}"  />
 
                         <th:block sec:authorize="hasAnyAuthority('admin', 'Salesperson')">
                             <th>Enabled</th>
@@ -143,7 +143,7 @@
             </div>
         </div>
 
-        <div th:replace="~{fragments :: pagination('/customers','customers')}" />
+        <div th:replace="~{fragments :: pagination('customers')}" />
 
         <div th:replace="~{fragments_modal :: confirm_modal}" />
 

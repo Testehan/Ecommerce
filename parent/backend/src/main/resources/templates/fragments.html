@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <th th:fragment="column_link(moduleURL,fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+    <th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
         <a class="text-white"
            th:href="@{${moduleURL}+'/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortOrder=' + ${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword=' + keyword : '' } + ${categoryId != null ? '&categoryId=' + categoryId : ''} }" >
             [[${columnLabel}]]
@@ -28,7 +28,7 @@
               th:class="${sortOrder == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"> </span>
     </th>
 
-    <a th:fragment="page_link(moduleURL, pageNumber, label)"
+    <a th:fragment="page_link(pageNumber, label)"
         class="page-link"
         th:href="@{${moduleURL}+'/page/'+${pageNumber} + '?sortField='+ ${sortField} + '&sortOrder=' + ${sortOrder} + ${keyword != null ? '&keyword=' + keyword : '' } + ${categoryId != null ? '&categoryId=' + categoryId : ''} }">
         [[${label}]]
@@ -54,7 +54,7 @@
         </th:block>
     </div>
                 <!-- th:remove="tag" means that this top level div will not be included with the fragment, only the content inside this div -->
-    <div th:fragment="pagination(moduleURL, entityName)" th:remove="tag">
+    <div th:fragment="pagination(entityName)" th:remove="tag">
 
         <div class="text-center m-1" th:if="${totalItems > 0}">
             <span>Showing [[${entityName}]] [[${startCount}]] to [[${endCount}]] from total of [[${totalItems}]]</span>
@@ -68,30 +68,30 @@
             <nav>
                 <ul class="pagination justify-content-center flex-wrap">
                     <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${moduleURL}, 1, 'First')}" />
+                        <a th:replace="~{fragments :: page_link(1, 'First')}" />
                     </li>
                     <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${moduleURL}, ${currentPage-1}, 'Previous')}" />
+                        <a th:replace="~{fragments :: page_link(${currentPage-1}, 'Previous')}" />
                     </li>
 
                     <!-- if you want to have all pages listed have the sequence from 1 to totalPages below; I would like to have just a few..hence the complicated sequence from below-->
                     <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(currentPage+1>totalPages ? currentPage-1>0 ? currentPage-1 : 1 : currentPage, currentPage+1>totalPages ? totalPages :currentPage+1)}">
-                        <a th:replace="~{fragments :: page_link(${moduleURL}, ${i}, ${i})}" />
+                        <a th:replace="~{fragments :: page_link(${i}, ${i})}" />
                     </li>
 
                     <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${moduleURL}, ${currentPage+1}, 'Next')}" />
+                        <a th:replace="~{fragments :: page_link(${currentPage+1}, 'Next')}" />
                     </li>
                     <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                        <a th:replace="~{fragments :: page_link(${moduleURL}, ${totalPages}, 'Last')}" />
+                        <a th:replace="~{fragments :: page_link(${totalPages}, 'Last')}" />
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
 
-    <div th:fragment="search_form_and_message(moduleURL)">
-        <form th:action="@{${moduleURL}}" class="form-inline m-3">
+    <div th:fragment="search_form_and_message()">
+        <form th:action="@{${moduleURL} + '/page/1'}" class="form-inline m-3">
             <input type="hidden" name="sortField" th:value="${sortField}" />
             <input type="hidden" name="sortOrder" th:value="${sortOrder}" />
 

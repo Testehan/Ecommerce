@@ -74,6 +74,7 @@ public class ProductController {
         if (Objects.nonNull(categoryId)) {
             model.addAttribute("categoryId", categoryId);
         }
+        model.addAttribute("moduleURL", "/products");
 
         // because first is folder from "templates"
         return "products/products";

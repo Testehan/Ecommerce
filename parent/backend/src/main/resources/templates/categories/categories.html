@@ -29,14 +29,14 @@
             <a th:href="@{/categories/export/pdf}" title="Export to PDF" class="fa-solid fa-file-pdf fa-2x icon-dark mr-2"></a>
         </div>
 
-        <div th:replace="~{fragments :: search_form_and_message('/categories/page/1')}" />
+        <div th:replace="~{fragments :: search_form_and_message}" />
 
         <div class="full-details">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
                         <th>ID</th>
                         <th>Category Image</th>
-                        <th th:replace="~{fragments :: column_link('/categories','name', 'Category Name', 'none')}"  />
+                        <th th:replace="~{fragments :: column_link('name', 'Category Name', 'none')}"  />
                         <th class="hideable-column">Alias</th>
                         <th>Enabled</th>
 
@@ -89,10 +89,10 @@
          needs to reflect that -->
         <div th:if="${keyword != null}" class="text-center">
             <span>Search result does not show results in hierarchical form</span>
-            <div th:replace="~{fragments :: pagination('/categories','categories')}" />
+            <div th:replace="~{fragments :: pagination('categories')}" />
         </div>
         <th:block th:unless="${keyword != null}">
-            <div th:replace="~{fragments :: pagination('/categories','top level categories')}" />
+            <div th:replace="~{fragments :: pagination('top level categories')}" />
         </th:block>
 
         <div th:replace="~{fragments_modal :: confirm_modal}" />
