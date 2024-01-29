@@ -224,7 +224,7 @@ public class UserRepositoryTest {
         int pageSize = 4;
         Pageable pageable = PageRequest.of(pageNo,pageSize);
 
-        Page<User> usersPage = userRepository.findAllByKeyword("Dumbledore",pageable);
+        Page<User> usersPage = userRepository.findAll("Dumbledore",pageable);
         assertThat(usersPage.getContent().stream().findFirst().get().getFirstName()).isEqualTo("Dumbledore");
     }
 
@@ -238,7 +238,7 @@ public class UserRepositoryTest {
         int pageSize = 4;
         Pageable pageable = PageRequest.of(pageNo,pageSize);
 
-        Page<User> usersPage = userRepository.findAllByKeyword("Albus",pageable);
+        Page<User> usersPage = userRepository.findAll("Albus",pageable);
         assertThat(usersPage.getContent().stream().findFirst().get().getLastName()).isEqualTo("Albus");
     }
 
@@ -255,7 +255,7 @@ public class UserRepositoryTest {
         int pageSize = 4;
         Pageable pageable = PageRequest.of(pageNo,pageSize);
 
-        Page<User> usersPage = userRepository.findAllByKeyword("Dumbledore",pageable);
+        Page<User> usersPage = userRepository.findAll("Dumbledore",pageable);
         assertThat(usersPage.getContent().size()).isEqualTo(2);
     }
 }

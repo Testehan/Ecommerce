@@ -12,15 +12,13 @@ public class PagingAndSortingHelper {
 
     private ModelAndViewContainer model;
     private String listName;
-    private String moduleURL;
     private String sortField;
     private String sortOrder;
     private String keyword;
 
-    public PagingAndSortingHelper(ModelAndViewContainer model, String listName, String moduleURL, String sortField, String sortOrder, String keyword) {
+    public PagingAndSortingHelper(ModelAndViewContainer model, String listName, String sortField, String sortOrder, String keyword) {
         this.model = model;
         this.listName = listName;
-        this.moduleURL = moduleURL;
         this.sortField = sortField;
         this.sortOrder = sortOrder;
         this.keyword = keyword;
@@ -44,7 +42,6 @@ public class PagingAndSortingHelper {
         model.addAttribute("endCount", endCount);
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute(listName, listItems);
-        model.addAttribute("moduleURL", moduleURL);
 
     }
 
@@ -72,10 +69,6 @@ public class PagingAndSortingHelper {
 
     public String getListName() {
         return listName;
-    }
-
-    public String getModuleURL() {
-        return moduleURL;
     }
 
     public String getSortField() {

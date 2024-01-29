@@ -1,15 +1,11 @@
 package com.testehan.ecommerce.backend.customer;
 
 import com.testehan.ecommerce.backend.setting.country.CountryRepository;
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,18 +28,8 @@ public class CustomerService {
     private PasswordEncoder passwordEncoder;
 
 
-    public Page<Customer> listCustomersByPage(Integer pageNumber, String sortField, String sortOrder, String keyword) {
-        Sort sort = Sort.by(sortField);
-        sort = sortOrder.equalsIgnoreCase("ASC") ? sort.ascending() : sort.descending();
-
-        // the first pageNumber displayed in the UI is 1...but the paging starts from 0, hence why we need to substract 1
-        Pageable pageable = PageRequest.of(pageNumber -1, CUSTOMERS_PER_PAGE, sort);
-
-        if (Strings.isNotBlank(keyword)){
-            return customerRepository.findAllByKeyword(keyword,pageable);
-        }
-
-        return customerRepository.findAll(pageable);
+    public void listByPage(int pageNum, PagingAndSortingHelper helper) {
+        helper.listEntities(pageNum, CUSTOMERS_PER_PAGE, customerRepository);
     }
 
     public void updateCustomerEnabledStatus(Integer id, boolean enabled) {
