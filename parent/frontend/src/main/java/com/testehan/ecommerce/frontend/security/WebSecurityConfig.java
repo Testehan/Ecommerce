@@ -1,5 +1,7 @@
 package com.testehan.ecommerce.frontend.security;
 
+import com.testehan.ecommerce.frontend.security.oauth.CustomerOAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,9 @@ public class WebSecurityConfig {
 
 
     public static final int TWO_WEEKS_COOKIE_VALIDITY = 14 * 24 * 60 * 60;
+
+    @Autowired
+    private CustomerOAuth2UserService customerOAuth2UserService;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -45,6 +50,12 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .usernameParameter("email")     // because in spring security, the default login input parameter name is "username" and we use email
                         .permitAll())
+                .oauth2Login( oauth2Login -> oauth2Login
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(customerOAuth2UserService)
+                        )
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .permitAll())
