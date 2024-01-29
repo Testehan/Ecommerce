@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.frontend.customer;
 
+import com.testehan.ecommerce.common.entity.AuthenticationType;
 import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.Customer;
 import org.junit.jupiter.api.Disabled;
@@ -136,5 +137,17 @@ public class CustomerRepositoryTests {
         System.out.println(customer);
     }
 
+    @Test
+    public void updateAuthenticationType() {
+        var email = "dan@yahoo.com";
+        var customer = customerRepository.findByEmail(email);
+
+        customerRepository.updateAuthenticationType(customer.getId(), AuthenticationType.FACEBOOK);
+        customerRepository.flush();
+
+        customer = customerRepository.findByEmail(email);
+        assertThat(customer).isNotNull();
+        assertThat(customer.getAuthenticationType()).isEqualTo(AuthenticationType.FACEBOOK);
+    }
 
 }

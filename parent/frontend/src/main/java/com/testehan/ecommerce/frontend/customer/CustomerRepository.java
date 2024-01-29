@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.frontend.customer;
 
+import com.testehan.ecommerce.common.entity.AuthenticationType;
 import com.testehan.ecommerce.common.entity.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Customer findByVerificationCode(String code);
 
     Long countById(Integer id);
+
+    @Query("UPDATE Customer c SET c.authenticationType = ?2 WHERE c.id = ?1 ")
+    @Modifying
+    void updateAuthenticationType(Integer customerId, AuthenticationType authenticationType);
 }

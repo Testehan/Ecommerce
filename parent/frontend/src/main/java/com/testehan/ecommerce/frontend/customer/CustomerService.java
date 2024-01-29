@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.frontend.customer;
 
+import com.testehan.ecommerce.common.entity.AuthenticationType;
 import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.frontend.setting.country.CountryRepository;
@@ -53,6 +54,12 @@ public class CustomerService {
         } else {
             customerRepository.enable(customer.getId());
             return true;
+        }
+    }
+
+    public void updateAuthenticationType(Customer customer, AuthenticationType authenticationType){
+        if (!customer.getAuthenticationType().equals(authenticationType)) {
+            customerRepository.updateAuthenticationType(customer.getId(), authenticationType);
         }
     }
 
