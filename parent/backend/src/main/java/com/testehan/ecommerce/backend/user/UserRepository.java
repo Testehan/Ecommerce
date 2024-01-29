@@ -1,16 +1,16 @@
 package com.testehan.ecommerce.backend.user;
 
+import com.testehan.ecommerce.backend.util.paging.SearchRepository;
 import com.testehan.ecommerce.common.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends SearchRepository<User, Integer> {
 
     User getUserByEmail(@Param("email") String email);
 
@@ -27,5 +27,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
         // the purpose of the concatenation from below is so that if someone searches for a keyword like "Dan T" that
         // represents the full name of a user, the result will be found
     @Query("SELECT u FROM User u WHERE CONCAT(u.id, ' ' , u.firstName, ' ', u.lastName, ' ', u.email,' ') like %?1%")
-    Page<User> findAllByKeyword(String keyword, Pageable pageable);
+    Page<User> findAll(String keyword, Pageable pageable);
 }

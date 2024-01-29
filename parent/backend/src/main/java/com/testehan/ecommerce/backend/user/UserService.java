@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.backend.user;
 
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.common.entity.Role;
 import com.testehan.ecommerce.common.entity.User;
 import com.testehan.ecommerce.common.exception.UserNotFoundException;
@@ -39,18 +40,8 @@ public class UserService {
         return (List<Role>) roleRepository.findAll();
     }
 
-    public Page<User> listUsersByPage(int pageNumber, String sortField, String sortOrder, String keyword){
-        Sort sort = Sort.by(sortField);
-        sort = sortOrder.equalsIgnoreCase("ASC") ? sort.ascending() : sort.descending();
-
-        // the first pageNumber displayed in the UI is 1...but the paging starts from 0, hence why we need to substract 1
-        Pageable pageable = PageRequest.of(pageNumber -1, USER_PAGE_SIZE, sort);
-
-        if (Strings.isNotBlank(keyword)){
-            return userRepository.findAllByKeyword(keyword,pageable);
-        } else {
-            return userRepository.findAll(pageable);
-        }
+    public void listUsersByPage(int pageNumber, PagingAndSortingHelper pagingAndSortingHelper){
+        pagingAndSortingHelper.listEntities(pageNumber,USER_PAGE_SIZE, userRepository);
     }
 
     public User save(User user) {

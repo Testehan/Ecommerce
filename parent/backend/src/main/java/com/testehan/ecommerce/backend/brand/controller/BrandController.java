@@ -1,11 +1,12 @@
 package com.testehan.ecommerce.backend.brand.controller;
 
-import com.testehan.ecommerce.common.exception.BrandNotFoundException;
 import com.testehan.ecommerce.backend.brand.BrandService;
 import com.testehan.ecommerce.backend.category.CategoryService;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
 import com.testehan.ecommerce.common.entity.Brand;
-import org.springframework.data.repository.query.Param;
+import com.testehan.ecommerce.common.exception.BrandNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -31,35 +32,15 @@ public class BrandController {
     }
 
     @GetMapping("/brands")
-    public String listFirstPage(Model model){
-        return listBrandsByPage(1,model, "name", "asc", NO_KEYWORD);
+    public String listFirstPage(){
+        return "redirect:/brands/page/1?sortField=name&sortOrder=asc";
     }
 
     @GetMapping("/brands/page/{pageNumber}")
-    public String listBrandsByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
-                                   @Param("sortField")String sortField, @Param("sortOrder")String sortOrder,
-                                   @Param("keyword")String keyword){
-        var pageOfBrands = brandService.listBrandsByPage(pageNumber, sortField, sortOrder, keyword);
-        model.addAttribute("listBrands",pageOfBrands.getContent());
+    public String listBrandsByPage( @PagingAndSortingParam(moduleURL = "/brands", listName = "listBrands") PagingAndSortingHelper pagingAndSortingHelper,
+            @PathVariable(name = "pageNumber") Integer pageNumber){
 
-        long startCount = (pageNumber-1)* BrandService.BRAND_PAGE_SIZE + 1;
-        long endCount = startCount + BrandService.BRAND_PAGE_SIZE - 1;
-        if (endCount > pageOfBrands.getTotalElements()){
-            endCount = pageOfBrands.getTotalElements();
-        }
-        model.addAttribute("startCount",startCount);
-        model.addAttribute("endCount",endCount);
-        model.addAttribute("currentPage",pageNumber);
-
-        model.addAttribute("totalItems",pageOfBrands.getTotalElements());
-        model.addAttribute("totalPages", pageOfBrands.getTotalPages());
-
-        String reverseSortOrder = sortOrder.equalsIgnoreCase("asc") ? "desc" : "asc";
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortOrder", sortOrder);
-        model.addAttribute("reverseSortOrder", reverseSortOrder);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/brands");
+        brandService.listBrandsByPage(pageNumber, pagingAndSortingHelper);
 
         // because first is folder from "templates"
         return "brands/brands";

@@ -1,14 +1,15 @@
 package com.testehan.ecommerce.backend.user.controller;
 
-import com.testehan.ecommerce.common.exception.UserNotFoundException;
 import com.testehan.ecommerce.backend.user.UserService;
 import com.testehan.ecommerce.backend.user.export.UserCsvExporter;
 import com.testehan.ecommerce.backend.user.export.UserExcelExporter;
 import com.testehan.ecommerce.backend.user.export.UserPdfExporter;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
 import com.testehan.ecommerce.common.entity.User;
+import com.testehan.ecommerce.common.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -34,36 +35,16 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String listFirstPage(Model model){       // BY DEFAULT we sort by firstName ascending
-        return listUsersByPage(1,model, "firstName", "asc", NO_KEYWORD);
+    public String listFirstPage(){
+        // BY DEFAULT we sort by firstName ascending
+        return "redirect:/users/page/1?sortField=firstName&sortOrder=asc";
     }
 
     @GetMapping("/users/page/{pageNumber}")
-    public String listUsersByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
-                                  @Param("sortField")String sortField, @Param("sortOrder")String sortOrder,
-                                  @Param("keyword")String keyword){
-        var pageOfUsers = userService.listUsersByPage(pageNumber, sortField, sortOrder, keyword);
-        model.addAttribute("listUsers",pageOfUsers.getContent());
+    public String listUsersByPage(@PagingAndSortingParam(listName = "listUsers", moduleURL="/users") PagingAndSortingHelper pagingAndSortingHelper,
+                                  @PathVariable(name = "pageNumber") Integer pageNumber){
 
-        long startCount = (pageNumber-1)*UserService.USER_PAGE_SIZE + 1;
-        long endCount = startCount + UserService.USER_PAGE_SIZE - 1;
-        if (endCount > pageOfUsers.getTotalElements()){
-            endCount = pageOfUsers.getTotalElements();
-        }
-        model.addAttribute("startCount",startCount);
-        model.addAttribute("endCount",endCount);
-        model.addAttribute("currentPage",pageNumber);
-
-        model.addAttribute("totalItems",pageOfUsers.getTotalElements());
-        model.addAttribute("totalPages", pageOfUsers.getTotalPages());
-
-        String reverseSortOrder = sortOrder.equalsIgnoreCase("asc") ? "desc" : "asc";
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortOrder", sortOrder);
-        model.addAttribute("reverseSortOrder", reverseSortOrder);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/users");
-
+        userService.listUsersByPage(pageNumber, pagingAndSortingHelper);
         // because first is folder from "templates"
         return "users/users";
     }
