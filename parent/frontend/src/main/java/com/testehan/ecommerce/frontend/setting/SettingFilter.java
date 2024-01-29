@@ -28,7 +28,6 @@ public class SettingFilter implements Filter {
 
         var settings = settingService.getGeneralSettings();
         for (Setting setting: settings) {
-            System.out.println(setting);
             servletRequest.setAttribute(setting.getKey(),setting.getValue());
         }
 

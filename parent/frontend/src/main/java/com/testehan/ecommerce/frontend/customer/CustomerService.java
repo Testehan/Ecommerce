@@ -6,6 +6,7 @@ import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.frontend.setting.country.CountryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
 
     public List<Country> listAllCountries() {
@@ -63,6 +64,10 @@ public class CustomerService {
         }
     }
 
+    public Customer getCustomerByEmail(String email){
+        return customerRepository.findByEmail(email);
+    }
+
     private void encodePassword(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
     }
@@ -75,5 +80,35 @@ public class CustomerService {
         for(int i = 0; i < len; i++)
             sb.append(AB.charAt(secureRandom.nextInt(AB.length())));
         return sb.toString();
+    }
+
+    public void addNewCustomerAfterOAuth2Login(String name, String email, String countryCode) {
+        var customer = new Customer();
+
+        String[] names = name.split(" ");
+        if (names.length < 2){
+            customer.setFirstName(name);
+            customer.setLastName("");
+        } else {
+            var firstName = names[0];
+            customer.setFirstName(firstName);
+            // because I assume the last name can be composed of multiple words, but we don't want the first one anymore
+            customer.setLastName(name.replaceFirst(firstName,""));
+        }
+
+
+        customer.setEmail(email);
+        customer.setEnabled(true);
+        customer.setCreatedTime(new Date());
+        customer.setAuthenticationType(AuthenticationType.GOOGLE);
+        customer.setPassword("");
+        customer.setAddressLine1("");
+        customer.setCity("");
+        customer.setState("");
+        customer.setPhoneNumber("");
+        customer.setPostalCode("");
+        customer.setCountry(countryRepository.findByCode(countryCode));
+
+        customerRepository.save(customer);
     }
 }

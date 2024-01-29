@@ -1,6 +1,7 @@
 package com.testehan.ecommerce.frontend.security;
 
 import com.testehan.ecommerce.frontend.security.oauth.CustomerOAuth2UserService;
+import com.testehan.ecommerce.frontend.security.oauth.OAuth2LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +19,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-
     public static final int TWO_WEEKS_COOKIE_VALIDITY = 14 * 24 * 60 * 60;
 
     @Autowired
     private CustomerOAuth2UserService customerOAuth2UserService;
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -55,6 +57,7 @@ public class WebSecurityConfig {
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(customerOAuth2UserService)
                         )
+                        .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

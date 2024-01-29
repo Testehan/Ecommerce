@@ -32,4 +32,8 @@ public class CustomerOAuth2User implements OAuth2User {
     public String getFullName(){
         return getName();
     }
+
+    public String getEmail(){
+        return oAuth2User.getAttribute("email");
+    }
 }
