@@ -48,6 +48,29 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
+    public void update(Customer customerInForm) {
+        var customerInDB = customerRepository.findById(customerInForm.getId()).get();
+
+        if (customerInDB.getAuthenticationType().equals(AuthenticationType.DATABASE)) {
+            if (!customerInForm.getPassword().isEmpty()) {
+                String encodedPassword = passwordEncoder.encode(customerInForm.getPassword());
+                customerInForm.setPassword(encodedPassword);
+            } else {
+                customerInForm.setPassword(customerInDB.getPassword());
+            }
+        } else {
+            customerInForm.setPassword(customerInDB.getPassword());
+        }
+
+        customerInForm.setEnabled(customerInDB.isEnabled());
+        customerInForm.setCreatedTime(customerInDB.getCreatedTime());
+        customerInForm.setVerificationCode(customerInDB.getVerificationCode());
+        customerInForm.setAuthenticationType(customerInDB.getAuthenticationType());
+//        customerInForm.setResetPasswordToken(customerInDB.getResetPasswordToken());
+
+        customerRepository.save(customerInForm);
+    }
+
     public boolean verify(String verificationCode) {
         Customer customer = customerRepository.findByVerificationCode(verificationCode);
 

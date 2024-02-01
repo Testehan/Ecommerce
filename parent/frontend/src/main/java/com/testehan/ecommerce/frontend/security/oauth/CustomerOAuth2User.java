@@ -10,6 +10,7 @@ public class CustomerOAuth2User implements OAuth2User {
 
     private OAuth2User oAuth2User;
     private String clientName;          // this will be either "google" or "facebook", so it helps differentiate between these 2
+    private String fullName;
 
     public CustomerOAuth2User(OAuth2User user, String clientName) {
         this.oAuth2User = user;
@@ -32,7 +33,7 @@ public class CustomerOAuth2User implements OAuth2User {
     }
 
     public String getFullName(){
-        return getName();
+        return this.fullName != null ? fullName : getName();
     }
 
     public String getEmail(){
@@ -41,5 +42,9 @@ public class CustomerOAuth2User implements OAuth2User {
 
     public String getClientName() {
         return clientName;
+    }
+
+    public void setFullName(String fullName){
+        this.fullName = fullName;
     }
 }
