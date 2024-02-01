@@ -3,6 +3,7 @@ package com.testehan.ecommerce.frontend.customer;
 import com.testehan.ecommerce.common.entity.AuthenticationType;
 import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.Customer;
+import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
 import com.testehan.ecommerce.frontend.setting.country.CountryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,14 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
 public class CustomerService {
+
+    private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     @Autowired
     private CountryRepository countryRepository;
@@ -96,8 +101,7 @@ public class CustomerService {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
     }
 
-    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    static SecureRandom secureRandom = new SecureRandom();
+
 
     private String randomString(int len){
         StringBuilder sb = new StringBuilder(len);
@@ -134,5 +138,18 @@ public class CustomerService {
         customer.setCountry(countryRepository.findByCode(countryCode));
 
         customerRepository.save(customer);
+    }
+
+    public void updateResetPasswordToken(String email) throws CustomerNotFoundException {
+        var customer = customerRepository.findByEmail(email);
+
+        if (Objects.nonNull(customer)){
+            var token = randomString(30);
+            customer.setResetPasswordToken(token);
+            customerRepository.save(customer);
+        } else {
+            throw new CustomerNotFoundException("email not found in DB");
+        }
+
     }
 }
