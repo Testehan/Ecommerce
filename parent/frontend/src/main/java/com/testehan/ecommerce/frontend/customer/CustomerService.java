@@ -83,7 +83,7 @@ public class CustomerService {
         return sb.toString();
     }
 
-    public void addNewCustomerAfterOAuth2Login(String name, String email, String countryCode) {
+    public void addNewCustomerAfterOAuth2Login(String name, String email, String countryCode, AuthenticationType authenticationType) {
         var customer = new Customer();
 
         String[] names = name.split(" ");
@@ -101,7 +101,7 @@ public class CustomerService {
         customer.setEmail(email);
         customer.setEnabled(true);
         customer.setCreatedTime(new Date());
-        customer.setAuthenticationType(AuthenticationType.GOOGLE);
+        customer.setAuthenticationType(authenticationType);
         customer.setPassword("");
         customer.setAddressLine1("");
         customer.setCity("");

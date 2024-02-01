@@ -28,15 +28,24 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         var countryCode = request.getLocale().getCountry();
         var customerName = customerOAuth2User.getName();
         var customerEmail = customerOAuth2User.getEmail();
-        System.out.println("countryCode " + countryCode);
 
+        var authenticationType = getAuthenticationType(customerOAuth2User.getClientName());
         if (customer == null){
-            customerService.addNewCustomerAfterOAuth2Login(customerName, customerEmail,countryCode);
+            customerService.addNewCustomerAfterOAuth2Login(customerName, customerEmail,countryCode, authenticationType);
         } else {
-            customerService.updateAuthenticationType(customer, AuthenticationType.GOOGLE);
+            customerService.updateAuthenticationType(customer, authenticationType);
         }
 
         super.onAuthenticationSuccess(request, response, authentication);
+    }
+
+    private AuthenticationType getAuthenticationType(String clientName){
+        if (clientName.equalsIgnoreCase("google")){
+            return AuthenticationType.GOOGLE;
+        } else if (clientName.equalsIgnoreCase("facebook")){
+            return AuthenticationType.FACEBOOK;
+        }
+        return AuthenticationType.DATABASE;
     }
 
 }

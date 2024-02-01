@@ -10,6 +10,8 @@ zFilesNotes/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+parent/frontend/src/main/resources/secrets.properties
+
 ### STS ###
 .apt_generated
 .classpath
