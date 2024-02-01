@@ -140,15 +140,16 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public void updateResetPasswordToken(String email) throws CustomerNotFoundException {
+    public String updateResetPasswordToken(String email) throws CustomerNotFoundException {
         var customer = customerRepository.findByEmail(email);
 
         if (Objects.nonNull(customer)){
             var token = randomString(30);
             customer.setResetPasswordToken(token);
             customerRepository.save(customer);
+            return token;
         } else {
-            throw new CustomerNotFoundException("email not found in DB");
+            throw new CustomerNotFoundException("The following email was not found in DB: " + email);
         }
 
     }
