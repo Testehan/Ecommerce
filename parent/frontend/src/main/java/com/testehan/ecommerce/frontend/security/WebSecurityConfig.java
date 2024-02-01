@@ -25,6 +25,8 @@ public class WebSecurityConfig {
     private CustomerOAuth2UserService customerOAuth2UserService;
     @Autowired
     private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    @Autowired
+    private DatabaseLoginSuccessHandler databaseLoginSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -51,6 +53,7 @@ public class WebSecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email")     // because in spring security, the default login input parameter name is "username" and we use email
+                        .successHandler(databaseLoginSuccessHandler)
                         .permitAll())
                 .oauth2Login( oauth2Login -> oauth2Login
                         .loginPage("/login")

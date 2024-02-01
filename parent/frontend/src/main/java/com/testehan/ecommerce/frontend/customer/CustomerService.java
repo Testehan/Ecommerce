@@ -40,6 +40,7 @@ public class CustomerService {
         encodePassword(customer);
         customer.setEnabled(false);
         customer.setCreatedTime(new Date());
+        customer.setAuthenticationType(AuthenticationType.DATABASE);    // DEFAULT
 
         var randomCode = randomString(64);
         customer.setVerificationCode(randomCode);

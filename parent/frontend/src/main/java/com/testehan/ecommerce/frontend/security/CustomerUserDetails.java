@@ -63,4 +63,7 @@ public class CustomerUserDetails implements UserDetails {
         this.customer.setLastName(lastName);
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
 }
