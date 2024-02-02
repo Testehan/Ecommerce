@@ -4,6 +4,8 @@
 <head th:replace="~{fragments :: page_head(${pageTitle},'none')}" />
 
 <body>
+<script type="text/javascript" th:src="@{/js/common_modal.js}"> </script>
+<script type="text/javascript" th:src="@{/js/quantity_control.js}"></script>
 <script>
     $(document).ready(function(){
         bigImage = $("#bigImage");
@@ -84,9 +86,9 @@
                 <span th:if="${product.inStock}" class="text-success"><b>In Stock</b></span>
                 <span th:unless="${product.inStock}" class="text-danger"><b>Out of Stock</b></span>
             </div>
-            <div class="mt-2">
-                <input type="text" size="5" value="1"/>
-            </div>
+
+            <div th:replace="~{cart/quantity_control :: quantity_control(1,${product.id})}" > </div>
+
             <div class="mt-1">
                 <input type="button" value="Add to Cart" class="btn btn-primary"/>
             </div>
@@ -120,6 +122,7 @@
 
     <div th:replace="~{product/images_carousel :: content}" />
 
+    <div th:replace="~{fragments :: modal_dialog}"></div>
     <div th:replace="~{navigation :: footer_menu}" />
 
 
