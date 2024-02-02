@@ -29,6 +29,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
 
@@ -152,5 +153,20 @@ public class CustomerService {
             throw new CustomerNotFoundException("The following email was not found in DB: " + email);
         }
 
+    }
+
+    public Customer getByResetPasswordToken(String token){
+        return customerRepository.findByResetPasswordToken(token);
+    }
+
+    public void updatePassword(String token, String newPassword) throws CustomerNotFoundException {
+        var customer = customerRepository.findByResetPasswordToken(token);
+        if (Objects.isNull(customer)){
+            throw new CustomerNotFoundException("Customer not found. Invalid token");
+        }
+        customer.setPassword(newPassword);
+        encodePassword(customer);
+        customer.setResetPasswordToken(null);
+        customerRepository.save(customer);
     }
 }
