@@ -6,6 +6,7 @@ import com.testehan.ecommerce.frontend.security.CustomerUserDetails;
 import com.testehan.ecommerce.frontend.security.oauth.CustomerOAuth2User;
 import com.testehan.ecommerce.frontend.setting.SettingService;
 import com.testehan.ecommerce.frontend.util.CustomerRegisterUtil;
+import com.testehan.ecommerce.frontend.util.Utility;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class CustomerController {
 
     @GetMapping("/account_details")
     public String viewAccountDetails(Model model, HttpServletRequest request) {
-        var customerEmail = getEmailOfAuthCustomer(request);
+        var customerEmail = Utility.getEmailOfAuthCustomer(request);
         var customer = customerService.getCustomerByEmail(customerEmail);
         var listCountries = customerService.listAllCountries();
 
@@ -103,20 +104,7 @@ public class CustomerController {
         }
     }
 
-    private String getEmailOfAuthCustomer(HttpServletRequest request){
-        var principal = request.getUserPrincipal();
-        String customerEmail = null;
 
-        if (principal instanceof UsernamePasswordAuthenticationToken || principal instanceof RememberMeAuthenticationToken){
-            customerEmail = principal.getName();
-        } else  if (principal instanceof OAuth2AuthenticationToken) {
-            OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) principal;
-            CustomerOAuth2User customer = (CustomerOAuth2User) oAuth2AuthenticationToken.getPrincipal();
-            customerEmail = customer.getEmail();
-        }
-
-        return customerEmail;
-    }
 
     public CustomerUserDetails getCustomerUserDetailsObject(Object principal) {
 
