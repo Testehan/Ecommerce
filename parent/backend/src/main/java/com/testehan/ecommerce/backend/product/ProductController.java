@@ -107,10 +107,12 @@ public class ProductController {
                               @AuthenticationPrincipal ShopUserDetails loggedUser) throws IOException
     {
         // salesperson can only update price related fields from UI...
-        if (loggedUser.hasRole("Salesperson")){
-            productService.saveProductPrice(product);
-            redirectAttributes.addFlashAttribute("message","The product price fields have been saved successfully.");
-            return "redirect:/products";
+        if (!loggedUser.hasRole("admin") && !loggedUser.hasRole("Editor")) {
+            if (loggedUser.hasRole("Salesperson")) {
+                productService.saveProductPrice(product);
+                redirectAttributes.addFlashAttribute("message", "The product price fields have been saved successfully.");
+                return "redirect:/products";
+            }
         }
 
         setMainImageName(mainImage,product);
@@ -161,15 +163,24 @@ public class ProductController {
         return "redirect:/products";
     }
     @GetMapping("/products/edit/{id}")
-    public String updateProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String updateProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes,
+                                @AuthenticationPrincipal ShopUserDetails loggedUser) {
         try {
             var product = productService.getById(id);
             var listBrands = brandService.findAll();
+            var numberOfExistingExtraImages = product.getImages().size();
 
+            var isReadOnlyForSalesPerson = false;
+            if (!loggedUser.hasRole("admin") && !loggedUser.hasRole("Editor")) {
+                if (loggedUser.hasRole("Salesperson")) {
+                    isReadOnlyForSalesPerson = true;
+                }
+            }
+
+            model.addAttribute("isReadOnlyForSalesPerson", isReadOnlyForSalesPerson);
             model.addAttribute("product", product);
             model.addAttribute("pageTitle", "Edit Product with ID " + id);
             model.addAttribute("listBrands",listBrands);
-            Integer numberOfExistingExtraImages = product.getImages().size();
             model.addAttribute("numberOfExistingExtraImages",numberOfExistingExtraImages);
 
             return "products/product_form";
