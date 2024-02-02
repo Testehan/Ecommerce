@@ -28,4 +28,14 @@ public class CartItem {
 
     private int quantity;
 
+
+    @Override
+    public String toString() {
+        return "CartItem{" +
+                "id =" + id +
+                ", customer full name =" + customer.getFullName() +
+                ", product name =" + product.getName() +
+                ", quantity =" + quantity +
+                '}';
+    }
 }

@@ -70,6 +70,10 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<ProductDetail> details = new ArrayList<>();
 
+    public Product(Integer productId) {
+        this.id = productId;
+    }
+
     public void addExtraImage(String imageName){
         this.images.add(new ProductImage(imageName,this));
     }
