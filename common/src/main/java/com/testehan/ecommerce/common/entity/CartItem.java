@@ -28,6 +28,11 @@ public class CartItem {
 
     private int quantity;
 
+    @Transient
+    public float getSubtotal() {            // because in DB i store cents
+        return product.getDiscountedPrice() / 100 * quantity;
+    }
+
 
     @Override
     public String toString() {
