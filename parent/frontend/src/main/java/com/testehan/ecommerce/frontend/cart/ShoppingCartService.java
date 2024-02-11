@@ -6,6 +6,7 @@ import com.testehan.ecommerce.common.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -37,5 +38,9 @@ public class ShoppingCartService {
         cartItemRepository.save(cartItem);
 
         return updatedQuantity;
+    }
+
+    public List<CartItem> listCartItems(Customer customer){
+        return cartItemRepository.findByCustomer(customer);
     }
 }
