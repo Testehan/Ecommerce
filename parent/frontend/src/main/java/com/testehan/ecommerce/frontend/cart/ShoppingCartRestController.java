@@ -1,6 +1,5 @@
 package com.testehan.ecommerce.frontend.cart;
 
-import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
 import com.testehan.ecommerce.frontend.customer.CustomerService;
 import com.testehan.ecommerce.frontend.util.Utility;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Objects;
 
 @RestController
 public class ShoppingCartRestController {
@@ -26,7 +23,7 @@ public class ShoppingCartRestController {
                                    HttpServletRequest servletRequest){
 
         try {
-            var customer = getAuthenticatedCustomer(servletRequest);
+            var customer = Utility.getAuthenticatedCustomer(customerService,servletRequest);
             var updatedQuantity = shoppingCartService.addProduct(productId,quantity,customer);
             return updatedQuantity + " item(s) of this product were added to your cart.";
         } catch (CustomerNotFoundException e) {
@@ -35,16 +32,6 @@ public class ShoppingCartRestController {
             return e.getMessage();
         }
 
-    }
-
-    private Customer getAuthenticatedCustomer(HttpServletRequest servletRequest) throws CustomerNotFoundException {
-        var email = Utility.getEmailOfAuthCustomer(servletRequest);
-        if (Objects.isNull(email)){
-            throw new CustomerNotFoundException("Customer is not authenticated !");
-        } else {
-
-        }
-        return customerService.getCustomerByEmail(email);
     }
 
 }

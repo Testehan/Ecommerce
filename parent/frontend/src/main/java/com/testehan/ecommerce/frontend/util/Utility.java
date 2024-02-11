@@ -1,5 +1,8 @@
 package com.testehan.ecommerce.frontend.util;
 
+import com.testehan.ecommerce.common.entity.Customer;
+import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
+import com.testehan.ecommerce.frontend.customer.CustomerService;
 import com.testehan.ecommerce.frontend.security.oauth.CustomerOAuth2User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
@@ -26,5 +29,15 @@ public class Utility {
         }
 
         return customerEmail;
+    }
+
+    public static Customer getAuthenticatedCustomer(CustomerService customerService, HttpServletRequest servletRequest) throws CustomerNotFoundException {
+        var email = Utility.getEmailOfAuthCustomer(servletRequest);
+        if (Objects.isNull(email)){
+            throw new CustomerNotFoundException("Customer is not authenticated !");
+        } else {
+
+        }
+        return customerService.getCustomerByEmail(email);
     }
 }
