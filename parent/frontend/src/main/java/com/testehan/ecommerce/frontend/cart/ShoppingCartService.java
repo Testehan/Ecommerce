@@ -3,6 +3,8 @@ package com.testehan.ecommerce.frontend.cart;
 import com.testehan.ecommerce.common.entity.CartItem;
 import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.frontend.product.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +12,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional
 public class ShoppingCartService {
 
     public static final int MAXIMUM_QUANTITY_OF_SAME_ITEMS = 5;
     @Autowired
     private CartItemRepository cartItemRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public Integer addProduct(Integer productId, Integer quantity, Customer customer) throws ShoppingCartException {
         var updatedQuantity = quantity;
@@ -42,5 +47,14 @@ public class ShoppingCartService {
 
     public List<CartItem> listCartItems(Customer customer){
         return cartItemRepository.findByCustomer(customer);
+    }
+
+    public float updateQuantity(Integer productId, Integer quantity, Customer customer) {
+        cartItemRepository.updateQuantity(quantity, customer.getId(), productId);
+        var product = productRepository.findById(productId).get();
+
+        // because in DB i store cents
+        float subtotal = product.getDiscountedPrice() / 100 * quantity;
+        return subtotal;
     }
 }
