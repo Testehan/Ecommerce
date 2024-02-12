@@ -5,6 +5,7 @@ import com.testehan.ecommerce.frontend.customer.CustomerService;
 import com.testehan.ecommerce.frontend.util.Utility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,4 +50,18 @@ public class ShoppingCartRestController {
 
     }
 
+    @DeleteMapping("/cart/remove/{productId}")
+    public String removeProduct(@PathVariable("productId") Integer productId,
+                                HttpServletRequest request) throws CustomerNotFoundException {
+
+        var customer = Utility.getAuthenticatedCustomer(customerService,request);
+
+        if (customer != null) {
+            shoppingCartService.removeProductFromShoppingCart(productId, customer);
+            return "The product was removed from your shopping cart.";
+        }else {
+            return "Login to remove product.";
+        }
+
+    }
 }
