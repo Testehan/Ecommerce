@@ -19,4 +19,6 @@ public interface ShippingRateRepository extends JpaRepository<ShippingRate, Inte
 
     @Query("SELECT sr FROM ShippingRate sr WHERE sr.country.id = ?1 AND sr.state = ?2")
     ShippingRate findByCountryAndState(Integer countryId, String state);
+
+    Long countById(Integer id);
 }
