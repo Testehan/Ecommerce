@@ -10,8 +10,12 @@ $(document).ready(function() {
 	$(".linkPlus").on("click", function(event) {
 		event.preventDefault();
 		increaseQuantity($(this));
-
 	});
+
+	$(".linkRemove").on("click", function(event) {
+        event.preventDefault();
+    	removeProduct($(this));
+    });
 });
 
 function decreaseQuantity(link) {
@@ -90,4 +94,37 @@ function clearCurrencyFormat(numberString) {
 function showEmptyShoppingCart() {
 	$("#sectionTotal").hide();
 	$("#sectionEmptyCartMessage").removeClass("d-none");
+}
+
+function removeProduct(link) {
+	url = link.attr("href");
+
+	$.ajax({
+		type: "DELETE",
+		url: url,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(csrfHeaderName, csrfValue);
+		}
+	}).done(function(response) {
+		rowNumber = link.attr("rowNumber");
+		removeProductHTML(rowNumber);
+		updateTotal();
+		updateCountNumbers();
+
+		showModalDialog("Shopping Cart", response);
+
+	}).fail(function() {
+		showErrorModal("Error while removing product.");
+	});
+}
+
+function removeProductHTML(rowNumber) {
+	$("#row" + rowNumber).remove();
+	$("#blankLine" + rowNumber).remove();
+}
+
+function updateCountNumbers() {
+	$(".divCount").each(function(index, element) {
+		element.innerHTML = "" + (index + 1);
+	});
 }
