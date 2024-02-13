@@ -6,7 +6,6 @@ import com.testehan.ecommerce.backend.security.ShopUserDetails;
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
 import com.testehan.ecommerce.common.entity.Product;
 import com.testehan.ecommerce.common.exception.ProductNotFoundException;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,9 +43,8 @@ public class ProductController {
 
     @GetMapping("/products/page/{pageNumber}")
     public String listProductsByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
-                                     @Param("sortField")String sortField, @Param("sortOrder")String sortOrder,
-                                     @Param("keyword")String keyword,
-                                     @Param("categoryId")Integer categoryId ){
+                                     String sortField, String sortOrder,
+                                     String keyword, Integer categoryId ){
 
         var pageOfProducts = productService.listProductsByPage(pageNumber, sortField, sortOrder, keyword,categoryId);
         model.addAttribute("listProducts",pageOfProducts.getContent());

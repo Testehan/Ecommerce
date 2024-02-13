@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -31,14 +30,13 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String listFirstPage(@Param("sortDir") String sortDir, Model model){
+    public String listFirstPage(String sortDir, Model model){
         return listCategoriesByPage(1,model,sortDir,null);
     }
 
     @GetMapping("/categories/page/{pageNumber}")
     public String listCategoriesByPage(@PathVariable(name = "pageNumber") Integer pageNumber, Model model,
-                                       @Param("sortOrder")String sortOrder,
-                                       @Param("keyword")String keyword)
+                                       String sortOrder, String keyword)
     {
         if (sortOrder == null || sortOrder.isEmpty()){
             sortOrder="asc";

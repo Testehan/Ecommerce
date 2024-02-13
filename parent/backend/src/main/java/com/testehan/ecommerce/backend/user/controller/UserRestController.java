@@ -1,7 +1,6 @@
 package com.testehan.ecommerce.backend.user.controller;
 
 import com.testehan.ecommerce.backend.user.UserService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +14,7 @@ public class UserRestController {
     }
 
     @PostMapping("/users/check_email")
-    public String checkDuplicateEmail(@Param("id") Integer id, @Param("email") String email) {
+    public String checkDuplicateEmail(Integer id, String email) {
         System.out.println("recieved email " + email + " for checking for duplicated");
         return userService.isEmailUnique(id, email) ? "OK" : "Duplicated";
     }

@@ -6,7 +6,6 @@ import com.testehan.ecommerce.common.exception.ProductNotFoundException;
 import com.testehan.ecommerce.frontend.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,11 +79,11 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String searchFirstPage(@Param("keyword")String keyword, Model model){
+    public String searchFirstPage(String keyword, Model model){
         return searchByPage(1,keyword,model);
     }
     @GetMapping("/search/page/{pageNum}")
-    public String searchByPage(@PathVariable("pageNum") int pageNum, @Param("keyword")String keyword, Model model){
+    public String searchByPage(@PathVariable("pageNum") int pageNum, String keyword, Model model){
 
         var pageProducts = productService.search(keyword,pageNum);
         model.addAttribute("pageTitle",keyword+" - Search Result");

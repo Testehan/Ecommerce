@@ -1,10 +1,9 @@
 package com.testehan.ecommerce.backend.brand.controller;
 
-import com.testehan.ecommerce.common.exception.BrandNotFoundException;
 import com.testehan.ecommerce.backend.brand.BrandNotFoundRestException;
 import com.testehan.ecommerce.backend.brand.BrandService;
 import com.testehan.ecommerce.backend.brand.CategoryDTO;
-import org.springframework.data.repository.query.Param;
+import com.testehan.ecommerce.common.exception.BrandNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,7 @@ public class BrandRestController {
     }
 
     @PostMapping("/brands/check_unique")
-    public String checkDuplicateName(@Param("id") Integer id, @Param("name") String name) {
+    public String checkDuplicateName(Integer id, String name) {
         return brandService.isNameUnique(id, name) ? "OK" : "DuplicateName";
     }
 
