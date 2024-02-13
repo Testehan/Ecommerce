@@ -28,6 +28,10 @@ public class Country {
     @OneToMany(mappedBy = "country", cascade=CascadeType.ALL, orphanRemoval=true)
     private Set<State> states = new HashSet<>();
 
+    public Country(Integer id) {
+        this.id = id;
+    }
+
     public Country(String name, String code) {
         this.name = name;
         this.code = code;
