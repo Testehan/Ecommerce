@@ -93,4 +93,17 @@ public class ShippingRateController {
         }
         return DEFAULT_REDIRECT_URL;
     }
+
+    @GetMapping("/shipping_rates/delete/{id}")
+    public String deleteShippingRate(@PathVariable(name = "id") Integer id,
+                             Model model, RedirectAttributes ra) {
+
+        try {
+            shippingRateService.delete(id);
+            ra.addFlashAttribute("message", "The shipping rate ID " + id + " has been deleted.");
+        } catch (ShippingRateNotFoundException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+        }
+        return DEFAULT_REDIRECT_URL;
+    }
 }
