@@ -1,16 +1,20 @@
 package com.testehan.ecommerce.backend.shipping;
 
-import com.testehan.ecommerce.common.entity.ShippingRate;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
+import com.testehan.ecommerce.common.entity.ShippingRate;
+import com.testehan.ecommerce.common.exception.ShippingRateAlreadyExistsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ShippingRateController {
 
+    public static final String DEFAULT_REDIRECT_URL = "redirect:/shipping_rates/page/1?sortField=country&sortOrder=asc";
     private ShippingRateService shippingRateService;
 
     public ShippingRateController(ShippingRateService shippingRateService) {
@@ -19,7 +23,7 @@ public class ShippingRateController {
 
     @GetMapping("/shipping_rates")
     public String listFirstPage(){
-        return "redirect:/shipping_rates/page/1?sortField=country&sortOrder=asc";
+        return DEFAULT_REDIRECT_URL;
     }
 
     @GetMapping("/shipping_rates/page/{pageNumber}")
@@ -42,5 +46,17 @@ public class ShippingRateController {
         model.addAttribute("pageTitle", "New Rate");
 
         return "shipping_rates/shipping_rate_form";
+    }
+
+    @PostMapping("/shipping_rates/save")
+    public String saveRate(ShippingRate rate, RedirectAttributes ra) {
+
+        try {
+            shippingRateService.save(rate);
+            ra.addFlashAttribute("message", "The shipping rate has been saved.");
+        } catch (ShippingRateAlreadyExistsException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+        }
+        return DEFAULT_REDIRECT_URL;
     }
 }
