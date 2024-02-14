@@ -79,4 +79,18 @@ public class ShippingRateController {
             return DEFAULT_REDIRECT_URL;
         }
     }
+
+    @GetMapping("/shipping_rates/cod/{id}/enabled/{supported}")
+    public String updateCashOnDeliveryStatus(@PathVariable(name = "id") Integer id,
+                                            @PathVariable(name = "supported") Boolean supported,
+                                            Model model, RedirectAttributes ra) {
+
+        try {
+            shippingRateService.updateCashOnDeliveryStatus(id, supported);
+            ra.addFlashAttribute("message", "COD support for shipping rate ID " + id + " has been updated.");
+        } catch (ShippingRateNotFoundException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+        }
+        return DEFAULT_REDIRECT_URL;
+    }
 }

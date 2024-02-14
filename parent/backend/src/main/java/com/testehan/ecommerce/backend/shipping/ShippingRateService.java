@@ -6,12 +6,14 @@ import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.ShippingRate;
 import com.testehan.ecommerce.common.exception.ShippingRateAlreadyExistsException;
 import com.testehan.ecommerce.common.exception.ShippingRateNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@Transactional
 public class ShippingRateService {
 
     public static final int SHIPPING_RATES_PER_PAGE = 10;
@@ -58,7 +60,7 @@ public class ShippingRateService {
         shippingRateRepository.deleteById(id);
     }
 
-    public void updateCODSupport(Integer id, boolean codSupported) throws ShippingRateNotFoundException {
+    public void updateCashOnDeliveryStatus(Integer id, boolean codSupported) throws ShippingRateNotFoundException {
         Long count = shippingRateRepository.countById(id);
         if (count == null || count == 0) {
             throw new ShippingRateNotFoundException("Could not find shipping rate with ID " + id);
