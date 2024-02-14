@@ -33,6 +33,7 @@ public class ShippingRate {
     private String state;
 
 
+
     @Override
     public String toString() {
         return "ShippingRate [id=" + id + ", rate=" + rate + ", days=" + days + ", codSupported=" + codSupported

@@ -2,11 +2,13 @@ package com.testehan.ecommerce.backend.shipping;
 
 import com.testehan.ecommerce.backend.setting.country.CountryRepository;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
+import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.ShippingRate;
 import com.testehan.ecommerce.common.exception.ShippingRateAlreadyExistsException;
 import com.testehan.ecommerce.common.exception.ShippingRateNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -65,4 +67,7 @@ public class ShippingRateService {
         shippingRateRepository.updateCashOnDeliveryStatus(id, codSupported);
     }
 
+    public List<Country> listAllCountries() {
+        return countryRepository.findAllByOrderByNameAsc();
+    }
 }
