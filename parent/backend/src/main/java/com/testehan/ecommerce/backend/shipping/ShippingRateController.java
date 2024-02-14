@@ -4,6 +4,7 @@ import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
 import com.testehan.ecommerce.common.entity.ShippingRate;
 import com.testehan.ecommerce.common.exception.ShippingRateAlreadyExistsException;
+import com.testehan.ecommerce.common.exception.ShippingRateNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,5 +59,24 @@ public class ShippingRateController {
             ra.addFlashAttribute("message", ex.getMessage());
         }
         return DEFAULT_REDIRECT_URL;
+    }
+
+    @GetMapping("/shipping_rates/edit/{id}")
+    public String editRate(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes ra) {
+
+        try {
+            var rate = shippingRateService.get(id);
+            var listCountries = shippingRateService.listAllCountries();
+
+            model.addAttribute("listCountries", listCountries);
+            model.addAttribute("rate", rate);
+            model.addAttribute("pageTitle", "Edit Rate (ID: " + id + ")");
+
+            return "shipping_rates/shipping_rate_form";
+        } catch (ShippingRateNotFoundException ex) {
+
+            ra.addFlashAttribute("message", ex.getMessage());
+            return DEFAULT_REDIRECT_URL;
+        }
     }
 }
