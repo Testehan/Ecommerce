@@ -38,4 +38,16 @@ public class AddressController {
 
         return "address_book/addresses";
     }
+
+    @GetMapping("/address_book/new")
+    public String addAddress(Model model) {
+
+        var listCountries = customerService.listAllCountries();
+
+        model.addAttribute("listCountries", listCountries);
+        model.addAttribute("address", new Address());
+        model.addAttribute("pageTitle", "Add New Address");
+
+        return "address_book/address_form";
+    }
 }
