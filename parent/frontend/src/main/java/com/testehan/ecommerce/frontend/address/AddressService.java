@@ -2,12 +2,14 @@ package com.testehan.ecommerce.frontend.address;
 
 import com.testehan.ecommerce.common.entity.Address;
 import com.testehan.ecommerce.common.entity.Customer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class AddressService {
 
     @Autowired

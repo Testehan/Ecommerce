@@ -15,6 +15,8 @@
           style="max-width: 600px; margin: 0 auto">
 
         <input type="hidden" th:field="*{id}" />
+        <input type="hidden" name="redirect" th:value="${param.redirect}" />
+
         <div th:if="${message != null}" class="alert alert-success text-center">
             [[${message}]]
         </div>

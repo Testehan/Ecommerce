@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -72,6 +73,31 @@ public class AddressController {
 
         return redirectURL;
 
+    }
+
+    @GetMapping("/address_book/edit/{id}")
+    public String editAddress(@PathVariable("id") Integer addressId, Model model,
+                              HttpServletRequest request) throws CustomerNotFoundException {
+
+        var customer = Utility.getAuthenticatedCustomer(customerService, request);
+        var listCountries = customerService.listAllCountries();
+        var address = addressService.get(addressId, customer.getId());
+
+        model.addAttribute("address", address);
+        model.addAttribute("listCountries", listCountries);
+        model.addAttribute("pageTitle", "Edit Address (ID: " + addressId + ")");
+
+        return "address_book/address_form";
+    }
+
+    @GetMapping("/address_book/delete/{id}")
+    public String deleteAddress(@PathVariable("id") Integer addressId, RedirectAttributes ra,
+                                HttpServletRequest request) throws CustomerNotFoundException {
+
+        var customer = Utility.getAuthenticatedCustomer(customerService, request);
+        addressService.delete(addressId, customer.getId());
+        ra.addFlashAttribute("message", "The address ID " + addressId + " has been deleted.");
+        return "redirect:/address_book";
     }
 
 }

@@ -83,8 +83,14 @@ public class CustomerController {
         customerService.update(customer);
         redirectAttributes.addFlashAttribute("message", "Your account details have been updated");
         updateNameForAuthenticatedCustomer(customer, request);
-        
-        return "redirect:/account_details";
+
+        var redirectOption = request.getParameter("redirect");
+        var redirectUrl = "redirect:/account_details";
+        if ("address_book".equalsIgnoreCase(redirectOption)){
+            redirectUrl = "redirect:/address_book";
+        }
+
+        return redirectUrl;
     }
 
     private void updateNameForAuthenticatedCustomer(Customer customer, HttpServletRequest request) {
