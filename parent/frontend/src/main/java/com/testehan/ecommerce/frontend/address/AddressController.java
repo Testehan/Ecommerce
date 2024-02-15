@@ -100,4 +100,24 @@ public class AddressController {
         return "redirect:/address_book";
     }
 
+    @GetMapping("/address_book/default/{id}")
+    public String setDefaultAddress(@PathVariable("id") Integer addressId,
+                                    HttpServletRequest request) throws CustomerNotFoundException {
+
+        var customer = Utility.getAuthenticatedCustomer(customerService, request);
+
+        addressService.setDefaultAddress(addressId, customer.getId());
+
+        var redirectOption = request.getParameter("redirect");
+        var redirectURL = "redirect:/address_book";
+
+        if ("cart".equals(redirectOption)) {
+            redirectURL = "redirect:/cart";
+        }else if ("checkout".equals(redirectOption)) {
+            redirectURL = "redirect:/checkout";
+        }
+
+        return redirectURL;
+    }
+
 }
