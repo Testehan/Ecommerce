@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.common.order;
+package com.testehan.ecommerce.common.entity.order;
 
 import com.testehan.ecommerce.common.entity.product.Product;
 import jakarta.persistence.*;
@@ -18,11 +18,11 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int quantity;
-    private float productCost;
-    private float shippingCost;
-    private float unitPrice;
-    private float subtotal;
+    private int quantity;           // float is a bad idea for money
+    private long productCost;
+    private long shippingCost;
+    private long unitPrice;
+    private long subtotal;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

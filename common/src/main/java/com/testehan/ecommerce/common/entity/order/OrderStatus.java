@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.common.order;
+package com.testehan.ecommerce.common.entity.order;
 
 public enum OrderStatus {
     NEW {
