@@ -1,5 +1,7 @@
-package com.testehan.ecommerce.common.entity;
+package com.testehan.ecommerce.common.entity.product;
 
+import com.testehan.ecommerce.common.entity.Brand;
+import com.testehan.ecommerce.common.entity.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

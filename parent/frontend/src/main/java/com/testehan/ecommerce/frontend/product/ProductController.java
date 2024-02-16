@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.frontend.product;
 
-import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.entity.product.Product;
 import com.testehan.ecommerce.common.exception.CategoryNotFoundException;
 import com.testehan.ecommerce.common.exception.ProductNotFoundException;
 import com.testehan.ecommerce.frontend.category.CategoryService;

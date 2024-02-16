@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.frontend.product;
 
-import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.entity.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

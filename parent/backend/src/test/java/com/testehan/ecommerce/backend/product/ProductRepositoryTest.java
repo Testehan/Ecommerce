@@ -3,6 +3,8 @@ package com.testehan.ecommerce.backend.product;
 import com.testehan.ecommerce.backend.brand.BrandRepository;
 import com.testehan.ecommerce.backend.category.CategoryRepository;
 import com.testehan.ecommerce.common.entity.*;
+import com.testehan.ecommerce.common.entity.product.Product;
+import com.testehan.ecommerce.common.entity.product.ProductImage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

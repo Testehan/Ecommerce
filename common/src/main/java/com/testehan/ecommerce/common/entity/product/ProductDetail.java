@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.common.entity;
+package com.testehan.ecommerce.common.entity.product;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,9 +13,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name="product_images")
-public class ProductImage {
-
+@Table(name="product_detail")
+public class ProductDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,30 +22,28 @@ public class ProductImage {
     @Column(length = 256, nullable = false)
     private String name;
 
+    @Column(length = 256, nullable = false)
+    private String value;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductImage(String name, Product product){
+    public ProductDetail(String name, String value, Product product) {
         this.name = name;
+        this.value = value;
         this.product = product;
-    }
-
-    @Transient
-    public String getImagePath() {
-        return "/product-images/" + this.product.getId() + "/extras/" + this.name;
-
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ProductImage that)) return false;
-        return Objects.equals(getName(), that.getName()) && Objects.equals(getProduct(), that.getProduct());
+        if (!(o instanceof ProductDetail that)) return false;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getValue(), that.getValue()) && Objects.equals(getProduct(), that.getProduct());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getProduct());
+        return Objects.hash(getName(), getValue(), getProduct());
     }
 }

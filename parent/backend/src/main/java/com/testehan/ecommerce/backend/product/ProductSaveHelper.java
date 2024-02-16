@@ -1,8 +1,8 @@
 package com.testehan.ecommerce.backend.product;
 
 import com.testehan.ecommerce.backend.util.FileUploadUtil;
-import com.testehan.ecommerce.common.entity.Product;
-import com.testehan.ecommerce.common.entity.ProductImage;
+import com.testehan.ecommerce.common.entity.product.Product;
+import com.testehan.ecommerce.common.entity.product.ProductImage;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

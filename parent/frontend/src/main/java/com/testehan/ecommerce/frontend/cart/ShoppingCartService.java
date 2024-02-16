@@ -2,7 +2,7 @@ package com.testehan.ecommerce.frontend.cart;
 
 import com.testehan.ecommerce.common.entity.CartItem;
 import com.testehan.ecommerce.common.entity.Customer;
-import com.testehan.ecommerce.common.entity.Product;
+import com.testehan.ecommerce.common.entity.product.Product;
 import com.testehan.ecommerce.frontend.product.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
