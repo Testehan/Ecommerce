@@ -1,14 +1,14 @@
 package com.testehan.ecommerce.backend.order;
 
+import com.testehan.ecommerce.backend.util.paging.SearchRepository;
 import com.testehan.ecommerce.common.entity.order.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Integer> {
+public interface OrderRepository extends SearchRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o WHERE o.firstName LIKE %?1% OR"
             + " CONCAT(o.firstName, ' ', o.lastName) LIKE %?1% OR"

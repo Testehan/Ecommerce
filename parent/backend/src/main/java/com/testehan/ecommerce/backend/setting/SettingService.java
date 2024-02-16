@@ -42,6 +42,12 @@ public class SettingService {
         return mailTemplateSettings;
     }
 
+    public List<Setting> getCurrencySettings() {
+        var currencySettings = settingRepository.findByCategory(SettingCategory.CURRENCY);
+
+        return currencySettings;
+    }
+
 
     public void saveAll(Iterable<Setting> settings) {
         settingRepository.saveAll(settings);

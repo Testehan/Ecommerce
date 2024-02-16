@@ -18,8 +18,6 @@ import java.util.List;
 @Controller
 public class CustomerController {
 
-    private static final String NO_KEYWORD="";
-
     private static final String DEFAULT_REDIRECT_URL = "redirect:/customers/page/1?sortField=firstName&sortOrder=asc";
 
     @Autowired
