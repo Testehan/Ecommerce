@@ -54,4 +54,13 @@ public class OrderService {
             throw new OrderNotFoundException("Could not find any orders with ID " + id);
         }
     }
+
+    public void delete(Integer id) throws OrderNotFoundException {
+        var count = orderRepository.countById(id);
+        if (count == null || count == 0) {
+            throw new OrderNotFoundException("Could not find any orders with ID " + id);
+        }
+
+        orderRepository.deleteById(id);
+    }
 }

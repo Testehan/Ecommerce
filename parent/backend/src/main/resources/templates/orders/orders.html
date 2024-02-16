@@ -122,7 +122,15 @@
     $(document).ready(function() {
         handleDefaultDetailLinkClick();
         handleDetailLinkClick(".linkCustomerDetail", "#customerDetailModal");
+        handleLinkDeleteOrder();
     });
+
+    function handleLinkDeleteOrder(){
+        $(".link-delete").on("click",function(e){
+               e.preventDefault();
+               showDeleteConfirmModal($(this),'order');
+        });
+    }
 
 </script>
 </body>
