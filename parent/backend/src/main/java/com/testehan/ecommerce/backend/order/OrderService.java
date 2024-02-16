@@ -2,12 +2,15 @@ package com.testehan.ecommerce.backend.order;
 
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.common.entity.order.Order;
+import com.testehan.ecommerce.common.exception.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class OrderService {
@@ -42,5 +45,13 @@ public class OrderService {
         }
 
         helper.updateModelAttributes(pageNum, page);
+    }
+
+    public Order get(Integer id) throws OrderNotFoundException {
+        try {
+            return orderRepository.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new OrderNotFoundException("Could not find any orders with ID " + id);
+        }
     }
 }
