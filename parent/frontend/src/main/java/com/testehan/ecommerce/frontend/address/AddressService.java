@@ -27,6 +27,10 @@ public class AddressService {
         return addressRepository.findByIdAndCustomer(addressId, customerId);
     }
 
+    public Address getDefaultAddress(Integer customerId) {
+        return addressRepository.findDefaultByCustomer(customerId);
+    }
+
     public void delete(Integer addressId, Integer customerId) {
         addressRepository.deleteByIdAndCustomer(addressId, customerId);
     }
