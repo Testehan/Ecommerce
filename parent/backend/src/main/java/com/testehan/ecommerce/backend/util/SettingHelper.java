@@ -3,7 +3,7 @@ package com.testehan.ecommerce.backend.util;
 import com.testehan.ecommerce.backend.setting.CurrencyRepository;
 import com.testehan.ecommerce.backend.setting.SettingService;
 import com.testehan.ecommerce.common.entity.Currency;
-import com.testehan.ecommerce.common.entity.Setting;
+import com.testehan.ecommerce.common.entity.setting.Setting;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

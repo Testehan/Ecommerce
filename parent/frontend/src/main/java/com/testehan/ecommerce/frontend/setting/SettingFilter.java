@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.frontend.setting;
 
-import com.testehan.ecommerce.common.entity.Setting;
+import com.testehan.ecommerce.common.entity.setting.Setting;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

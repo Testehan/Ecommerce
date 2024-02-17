@@ -1,4 +1,4 @@
-package com.testehan.ecommerce.common.entity;
+package com.testehan.ecommerce.common.entity.setting;
 
 import java.util.List;
 

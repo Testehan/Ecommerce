@@ -1,8 +1,8 @@
 package com.testehan.ecommerce.backend.setting.config;
 
 import com.testehan.ecommerce.backend.setting.SettingRepository;
-import com.testehan.ecommerce.common.entity.Setting;
-import com.testehan.ecommerce.common.entity.SettingCategory;
+import com.testehan.ecommerce.common.entity.setting.Setting;
+import com.testehan.ecommerce.common.entity.setting.SettingCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

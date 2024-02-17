@@ -1,7 +1,7 @@
 package com.testehan.ecommerce.frontend.setting;
 
-import com.testehan.ecommerce.common.entity.Setting;
-import com.testehan.ecommerce.common.entity.SettingBag;
+import com.testehan.ecommerce.common.entity.setting.Setting;
+import com.testehan.ecommerce.common.entity.setting.SettingBag;
 
 import java.util.List;
 

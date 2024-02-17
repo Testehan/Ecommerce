@@ -1,8 +1,8 @@
 package com.testehan.ecommerce.backend.setting;
 
 import com.testehan.ecommerce.backend.util.GeneralSettingBag;
-import com.testehan.ecommerce.common.entity.Setting;
-import com.testehan.ecommerce.common.entity.SettingCategory;
+import com.testehan.ecommerce.common.entity.setting.Setting;
+import com.testehan.ecommerce.common.entity.setting.SettingCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

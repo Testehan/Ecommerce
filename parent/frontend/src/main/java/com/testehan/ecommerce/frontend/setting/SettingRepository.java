@@ -1,7 +1,7 @@
 package com.testehan.ecommerce.frontend.setting;
 
-import com.testehan.ecommerce.common.entity.Setting;
-import com.testehan.ecommerce.common.entity.SettingCategory;
+import com.testehan.ecommerce.common.entity.setting.Setting;
+import com.testehan.ecommerce.common.entity.setting.SettingCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -4,7 +4,7 @@ import com.testehan.ecommerce.backend.security.ShopUserDetails;
 import com.testehan.ecommerce.backend.setting.SettingService;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
-import com.testehan.ecommerce.common.entity.Setting;
+import com.testehan.ecommerce.common.entity.setting.Setting;
 import com.testehan.ecommerce.common.exception.OrderNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
