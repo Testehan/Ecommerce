@@ -88,6 +88,8 @@ public class CustomerController {
         var redirectUrl = "redirect:/account_details";
         if ("address_book".equalsIgnoreCase(redirectOption)){
             redirectUrl = "redirect:/address_book";
+        } else if ("cart".equalsIgnoreCase(redirectOption)){
+            redirectUrl = "redirect:/cart";
         }
 
         return redirectUrl;
