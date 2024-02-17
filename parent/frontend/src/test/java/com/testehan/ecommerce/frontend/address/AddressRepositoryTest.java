@@ -84,4 +84,12 @@ public class AddressRepositoryTest {
         assertThat(address).isNull();
     }
 
+    @Test
+    public void testGetDefault() {
+        var customerId = 6;
+        var address = addressRepository.findDefaultByCustomer(customerId);
+        assertThat(address).isNotNull();
+        System.out.println(address);
+    }
+
 }
