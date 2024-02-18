@@ -28,6 +28,7 @@ public class CartItem {
     private Product product;
 
     private int quantity;
+    @Transient
     private long shippingCost;
 
     @Transient

@@ -19,7 +19,6 @@ public class CheckoutInfo {
     private long shippingCostTotal;
     private long paymentTotal;
     private int deliverDays;
-    private Date deliveryDate;
     private boolean codSupported;
 
     public Date getDeliveryDate() {
