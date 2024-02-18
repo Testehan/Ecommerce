@@ -28,12 +28,21 @@ public class CartItem {
     private Product product;
 
     private int quantity;
+    private long shippingCost;
 
     @Transient
     public float getSubtotal() {            // because in DB i store cents
         return product.getDiscountedPrice() / 100 * quantity;
     }
 
+    @Transient
+    public long getShippingCost() {
+        return shippingCost;
+    }
+
+    public void setShippingCost(long shippingCost) {
+        this.shippingCost = shippingCost;
+    }
 
     @Override
     public String toString() {
