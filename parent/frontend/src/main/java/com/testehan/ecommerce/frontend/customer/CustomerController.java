@@ -90,6 +90,8 @@ public class CustomerController {
             redirectUrl = "redirect:/address_book";
         } else if ("cart".equalsIgnoreCase(redirectOption)){
             redirectUrl = "redirect:/cart";
+        } else if ("checkout".equalsIgnoreCase(redirectOption)){
+            redirectUrl = "redirect:/address_book?redirect=checkout";
         }
 
         return redirectUrl;
