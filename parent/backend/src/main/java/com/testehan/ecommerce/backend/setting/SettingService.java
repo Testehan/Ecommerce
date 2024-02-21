@@ -32,20 +32,22 @@ public class SettingService {
 
     public List<Setting> getMailServerSettings() {
         var mailServerSettings = settingRepository.findByCategory(SettingCategory.MAIL_SERVER);
-
         return mailServerSettings;
     }
 
     public List<Setting> getMailTemplateSettings() {
         var mailTemplateSettings = settingRepository.findByCategory(SettingCategory.MAIL_TEMPLATES);
-
         return mailTemplateSettings;
     }
 
     public List<Setting> getCurrencySettings() {
         var currencySettings = settingRepository.findByCategory(SettingCategory.CURRENCY);
-
         return currencySettings;
+    }
+
+    public List<Setting> getPaymentSettings() {
+        var paymentSettings = settingRepository.findByCategory(SettingCategory.PAYMENT);
+        return paymentSettings;
     }
 
 
