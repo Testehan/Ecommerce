@@ -35,6 +35,7 @@ public class OrderService {
         newOrder.setTotal(checkoutInfo.getPaymentTotal());
         newOrder.setDeliverDays(checkoutInfo.getDeliverDays());
         newOrder.setDeliverDate(checkoutInfo.getDeliveryDate());
+        newOrder.setPaymentMethod(paymentMethod);
 
         if (Objects.isNull(address)){
             newOrder.copyAddressFromCustomer();

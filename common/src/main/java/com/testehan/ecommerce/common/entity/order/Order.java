@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.common.entity.order;
 
+import com.testehan.ecommerce.common.entity.Address;
 import com.testehan.ecommerce.common.entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "orders")          // "user" is reserver word in postgresql..
+@Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -101,5 +102,17 @@ public class Order {
     public String toString() {
         return "Order [id=" + id + ", subtotal=" + subtotal + ", paymentMethod=" + paymentMethod + ", status=" + status
                 + ", customer=" + customer.getFullName() + "]";
+    }
+
+    public void copyShippingAddress(Address address) {
+        setFirstName(address.getFirstName());
+        setLastName(address.getLastName());
+        setPhoneNumber(address.getPhoneNumber());
+        setAddressLine1(address.getAddressLine1());
+        setAddressLine2(address.getAddressLine2());
+        setCity(address.getCity());
+        setCountry(address.getCountry().getName());
+        setPostalCode(address.getPostalCode());
+        setState(address.getState());
     }
 }
