@@ -207,11 +207,32 @@
 
         <div class="tab-pane fade p-3" id="track" role="tabpanel" aria-labelledby="track-tab">
             <div class="full-details">
-
+                <table class="table table-bordered table-striped table-hover table-responsive-xl">
+                    <thead class="thead-dark">
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                    </thead>
+                    <tbody>
+                    <tr th:each="track : ${order.orderTracks}">
+                        <td th:text="${track.updatedTime}"></td>
+                        <td th:text="${track.status}"></td>
+                        <td th:text="${track.notes}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="less-details">
-
+                <th:block th:each="track : ${order.orderTracks}">
+                    <div class="row p-1">
+                        <span>[[${track.updatedTime}]]</span>
+                    </div>
+                    <div class="row p-1 ml-3">
+                        <span>&nbsp;&nbsp;<b>[[${track.status}]]</b>: <i>[[${track.notes}]]</i></span>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                </th:block>
             </div>
         </div>
 
