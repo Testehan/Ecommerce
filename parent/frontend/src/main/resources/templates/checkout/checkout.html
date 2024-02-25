@@ -165,8 +165,9 @@
 		onApprove: function(data, actions) {
 			// buyer approves payment
 			return actions.order.capture().then(function(details) {
-				// console.log(details);
+				console.log(details);
 				orderId = details.id;
+				console.log("Order id is " + orderId);
 				// totalAmount = details.purchase_units[0].amount.value;
 
 				validateOrder(orderId);
