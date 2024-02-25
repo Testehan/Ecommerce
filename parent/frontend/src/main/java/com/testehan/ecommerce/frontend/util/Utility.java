@@ -4,11 +4,14 @@ import com.testehan.ecommerce.common.entity.Customer;
 import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
 import com.testehan.ecommerce.frontend.customer.CustomerService;
 import com.testehan.ecommerce.frontend.security.oauth.CustomerOAuth2User;
+import com.testehan.ecommerce.frontend.setting.CurrencySettingBag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Objects;
 
 public class Utility {
@@ -39,5 +42,36 @@ public class Utility {
 
         }
         return customerService.getCustomerByEmail(email);
+    }
+
+    public static String formatCurrency(long amount, CurrencySettingBag settings) {
+        var symbol = settings.getSymbol();
+        var symbolPosition = settings.getSymbolPosition();
+        var decimalPointType = settings.getDecimalPointType();
+        var thousandPointType = settings.getThousandPointType();
+        int decimalDigits = settings.getDecimalDigits();
+
+        String pattern = symbolPosition.equals("Before price") ? symbol : "";
+        pattern += "###,###";
+
+        if (decimalDigits > 0) {
+            pattern += ".";
+            for (int count = 1; count <= decimalDigits; count++){
+                pattern += "#";
+            }
+        }
+
+        pattern += symbolPosition.equals("After price") ? symbol : "";
+
+        char thousandSeparator = thousandPointType.equals("POINT") ? '.' : ',';
+        char decimalSeparator = decimalPointType.equals("POINT") ? '.' : ',';
+
+        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+        decimalFormatSymbols.setDecimalSeparator(decimalSeparator);
+        decimalFormatSymbols.setGroupingSeparator(thousandSeparator);
+
+        DecimalFormat formatter = new DecimalFormat(pattern, decimalFormatSymbols);
+
+        return formatter.format(amount);
     }
 }

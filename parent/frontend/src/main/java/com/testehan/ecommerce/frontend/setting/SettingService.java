@@ -24,4 +24,13 @@ public class SettingService {
         return new EmailSettingsBag(emailSettings);
     }
 
+    public CurrencySettingBag getCurrencySettings() {
+        var settings = settingRepository.findByCategory(SettingCategory.CURRENCY);
+        return new CurrencySettingBag(settings);
+    }
+
+    public PaymentSettingBag getPaymentSettings() {
+        var settings = settingRepository.findByCategory(SettingCategory.PAYMENT);
+        return new PaymentSettingBag(settings);
+    }
 }
