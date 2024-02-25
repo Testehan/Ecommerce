@@ -26,7 +26,14 @@ public class OrderService {
                              CheckoutInfo checkoutInfo){
         var newOrder = new Order();
         newOrder.setOrderTime(new Date());
-        newOrder.setStatus(OrderStatus.NEW);
+        newOrder.setPaymentMethod(paymentMethod);
+
+        if (PaymentMethod.PAYPAL.equals(paymentMethod)){
+            newOrder.setStatus(OrderStatus.PAID);
+        } else {
+            newOrder.setStatus(OrderStatus.NEW);
+        }
+
         newOrder.setCustomer(customer);
         newOrder.setProductCost(checkoutInfo.getProductCost());
         newOrder.setSubtotal(checkoutInfo.getProductTotal());
@@ -35,7 +42,6 @@ public class OrderService {
         newOrder.setTotal(checkoutInfo.getPaymentTotal());
         newOrder.setDeliverDays(checkoutInfo.getDeliverDays());
         newOrder.setDeliverDate(checkoutInfo.getDeliveryDate());
-        newOrder.setPaymentMethod(paymentMethod);
 
         if (Objects.isNull(address)){
             newOrder.copyAddressFromCustomer();

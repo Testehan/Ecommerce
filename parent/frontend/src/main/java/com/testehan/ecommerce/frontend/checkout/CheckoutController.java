@@ -4,8 +4,10 @@ import com.testehan.ecommerce.common.entity.ShippingRate;
 import com.testehan.ecommerce.common.entity.order.Order;
 import com.testehan.ecommerce.common.entity.order.PaymentMethod;
 import com.testehan.ecommerce.common.exception.CustomerNotFoundException;
+import com.testehan.ecommerce.common.exception.PayPalApiException;
 import com.testehan.ecommerce.frontend.address.AddressService;
 import com.testehan.ecommerce.frontend.cart.ShoppingCartService;
+import com.testehan.ecommerce.frontend.checkout.paypal.PayPalService;
 import com.testehan.ecommerce.frontend.customer.CustomerService;
 import com.testehan.ecommerce.frontend.order.OrderService;
 import com.testehan.ecommerce.frontend.setting.SettingService;
@@ -45,6 +47,8 @@ public class CheckoutController {
     private OrderService orderService;
     @Autowired
     private SettingService settingService;
+    @Autowired
+    private PayPalService payPalService;
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, HttpServletRequest request) throws CustomerNotFoundException {
@@ -102,6 +106,31 @@ public class CheckoutController {
         sendOrderConfirmationEmail(request, order);
 
         return "checkout/order_completed";
+    }
+
+    @PostMapping("/process_paypal_order")
+    public String processPayPalOrder(HttpServletRequest request, Model model)
+            throws UnsupportedEncodingException, MessagingException, CustomerNotFoundException{
+
+        var orderId = request.getParameter("orderId");
+
+        String message;
+
+        try {
+            if (payPalService.validateOrder(orderId)) {
+                return placeOrder(request);
+            } else {
+                message = "ERROR: Transaction could not be completed because order information is invalid";
+            }
+        } catch (PayPalApiException e) {
+            message = "ERROR: Transaction failed due to error: " + e.getMessage();
+        }
+
+        model.addAttribute("pageTitle", "Checkout Failure");
+        model.addAttribute("title", "Checkout Failure");
+        model.addAttribute("message", message);
+
+        return "message";
     }
 
     private void sendOrderConfirmationEmail(HttpServletRequest request, Order order) throws MessagingException, UnsupportedEncodingException {
