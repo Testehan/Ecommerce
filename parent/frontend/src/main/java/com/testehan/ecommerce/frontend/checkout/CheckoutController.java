@@ -66,9 +66,15 @@ public class CheckoutController {
 
         var cartItems = shoppingCartService.listCartItems(customer);
         var checkoutInfo = checkoutService.prepareCheckout(cartItems, shippingRate);
+        var currencyCode = settingService.getCurrencyCode();
+        var paymentSettings = settingService.getPaymentSettings();
+        var paypalClientId = paymentSettings.getClientID();
 
         model.addAttribute("checkoutInfo", checkoutInfo);
         model.addAttribute("cartItems", cartItems);
+        model.addAttribute("currencyCode", currencyCode);
+        model.addAttribute("customer", customer);
+        model.addAttribute("paypalClientId", paypalClientId);
 
         return "checkout/checkout";
     }

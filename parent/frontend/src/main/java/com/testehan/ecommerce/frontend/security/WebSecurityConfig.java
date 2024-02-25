@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/images/**","/css/**","/webjars/**","/js/**")// to access these patterns a user can be NOT authenticated; ex in login page
                     .permitAll()
                 .requestMatchers("/account_details","/update_account_details","/cart","/address_book",
-                        "/checkout","/place_order")
+                        "/checkout","/place_order","/process_paypal_order")
                     .authenticated()
                 .anyRequest()
                     .permitAll()

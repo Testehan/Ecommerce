@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,5 +26,10 @@ public class CheckoutInfo {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, deliverDays);
         return calendar.getTime();
+    }
+
+    public String getPaymentTotalPayPal() {
+        DecimalFormat formatter = new DecimalFormat("##.##");
+        return formatter.format(paymentTotal);
     }
 }
