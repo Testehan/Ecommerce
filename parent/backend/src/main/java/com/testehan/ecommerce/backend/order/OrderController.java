@@ -103,6 +103,22 @@ public class OrderController {
         }
 
     }
+//
+//    @PostMapping("/order/save")
+//    public String saveOrder(Order order, HttpServletRequest request, RedirectAttributes ra) {
+//
+//        var countryName = request.getParameter("countryName");
+//        order.setCountry(countryName);
+//
+//        OrderUtil.updateProductDetails(order, request);
+//        OrderUtil.updateOrderTracks(order, request);
+//
+//        orderService.save(order);
+//
+//        ra.addFlashAttribute("messageSuccess", "The order ID " + order.getId() + " has been updated successfully");
+//
+//        return DEFAULT_REDIRECT_URL;
+//    }
 
     public void loadCurrencySetting(HttpServletRequest request) {
         var currencySettings = settingService.getCurrencySettings();
