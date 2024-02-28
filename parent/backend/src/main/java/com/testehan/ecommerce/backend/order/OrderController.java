@@ -4,6 +4,7 @@ import com.testehan.ecommerce.backend.security.ShopUserDetails;
 import com.testehan.ecommerce.backend.setting.SettingService;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
+import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.setting.Setting;
 import com.testehan.ecommerce.common.exception.OrderNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class OrderController {
@@ -77,6 +80,28 @@ public class OrderController {
             ra.addFlashAttribute("messageError", ex.getMessage());
         }
         return DEFAULT_REDIRECT_URL;
+    }
+
+    @GetMapping("/orders/edit/{id}")
+    public String editOrder(@PathVariable("id") Integer id, Model model, RedirectAttributes ra,
+                            HttpServletRequest request) {
+
+        try {
+            var order = orderService.get(id);;
+
+            List<Country> listCountries = orderService.listAllCountries();
+
+            model.addAttribute("pageTitle", "Edit Order (ID: " + id + ")");
+            model.addAttribute("order", order);
+            model.addAttribute("listCountries", listCountries);
+
+            return "orders/order_form";
+
+        } catch (OrderNotFoundException ex) {
+            ra.addFlashAttribute("message", ex.getMessage());
+            return DEFAULT_REDIRECT_URL;
+        }
+
     }
 
     public void loadCurrencySetting(HttpServletRequest request) {

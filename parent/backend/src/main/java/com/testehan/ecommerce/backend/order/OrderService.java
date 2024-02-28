@@ -1,6 +1,8 @@
 package com.testehan.ecommerce.backend.order;
 
+import com.testehan.ecommerce.backend.setting.country.CountryRepository;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
+import com.testehan.ecommerce.common.entity.Country;
 import com.testehan.ecommerce.common.entity.order.Order;
 import com.testehan.ecommerce.common.exception.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -19,6 +22,8 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CountryRepository countryRepository;
 
     public void listByPage(int pageNum, PagingAndSortingHelper helper) {
         var sortField = helper.getSortField();
@@ -62,5 +67,9 @@ public class OrderService {
         }
 
         orderRepository.deleteById(id);
+    }
+
+    public List<Country> listAllCountries() {
+        return countryRepository.findAllByOrderByNameAsc();
     }
 }
