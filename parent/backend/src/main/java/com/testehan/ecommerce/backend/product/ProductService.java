@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.backend.product;
 
+import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.common.entity.product.Product;
 import com.testehan.ecommerce.common.exception.ProductNotFoundException;
 import jakarta.transaction.Transactional;
@@ -122,5 +123,12 @@ public class ProductService {
 
         return productRepository.findAll(pageable);
 
+    }
+
+    public void searchProducts(int pageNum, PagingAndSortingHelper helper) {
+        Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+        String keyword = helper.getKeyword();
+        Page<Product> page = productRepository.searchProductsByName(keyword, pageable);
+        helper.updateModelAttributes(pageNum, page);
     }
 }
