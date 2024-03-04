@@ -63,7 +63,9 @@ public class WebSecurityConfig {
                         .logoutUrl("/logout")
                         .permitAll())
                 .rememberMe(rememberMe -> rememberMe.key("123456789"));
-
+        // line below is needed so that the "Add a product" from an order functionality works, specifically
+        // the iframe from add_product_modal
+        http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()));
         return http.build();
     }
 
