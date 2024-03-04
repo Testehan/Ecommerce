@@ -21,7 +21,7 @@ public class ProductSearchController {
     @PostMapping("/orders/search_product")
     public String searchProducts(String keyword) {
 
-        return "redirect:/orders/search_product/page/1?sortField=name&sortDir=asc&keyword=" + keyword;
+        return "redirect:/orders/search_product/page/1?sortField=name&sortOrder=asc&keyword=" + keyword;
     }
 
     @GetMapping("/orders/search_product/page/{pageNum}")
