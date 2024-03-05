@@ -44,7 +44,6 @@ public class OrderTrack {
 
     public void setUpdatedTimeOnForm(String dateString) throws ParseException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-        //dateFormatter.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Istanbul"));
         try {
             this.updatedTime = dateFormatter.parse(dateString);
         } catch (ParseException e) {
