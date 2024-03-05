@@ -5,6 +5,7 @@ import com.testehan.ecommerce.backend.setting.SettingService;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
 import com.testehan.ecommerce.common.entity.Country;
+import com.testehan.ecommerce.common.entity.order.Order;
 import com.testehan.ecommerce.common.entity.setting.Setting;
 import com.testehan.ecommerce.common.exception.OrderNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -103,22 +105,22 @@ public class OrderController {
         }
 
     }
-//
-//    @PostMapping("/order/save")
-//    public String saveOrder(Order order, HttpServletRequest request, RedirectAttributes ra) {
-//
-//        var countryName = request.getParameter("countryName");
-//        order.setCountry(countryName);
-//
-//        OrderUtil.updateProductDetails(order, request);
-//        OrderUtil.updateOrderTracks(order, request);
-//
-//        orderService.save(order);
-//
-//        ra.addFlashAttribute("messageSuccess", "The order ID " + order.getId() + " has been updated successfully");
-//
-//        return DEFAULT_REDIRECT_URL;
-//    }
+
+    @PostMapping("/order/save")
+    public String saveOrder(Order order, HttpServletRequest request, RedirectAttributes ra) {
+
+        var countryName = request.getParameter("countryName");
+        order.setCountry(countryName);
+
+        OrderUtil.updateProductDetails(order, request);
+        OrderUtil.updateOrderTracks(order, request);
+
+        orderService.save(order);
+
+        ra.addFlashAttribute("message", "The order ID " + order.getId() + " has been updated successfully");
+
+        return DEFAULT_REDIRECT_URL;
+    }
 
     public void loadCurrencySetting(HttpServletRequest request) {
         var currencySettings = settingService.getCurrencySettings();
