@@ -38,11 +38,17 @@ public class OrderController {
     @GetMapping("/orders/page/{pageNumber}")
     public String listCustomersByPage( @PagingAndSortingParam(moduleURL = "/orders", listName = "listOrders") PagingAndSortingHelper pagingAndSortingHelper,
                                        @PathVariable(name = "pageNumber") Integer pageNumber,
-                                       HttpServletRequest request){
+                                       HttpServletRequest request,
+                                       @AuthenticationPrincipal ShopUserDetails loggedUser){
 
         orderService.listByPage(pageNumber, pagingAndSortingHelper);
         loadCurrencySetting(request);
-        // because first is folder from "templates"
+
+        if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Salesperson")
+                && loggedUser.hasRole("Shipper")){
+            return "orders/orders_shipper";     // special view for shippers
+        }
+
         return "orders/orders";
     }
 
