@@ -3,11 +3,9 @@ package com.testehan.ecommerce.frontend.order;
 import com.testehan.ecommerce.common.entity.Address;
 import com.testehan.ecommerce.common.entity.CartItem;
 import com.testehan.ecommerce.common.entity.Customer;
-import com.testehan.ecommerce.common.entity.order.Order;
-import com.testehan.ecommerce.common.entity.order.OrderDetail;
-import com.testehan.ecommerce.common.entity.order.OrderStatus;
-import com.testehan.ecommerce.common.entity.order.PaymentMethod;
+import com.testehan.ecommerce.common.entity.order.*;
 import com.testehan.ecommerce.frontend.checkout.CheckoutInfo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
+@Transactional
 public class OrderService {
 
     @Autowired
@@ -63,6 +62,13 @@ public class OrderService {
 
             orderDetails.add(orderDetail);
         }
+
+        var track = new OrderTrack();
+        track.setOrder(newOrder);
+        track.setStatus(OrderStatus.NEW);
+        track.setNotes(OrderStatus.NEW.defaultDescription());
+        track.setUpdatedTime(new Date());
+        newOrder.getOrderTracks().add(track);
 
         return orderRepository.save(newOrder);
     }
