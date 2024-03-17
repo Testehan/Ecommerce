@@ -42,6 +42,7 @@ public class WebSecurityConfig {
         http.authorizeRequests()
             .requestMatchers("/images/**","/css/**","/webjars/**","/js/**")// to access these patterns a user can be NOT authenticated; ex in login page
                 .permitAll()
+            .requestMatchers("/states/list_states_by_country/**").hasAnyAuthority("admin","Salesperson")
             .requestMatchers("/users/**","/settings/**", "/states/**","/countries/**").hasAnyAuthority("admin")
 
             .requestMatchers("/categories/**","/brands/**","/menus/**", "/articles/**").hasAnyAuthority("admin","Editor")
@@ -50,6 +51,7 @@ public class WebSecurityConfig {
             .requestMatchers("/products/edit/**","/products/save","/products/check_unique").hasAnyAuthority("admin","Editor","Salesperson")
             .requestMatchers("/products","/products/","/products/detail/**","/products/page/**").hasAnyAuthority("admin","Editor","Salesperson","Shipper")
             .requestMatchers("/products/**").hasAnyAuthority("admin","Editor")
+            .requestMatchers("/orders","/orders/","/orders/page/**","/orders/detail/**").hasAnyAuthority("admin","Salesperson","Shipper")
             .requestMatchers("/customers/**","/orders/**","/get_shipping_cost").hasAnyAuthority("admin","Salesperson")
             .anyRequest()
                 .authenticated()
