@@ -29,7 +29,6 @@ public class OrderController {
 
     @GetMapping("/orders")
     public String listFirstPage(Model model, HttpServletRequest request) throws CustomerNotFoundException {
-//        return listOrdersByPage(model, request, 1, "orderTime", "desc", null);
         return "redirect:/orders/page/1?sortField=orderTime&sortOrder=desc";
     }
 
