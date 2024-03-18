@@ -234,7 +234,7 @@ public class Order {
         }
     }
 
-    private boolean hasStatus(OrderStatus status) {
+    public boolean hasStatus(OrderStatus status) {
         for (OrderTrack aTrack : orderTracks) {
             if (aTrack.getStatus().equals(status)) {
                 return true;
