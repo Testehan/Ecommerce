@@ -29,7 +29,8 @@ public class OrderController {
 
     @GetMapping("/orders")
     public String listFirstPage(Model model, HttpServletRequest request) throws CustomerNotFoundException {
-        return listOrdersByPage(model, request, 1, "orderTime", "desc", null);
+//        return listOrdersByPage(model, request, 1, "orderTime", "desc", null);
+        return "redirect:/orders/page/1?sortField=orderTime&sortOrder=desc";
     }
 
     @GetMapping("/orders/page/{pageNum}")
@@ -51,7 +52,7 @@ public class OrderController {
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("keyword", keyword);
         model.addAttribute("moduleURL", "/orders");
-        model.addAttribute("reverseSortDir", sortOrder.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseSortOrder", sortOrder.equals("asc") ? "desc" : "asc");
 
         long startCount = (pageNum - 1) * OrderService.ORDERS_PER_PAGE + 1;
 

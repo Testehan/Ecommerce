@@ -243,4 +243,20 @@ public class Order {
         return false;
     }
 
+    // TODO this is very ugly.. :/
+    @Transient
+    public String getProductNames() {
+        String productNames ;
+
+        productNames = "<ul>";
+
+        for (OrderDetail detail : orderDetails) {
+            productNames += "<li>" + detail.getProduct().getProductShortName() + "</li>";
+        }
+
+        productNames += "</ul>";
+
+        return productNames;
+    }
+
 }
