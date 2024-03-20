@@ -11,6 +11,7 @@ zFilesNotes/
 !**/src/test/**/target/
 
 parent/frontend/src/main/resources/secrets.properties
+zFilesNotes/tutorials/secrets.txt
 
 ### STS ###
 .apt_generated
