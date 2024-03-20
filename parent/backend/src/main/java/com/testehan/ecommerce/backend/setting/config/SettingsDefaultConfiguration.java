@@ -30,7 +30,7 @@ public class SettingsDefaultConfiguration {
                 LOGGER.info("Default settings will be persisted in the database !");
 
                 var setting = new Setting(SettingsNames.SITE_NAME.name(), "Shop", SettingCategory.GENERAL);
-                var setting2 = new Setting(SettingsNames.SITE_LOGO.name(), "/images/logo.png", SettingCategory.GENERAL);
+                var setting2 = new Setting(SettingsNames.SITE_LOGO.name(), "/site-logo/logo.png", SettingCategory.GENERAL);
                 var setting3 = new Setting(SettingsNames.COPYRIGHT.name(), "Shop - Copyright © Shopp", SettingCategory.GENERAL);
 
                 settingRepository.saveAll(List.of(setting, setting2, setting3));

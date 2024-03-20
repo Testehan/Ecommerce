@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.common.entity;
 
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -71,7 +72,7 @@ public class User {
         if (id == null || photo == null) {
             return "/images/default-user.png";
         } else {
-            return "/user-photos/" + this.id + "/" + this.photo;
+            return AmazonS3Constants.S3_BASE_URI + "/user-photos/" + this.id + "/" + this.photo;
         }
     }
 

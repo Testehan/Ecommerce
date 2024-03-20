@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.frontend.setting;
 
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import com.testehan.ecommerce.common.entity.setting.Setting;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ public class SettingFilter implements Filter {
             servletRequest.setAttribute(setting.getKey(),setting.getValue());
         }
 
+        servletRequest.setAttribute("S3_BASE_URI", AmazonS3Constants.S3_BASE_URI);
         filterChain.doFilter(servletRequest,servletResponse);
     }
 }

@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.common.entity.product;
 
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class ProductImage {
 
     @Transient
     public String getImagePath() {
-        return "/product-images/" + this.product.getId() + "/extras/" + this.name;
+        return AmazonS3Constants.S3_BASE_URI + "/product-images/" + this.product.getId() + "/extras/" + this.name;
 
     }
 

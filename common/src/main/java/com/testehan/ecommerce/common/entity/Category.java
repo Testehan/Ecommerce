@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.common.entity;
 
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -95,7 +96,7 @@ public class Category {
         if (this.id == null  ){
             return "/images/default-category.png";
         } else {
-            return "/category-images/" + this.id + "/" + this.image;
+            return AmazonS3Constants.S3_BASE_URI + "/category-images/" + this.id + "/" + this.image;
         }
     }
 

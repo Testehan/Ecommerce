@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.common.entity.product;
 
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import com.testehan.ecommerce.common.entity.Brand;
 import com.testehan.ecommerce.common.entity.Category;
 import jakarta.persistence.*;
@@ -97,7 +98,7 @@ public class Product {
         if (this.id == null || this.mainImage == null){
             return "/images/image-thumbnail.png";
         } else {
-            return "/product-images/" + this.id + "/" + this.mainImage;
+            return AmazonS3Constants.S3_BASE_URI + "/product-images/" + this.id + "/" + this.mainImage;
         }
     }
 

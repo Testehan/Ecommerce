@@ -1,5 +1,6 @@
 package com.testehan.ecommerce.common.entity;
 
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,7 +49,7 @@ public class Brand {
         if (this.id == null  ){
             return "/images/default-category.png";
         } else {
-            return "/brand-logos/" + this.id + "/" + this.logo;
+            return AmazonS3Constants.S3_BASE_URI + "/brand-logos/" + this.id + "/" + this.logo;
         }
     }
 

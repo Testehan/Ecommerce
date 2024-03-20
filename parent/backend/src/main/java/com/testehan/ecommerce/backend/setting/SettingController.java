@@ -2,6 +2,7 @@ package com.testehan.ecommerce.backend.setting;
 
 import com.testehan.ecommerce.backend.util.GeneralSettingBag;
 import com.testehan.ecommerce.backend.util.SettingHelper;
+import com.testehan.ecommerce.common.constants.AmazonS3Constants;
 import com.testehan.ecommerce.common.entity.setting.Setting;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class SettingController {
         var listCurrencies = currencyRepository.findAllByOrderByNameAsc();
 
         model.addAttribute("listCurrencies",listCurrencies);
+        model.addAttribute("S3_BASE_URI", AmazonS3Constants.S3_BASE_URI);
 
         for (Setting setting : listSettings){
             model.addAttribute(setting.getKey(),setting.getValue());
