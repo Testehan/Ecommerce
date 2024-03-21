@@ -16,13 +16,18 @@ public class SettingHelper {
 
     public static void saveSiteLogo(MultipartFile multipartFile, GeneralSettingBag settingBag) throws IOException {
         if (!multipartFile.isEmpty()) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            String value = "/site-logo/" + fileName;
+            var fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            var value = "/site-logo/" + fileName;
             settingBag.updateSiteLogo(value);
 
-			String uploadDir = "site-logo/";
-			FileUploadUtil.deletePreviousFiles(uploadDir);
-			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            // before S3 migration
+//			String uploadDir = "site-logo/";
+//			FileUploadUtil.deletePreviousFiles(uploadDir);
+//			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+            var uploadDir = "site-logo";
+            AmazonS3Util.removeFolder(uploadDir);
+            AmazonS3Util.uploadFile(uploadDir, fileName, multipartFile.getInputStream());
         }
     }
 

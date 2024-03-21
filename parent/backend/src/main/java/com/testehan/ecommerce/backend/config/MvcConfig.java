@@ -20,6 +20,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     private DatabaseUpdates databaseUpdates;
 
+    // S3 migration ..the next 2 methods are not needed anymore since we use S3 for storage
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         exposeDirectory("user-photos", registry, "/user-photos/**");

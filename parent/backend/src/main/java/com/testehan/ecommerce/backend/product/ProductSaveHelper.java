@@ -1,6 +1,6 @@
 package com.testehan.ecommerce.backend.product;
 
-import com.testehan.ecommerce.backend.util.FileUploadUtil;
+import com.testehan.ecommerce.backend.util.AmazonS3Util;
 import com.testehan.ecommerce.common.entity.product.Product;
 import com.testehan.ecommerce.common.entity.product.ProductImage;
 import org.apache.logging.log4j.util.Strings;
@@ -10,10 +10,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -22,24 +20,35 @@ public class ProductSaveHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductSaveHelper.class);
 
     static void deleteExtraImagesThatWereRemovedInForm(Product product) {
-        String uploadDirExtras = "product-images/" + product.getId() + "/extras";
-        Path path = Paths.get(uploadDirExtras);
+        var uploadDirExtras = "product-images/" + product.getId() + "/extras";
+        // before S3 migration
+//        Path path = Paths.get(uploadDirExtras);
+//
+//        try{
+//            Files.list(path).forEach(image -> {
+//                String imageName = image.toFile().getName();
+//                if (!product.containsImageName(imageName)){
+//                    try {
+//                        Files.delete(image);
+//                        LOGGER.info("Deleted extra image " + imageName + " from " + uploadDirExtras);
+//                    } catch (IOException e) {
+//                        LOGGER.error("Could not delete file " + imageName + " from " + uploadDirExtras);
+//                    }
+//                }
+//            });
+//        } catch (IOException e) {
+//            LOGGER.error("Problem listing the files from " + uploadDirExtras);
+//        }
 
-        try{
-            Files.list(path).forEach(image -> {
-                String imageName = image.toFile().getName();
-                if (!product.containsImageName(imageName)){
-                    try {
-                        Files.delete(image);
-                        LOGGER.info("Deleted extra image " + imageName + " from " + uploadDirExtras);
-                    } catch (IOException e) {
-                        LOGGER.error("Could not delete file " + imageName + " from " + uploadDirExtras);
-                    }
-                }
-            });
-        } catch (IOException e) {
-            LOGGER.error("Problem listing the files from " + uploadDirExtras);
+        List<String> objectKeys = AmazonS3Util.listFolder(uploadDirExtras);
+        for (String key : objectKeys){
+            int lastIndexOfSlash = key.lastIndexOf("/");
+            var filename = key.substring(lastIndexOfSlash + 1);
+            if (!product.containsImageName(filename)){
+                AmazonS3Util.deleteFile(key);
+            }
         }
+
     }
 
     static void setExistingExtraImageNames(Product product, String[] imageIds, String[] imageNames) {
@@ -75,20 +84,30 @@ public class ProductSaveHelper {
 
     static void saveUploadedImages(Product product, MultipartFile mainImage, MultipartFile[] extraImages) throws IOException {
         if (!mainImage.isEmpty()) {
-            String filename = StringUtils.cleanPath(mainImage.getOriginalFilename());
-            String uploadDir = "product-images/" + product.getId();
+            var filename = StringUtils.cleanPath(mainImage.getOriginalFilename());
+            var uploadDir = "product-images/" + product.getId();
 
-            FileUploadUtil.deletePreviousFiles(uploadDir);
-            FileUploadUtil.saveFile(uploadDir, filename, mainImage);
+            // before S3 migration
+//            FileUploadUtil.deletePreviousFiles(uploadDir);
+//            FileUploadUtil.saveFile(uploadDir, filename, mainImage);
+            List<String> objectKeys = AmazonS3Util.listFolder(uploadDir + "/"); // + "/" is added at the end because otherwise because of the was S3 handles keys, if we wanted it to display /10 items...it would also display /1000 items for example.. which is not what we want here
+            for (String key : objectKeys){
+                if (!key.contains("extra")){
+                    AmazonS3Util.deleteFile(key);
+                }
+            }
+            AmazonS3Util.uploadFile(uploadDir, filename, mainImage.getInputStream());
         }
 
         if (extraImages.length>0) {
-            String uploadDirExtras = "product-images/" + product.getId() + "/extras";
+            var uploadDirExtras = "product-images/" + product.getId() + "/extras";
             for (MultipartFile extraImage : extraImages) {
                 if (extraImage.isEmpty()) continue;
 
                 String filename = StringUtils.cleanPath(extraImage.getOriginalFilename());
-                FileUploadUtil.saveFile(uploadDirExtras, filename, extraImage);
+                // before S3 migration
+//                FileUploadUtil.saveFile(uploadDirExtras, filename, extraImage);
+                AmazonS3Util.uploadFile(uploadDirExtras, filename, extraImage.getInputStream());
             }
         }
     }

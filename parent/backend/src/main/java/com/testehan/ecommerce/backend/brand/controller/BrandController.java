@@ -2,7 +2,7 @@ package com.testehan.ecommerce.backend.brand.controller;
 
 import com.testehan.ecommerce.backend.brand.BrandService;
 import com.testehan.ecommerce.backend.category.CategoryService;
-import com.testehan.ecommerce.backend.util.FileUploadUtil;
+import com.testehan.ecommerce.backend.util.AmazonS3Util;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
 import com.testehan.ecommerce.common.entity.Brand;
@@ -69,8 +69,11 @@ public class BrandController {
             Brand savedBrand =  brandService.save(brand);
             String uploadDir = "brand-logos/" + savedBrand.getId();
 
-            FileUploadUtil.deletePreviousFiles(uploadDir);
-            FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+            // before S3 migration
+//            FileUploadUtil.deletePreviousFiles(uploadDir);
+//            FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+            AmazonS3Util.removeFolder(uploadDir);
+            AmazonS3Util.uploadFile(uploadDir, filename, multipartFile.getInputStream());
         } else {
             brandService.save(brand);
         }
@@ -102,8 +105,11 @@ public class BrandController {
         try {
             brandService.deleteBrand(id);
 
-            String brandLogosDir = "brand-logos/" + id;
-            FileUploadUtil.deletePreviousFilesAndDirectory(brandLogosDir);
+            var brandLogosDir = "brand-logos/" + id;
+
+            // before S3 migration
+//            FileUploadUtil.deletePreviousFilesAndDirectory(brandLogosDir);
+            AmazonS3Util.removeFolder(brandLogosDir);
 
             redirectAttributes.addFlashAttribute("message", "The brand with ID " + id + " has been deleted successfully");
 

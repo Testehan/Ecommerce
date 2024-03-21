@@ -4,7 +4,7 @@ import com.testehan.ecommerce.backend.user.UserService;
 import com.testehan.ecommerce.backend.user.export.UserCsvExporter;
 import com.testehan.ecommerce.backend.user.export.UserExcelExporter;
 import com.testehan.ecommerce.backend.user.export.UserPdfExporter;
-import com.testehan.ecommerce.backend.util.FileUploadUtil;
+import com.testehan.ecommerce.backend.util.AmazonS3Util;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingHelper;
 import com.testehan.ecommerce.backend.util.paging.PagingAndSortingParam;
 import com.testehan.ecommerce.common.entity.User;
@@ -73,8 +73,11 @@ public class UserController {
            User savedUser =  userService.save(user);
            String uploadDir = "user-photos/" + savedUser.getId();
 
-           FileUploadUtil.deletePreviousFiles(uploadDir);
-           FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+// before S3 migration
+//           FileUploadUtil.deletePreviousFiles(uploadDir);
+//           FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+           AmazonS3Util.removeFolder(uploadDir);
+           AmazonS3Util.uploadFile(uploadDir, filename, multipartFile.getInputStream());
        } else {
            // means that when the user was created, no picture was provided
            if (user.getPhoto()==null || user.getPhoto().isEmpty()) {
@@ -126,7 +129,9 @@ public class UserController {
             userService.deleteUser(id);
 
             String userPhotosDir = "user-photos/" + id;
-			FileUploadUtil.deletePreviousFilesAndDirectory(userPhotosDir);
+            // before S3 migration
+//			FileUploadUtil.deletePreviousFilesAndDirectory(userPhotosDir);
+            AmazonS3Util.removeFolder(userPhotosDir);
 
             redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deleted successfully");
 

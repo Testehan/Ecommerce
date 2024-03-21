@@ -1,7 +1,7 @@
 package com.testehan.ecommerce.backend.category;
 
 import com.testehan.ecommerce.backend.category.export.CategoryCsvExporter;
-import com.testehan.ecommerce.backend.util.FileUploadUtil;
+import com.testehan.ecommerce.backend.util.AmazonS3Util;
 import com.testehan.ecommerce.common.entity.Category;
 import com.testehan.ecommerce.common.exception.CategoryNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -66,8 +66,6 @@ public class CategoryController {
         model.addAttribute("moduleURL", "/categories");
 
         return "categories/categories";
-
-
     }
 
     @GetMapping("/categories/new")
@@ -92,8 +90,11 @@ public class CategoryController {
             Category savedCategory = categoryService.save(category);
             String uploadDir = "category-images/" + savedCategory.getId();
 
-            FileUploadUtil.deletePreviousFiles(uploadDir);
-            FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
+            // before S3 migration
+//            FileUploadUtil.deletePreviousFiles(uploadDir);
+//            FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
+            AmazonS3Util.removeFolder(uploadDir);
+            AmazonS3Util.uploadFile(uploadDir, filename, multipartFile.getInputStream());
         } else {
             categoryService.save(category);
         }
@@ -139,8 +140,10 @@ public class CategoryController {
         try {
             categoryService.delete(id);
 
-            String categoryImagesDir = "category-images/" + id;
-            FileUploadUtil.deletePreviousFilesAndDirectory(categoryImagesDir);
+            var categoryImagesDir = "category-images/" + id;
+            // before S3 migration
+//            FileUploadUtil.deletePreviousFilesAndDirectory(categoryImagesDir);
+            AmazonS3Util.removeFolder(categoryImagesDir);
 
             redirectAttributes.addFlashAttribute("message", "The category with ID " + id + " has been deleted successfully");
 
