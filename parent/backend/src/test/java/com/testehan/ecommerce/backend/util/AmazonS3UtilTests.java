@@ -32,7 +32,13 @@ public class AmazonS3UtilTests {
 
     @Test
     public void deleteFile() {
-        String fileName = "test-upload/default-user.png";
+        var fileName = "test-upload/default-user.png";
         AmazonS3Util.deleteFile(fileName);
+    }
+
+    @Test
+    public void testRemoveFolder() {
+        var folderName = "test-upload";
+        AmazonS3Util.removeFolder(folderName);
     }
 }

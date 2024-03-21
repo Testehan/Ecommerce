@@ -90,4 +90,27 @@ public class AmazonS3Util {
 
         return request;
     }
+
+    public static void removeFolder(String folderName) {
+
+        S3Client client = createAmazomS3();
+        ListObjectsRequest listRequest = listAllFilesInAmazonS3ForRemove(folderName);
+        ListObjectsResponse response = client.listObjects(listRequest);
+
+        List<S3Object> contents = response.contents();
+        ListIterator<S3Object> listIterator = contents.listIterator();
+
+        while (listIterator.hasNext()) {
+            S3Object object = listIterator.next();
+            DeleteObjectRequest request = deleteFileFromAmazonS3(object.key());
+            client.deleteObject(request);
+        }
+    }
+
+    public static ListObjectsRequest listAllFilesInAmazonS3ForRemove(String folderName) {
+        ListObjectsRequest listRequest = ListObjectsRequest.builder()
+                .bucket(BUCKET_NAME).prefix(folderName + "/").build();
+
+        return listRequest;
+    }
 }
