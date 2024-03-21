@@ -6,10 +6,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
-import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Object;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,6 +74,19 @@ public class AmazonS3Util {
     public static PutObjectRequest putFileInAmazonS3(String folderName, String fileName) {
         PutObjectRequest request = PutObjectRequest.builder().bucket(BUCKET_NAME)
                 .key(folderName + "/" + fileName).acl("public-read").build();
+
+        return request;
+    }
+
+    public static void deleteFile(String fileName) {
+        S3Client client = createAmazomS3();
+        DeleteObjectRequest request = deleteFileFromAmazonS3(fileName);
+        client.deleteObject(request);
+    }
+
+    public static DeleteObjectRequest deleteFileFromAmazonS3(String fileName) {
+        DeleteObjectRequest request = DeleteObjectRequest.builder().bucket(BUCKET_NAME)
+                .key(fileName).build();
 
         return request;
     }

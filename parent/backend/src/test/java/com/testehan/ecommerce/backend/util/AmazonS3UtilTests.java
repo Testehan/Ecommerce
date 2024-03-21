@@ -29,4 +29,10 @@ public class AmazonS3UtilTests {
 
         AmazonS3Util.uploadFile(folderName, fileName, inputStream);
     }
+
+    @Test
+    public void deleteFile() {
+        String fileName = "test-upload/default-user.png";
+        AmazonS3Util.deleteFile(fileName);
+    }
 }
